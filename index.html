@@ -39,8 +39,8 @@
     --line: #e3ddd2;
     --wx-mu: #2f7a48;   /* 木 */
     --wx-huo: #b93a2b;  /* 火 */
-    --wx-tu: #9a7009;   /* 土 */
-    --wx-jin: #6b6152;  /* 金 */
+    --wx-tu: #6b6152;   /* 土 */
+    --wx-jin: #9a7009;  /* 金 */
     --wx-shui: #26618f; /* 水 */
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -179,8 +179,8 @@
   .wx-shui { color: var(--wx-shui); }
   .bg-mu { background: rgba(63,138,86,.10); }
   .bg-huo { background: rgba(192,57,43,.10); }
-  .bg-tu { background: rgba(184,134,11,.10); }
-  .bg-jin { background: rgba(138,127,109,.10); }
+  .bg-tu { background: rgba(138,127,109,.10); }
+  .bg-jin { background: rgba(184,134,11,.10); }
   .bg-shui { background: rgba(47,111,158,.10); }
   /* 五行 */
   .wx-row { display: flex; align-items: center; gap: 10px; margin: 7px 0; }
@@ -293,7 +293,121 @@
   .corr-detail .cd-line { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
   .corr-detail .cd-line .cd-v { color: var(--ink); }
   .corr-detail .cd-sum { margin-top: 6px; font-weight: 600; color: var(--ink); }
+  /* ===== 人物性格 ===== */
+  .xg-head {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding-bottom: 12px; margin-bottom: 12px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .xg-gan {
+    font-size: 34px; font-weight: 700; color: var(--red);
+    line-height: 1; letter-spacing: 2px;
+  }
+  .xg-wx {
+    font-size: 13px; color: var(--ink-dim);
+  }
+  .xg-level {
+    font-size: 12px; padding: 3px 10px; border-radius: 10px;
+    letter-spacing: 1px; font-weight: 600;
+  }
+  .lvl-strong { color: #a83226; background: rgba(192,57,43,.10); border: 1px solid rgba(192,57,43,.32); }
+  .lvl-mid    { color: #2f7a48; background: rgba(63,138,86,.12); border: 1px solid rgba(63,138,86,.35); }
+  .lvl-weak   { color: #26618f; background: rgba(38,97,143,.10); border: 1px solid rgba(38,97,143,.30); }
+  .xg-score {
+    margin-left: auto; font-size: 12px; color: var(--ink-faint);
+  }
+  .xg-sec { margin-bottom: 11px; }
+  .xg-sec:last-child { margin-bottom: 0; }
+  .xg-tag {
+    display: inline-block; font-size: 11px; letter-spacing: 1px;
+    color: var(--gold); border: 1px solid var(--line);
+    background: var(--card2); border-radius: 4px;
+    padding: 1px 7px; margin-bottom: 5px;
+  }
+  .xg-text { font-size: 14px; line-height: 1.85; color: var(--ink); }
+  .xg-text.base { color: var(--ink-dim); }
+  .xg-strength {
+    margin-top: 12px; padding-top: 11px;
+    border-top: 1px dashed var(--line);
+    font-size: 12px; color: var(--ink-dim); line-height: 1.8;
+  }
+  .xg-strength b { color: var(--ink); }
+
+  /* ----- 内心性格子卡（十二长生权重法） ----- */
+  .xg-sub {
+    margin-top: 18px; padding: 14px 14px 13px;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+    border-radius: 8px;
+    background: var(--card2);
+  }
+  .xg-sub-hd {
+    display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
+    padding-bottom: 10px; margin-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .xg-sub-hd .t {
+    font-size: 14px; font-weight: 700; color: var(--ink);
+    letter-spacing: 1px;
+  }
+  .xg-sub-hd .m {
+    font-size: 11px; color: var(--ink-faint);
+    letter-spacing: .5px;
+  }
+  /* 长生四柱：等宽四列小方块 */
+  .cs-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 7px; margin-bottom: 13px;
+  }
+  .cs-cell {
+    text-align: center; padding: 8px 3px 7px;
+    border-radius: 6px; background: var(--card);
+    border: 1px solid var(--line);
+  }
+  .cs-pos { font-size: 10.5px; color: var(--ink-faint); letter-spacing: .5px; margin-bottom: 3px; }
+  .cs-stage { font-size: 16px; font-weight: 700; line-height: 1.15; letter-spacing: 1px; }
+  .cs-val { font-size: 10.5px; color: var(--ink-faint); margin-top: 3px; letter-spacing: .3px; }
+  .cs-cell.strong { border-color: rgba(192,57,43,.35); background: rgba(192,57,43,.05); }
+  .cs-cell.strong .cs-stage { color: #a83226; }
+  .cs-cell.mid { border-color: rgba(63,138,86,.32); background: rgba(63,138,86,.05); }
+  .cs-cell.mid .cs-stage { color: #2f7a48; }
+  .cs-cell.weak { border-color: rgba(38,97,143,.30); background: rgba(38,97,143,.05); }
+  .cs-cell.weak .cs-stage { color: #26618f; }
+  /* 内心强度汇总条 */
+  .cs-sum {
+    display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+    font-size: 12.5px; color: var(--ink-dim);
+    margin-bottom: 12px;
+  }
+  .cs-sum .lbl { color: var(--ink-faint); font-size: 11.5px; }
+  /* 逐柱点评 */
+  .cs-notes { display: flex; flex-direction: column; gap: 6px; }
+  .cs-note {
+    display: flex; gap: 8px; align-items: flex-start;
+    font-size: 12.5px; line-height: 1.7; color: var(--ink-dim);
+  }
+  .cs-note .k {
+    flex: 0 0 auto; min-width: 46px; text-align: center;
+    font-size: 11px; padding: 1px 6px; border-radius: 4px;
+    border: 1px solid var(--line); background: var(--card);
+    color: var(--ink-faint); letter-spacing: .5px;
+  }
+  .cs-note .k.strong { color: #a83226; border-color: rgba(192,57,43,.32); }
+  .cs-note .k.mid { color: #2f7a48; border-color: rgba(63,138,86,.32); }
+  .cs-note .k.weak { color: #26618f; border-color: rgba(38,97,143,.30); }
+  .cs-note .v { flex: 1 1 auto; }
+
   @media (max-width: 560px) {
+    .xg-gan { font-size: 28px; }
+    .xg-text { font-size: 13.5px; }
+    .xg-score { width: 100%; margin-left: 0; }
+    .xg-sub { padding: 12px 11px 11px; margin-top: 15px; }
+    .cs-grid { gap: 5px; }
+    .cs-cell { padding: 7px 2px 6px; }
+    .cs-stage { font-size: 14.5px; letter-spacing: .5px; }
+    .cs-pos, .cs-val { font-size: 10px; }
+    .cs-note { font-size: 12px; }
+    .cs-note .k { min-width: 42px; }
     .gz { font-size: 30px; width: 46px; height: 46px; }
     header h1 { font-size: 26px; letter-spacing: 8px; text-indent: 8px; }
     .dy-col { min-width: 64px; padding: 7px 4px 8px; }
@@ -415,6 +529,13 @@
     <h2>五行力量</h2>
     <div id="wuxing"></div>
     <div class="wx-sum" id="wxsum"></div>
+  </div>
+
+  <!-- 人物性格 -->
+  <div class="card">
+    <h2>人物性格</h2>
+    <div id="xingge"></div>
+    <div class="hint" style="margin-top:8px">依月令旺衰系数法判定日主旺弱，参《三命通会》论日主之性转述。命理性格仅供参考，勿据以论断他人。</div>
   </div>
 
   <!-- 神煞详解 -->
@@ -1224,6 +1345,103 @@
   }
 
   // ============================================================
+  // 月令旺衰系数法
+  // ============================================================
+  // 五行生克关系
+  var WX_SHENG = { "木": "火", "火": "土", "土": "金", "金": "水", "水": "木" };  // 我生
+  var WX_KE    = { "木": "土", "火": "金", "土": "水", "金": "木", "水": "火" };  // 我克
+
+  function wxRelation(a, b) {
+    // 返回 a 对 b 的关系
+    if (a === b) return "同";
+    if (WX_SHENG[a] === b) return "生";      // a 生 b
+    if (WX_SHENG[b] === a) return "被生";    // b 生 a
+    if (WX_KE[a] === b) return "克";
+    if (WX_KE[b] === a) return "被克";
+    return "无";
+  }
+
+  // 月令对日主的旺衰系数（旺相休囚死）
+  // 月支五行 与 日主五行 的关系决定系数
+  function monthCoef(dayWx, monthWx) {
+    var rel = wxRelation(monthWx, dayWx);   // 月令 对 日主
+    if (rel === "同") return 1.5;           // 旺：当令同气
+    if (rel === "生") return 1.2;           // 相：月令生日主
+    if (rel === "被生") return 0.8;         // 休：日主生月令（泄气）
+    if (rel === "克") return 0.6;           // 囚：月令克日主
+    if (rel === "被克") return 0.9;         // 死：日主克月令
+    return 1.0;
+  }
+
+  // 计算旺衰：月令系数 + 五行力量加权
+  function calcStrength(pillars, monthZhi, wx) {
+    var dayWx = GAN_WUXING[pillars[2] % 10];
+    var monthWx = ZHI_WUXING[monthZhi];
+
+    // 天干四字（含日主）与地支四本气，各按与日主的生克给权重
+    var detail = [];
+    var score = 0;
+
+    // 权重：日干(月干)相邻更重，年干时干稍轻；地支本气为主
+    var ganWeight = [0.8, 1.2, 1.0, 0.8];   // 年干 月干 日干 时干
+    var zhiWeight = [0.8, 1.5, 1.2, 0.8];   // 年支 月支 日支 时支（月支为提纲最重）
+
+    for (var i = 0; i < 4; i++) {
+      var g = GAN_WUXING[pillars[i] % 10];
+      var gr = wxRelation(g, dayWx);   // 该字五行 对 日主
+      var gv = 0;
+      if (gr === "同") gv = ganWeight[i] * 1.0;          // 比劫帮身
+      else if (gr === "生") gv = ganWeight[i] * 0.8;     // 印星生身
+      else if (gr === "被生") gv = -ganWeight[i] * 0.5;  // 食伤泄身
+      else if (gr === "被克") gv = -ganWeight[i] * 0.7;  // 财耗身
+      else if (gr === "克") gv = -ganWeight[i] * 1.0;    // 官杀克身
+      score += gv;
+      detail.push({ pos: ["年干","月干","日干","时干"][i], wx: g,
+                    rel: gr, val: Math.round(gv * 100) / 100 });
+    }
+    for (var j = 0; j < 4; j++) {
+      var z = ZHI_WUXING[pillars[j] % 12];
+      var zr = wxRelation(z, dayWx);
+      var zv = 0;
+      if (zr === "同") zv = zhiWeight[j] * 1.0;
+      else if (zr === "生") zv = zhiWeight[j] * 0.8;
+      else if (zr === "被生") zv = -zhiWeight[j] * 0.5;
+      else if (zr === "被克") zv = -zhiWeight[j] * 0.7;
+      else if (zr === "克") zv = -zhiWeight[j] * 1.0;
+      score += zv;
+      detail.push({ pos: ["年支","月支","日支","时支"][j], wx: z,
+                    rel: zr, val: Math.round(zv * 100) / 100 });
+    }
+
+    // 月令系数修正
+    var mCoef = monthCoef(dayWx, monthWx);
+    var finalScore = score * mCoef;
+
+    // 分档：根据最终得分
+    var level;
+    if (finalScore >= 3.0) level = "极旺";
+    else if (finalScore >= 1.2) level = "偏旺";
+    else if (finalScore > -1.2) level = "中和";
+    else if (finalScore > -3.0) level = "偏弱";
+    else level = "极弱";
+
+    // 中文简称（用于文案）
+    var levelShort = (level === "极旺" || level === "偏旺") ? "旺"
+                   : (level === "中和" ? "中和" : "弱");
+
+    return {
+      dayWx: dayWx,
+      monthWx: monthWx,
+      monthCoef: mCoef,
+      rawScore: Math.round(score * 100) / 100,
+      score: Math.round(finalScore * 100) / 100,
+      level: level,
+      levelShort: levelShort,
+      detail: detail
+    };
+  }
+
+  // ============================================================
   // 时间校正模块：夏令时回退 → 经度校正 → 均时差（真太阳时）
   // ============================================================
 
@@ -1386,6 +1604,284 @@
     return eot * 4;
   }
 
+  // ============================================================
+  // 人物性格解读（参《三命通会》论日主，转白话）
+  // 结构：日主天干 → { 旺, 中和, 弱 } 三段论述
+  // ============================================================
+  var XINGGE = {
+    "甲": {
+      base: "甲木为参天之木，性直而仁，有担当、重原则，喜居首位。",
+      旺: "木气过旺，则刚直有余而变通不足，主观强、不易低头，遇事易独断。宜学柔韧，多听人言。",
+      中和: "木气得中，为人正直仁厚，有骨气亦知进退，能担事、肯负责，是天生的组织者与开创者。",
+      弱: "木气不足，则志向虽高而信心易摇，遇压易退，常在取舍间犹豫。宜借外力、结良友以壮其气。"
+    },
+    "乙": {
+      base: "乙木为花草藤蔓，性柔而韧，善攀附、知变通，重感情。",
+      旺: "木气过旺，则心思过密、易多愁善感，遇事缠绕难决，亦易依赖他人。宜养决断之气。",
+      中和: "木气得中，柔中带韧，善解人意、能屈能伸，是极佳的协调者与辅助之才，人缘多佳。",
+      弱: "木气不足，则易随波逐流、缺乏主见，遇强则屈，常委屈自己迁就他人。宜立定心志。"
+    },
+    "丙": {
+      base: "丙火为太阳之火，性烈而明，热情豪爽，磊落不拘小节。",
+      旺: "火气过旺，则性急易怒、锋芒太露，做事有始无终，亦易因快言得罪于人。宜养沉静、忌急进。",
+      中和: "火气得中，光明磊落、热忱坦荡，感染力强，能聚人心，是极富魅力的行动派与领袖型。",
+      弱: "火气不足，则热忱难持久，易显气短、信心不足，做事虎头蛇尾。宜坚守一事，勿贪多。"
+    },
+    "丁": {
+      base: "丁火为灯烛之火，性柔而明，内敛细腻，善体察人心。",
+      旺: "火气过旺，则心浮气躁、遇事急躁，虽细致却易钻牛角尖，情绪起伏大。宜调息养静。",
+      中和: "火气得中，温润而有内涵，思虑细密、体察入微，长于文墨与技艺，是温和而可靠的智谋型人物。",
+      弱: "火气不足，则易灰心丧志、心神不宁，常自我怀疑。宜多亲近良师益友，以养其明。"
+    },
+    "戊": {
+      base: "戊土为城墙之土，性厚重，稳重持成，言而有信。",
+      旺: "土气过旺，则固执守旧、过重安稳，不易接受新事物，行动偏缓。宜开眼界、忌因循。",
+      中和: "土气得中，敦厚沉稳、堪当大任，处事有度量、为人可托付，是极佳的奠基者与守成之才。",
+      弱: "土气不足，则根基不稳、易随外境摇动，缺乏定见与耐力。宜专精一业以厚其基。"
+    },
+    "己": {
+      base: "己土为田园之土，性温润，包容含蓄，善滋养培育。",
+      旺: "土气过旺，则心思杂乱、优柔寡断，易钻隐微之事，反失大体。宜出以简明。",
+      中和: "土气得中，涵养深厚、兼容并蓄，善于调和与培育，长于理财与实务，是温和务实的统筹型人物。",
+      弱: "土气不足，则易思虑过度而不自信，做事缩手缩脚、难得伸展。宜定心守正。"
+    },
+    "庚": {
+      base: "庚金为斧钺之金，性刚锐，果断讲义气，是非分明。",
+      旺: "金气过旺，则刚猛好胜、锋芒逼人，易得罪人，行事失于急切。宜学含容、忌苛察。",
+      中和: "金气得中，刚毅果决、做事利落，重义气有原则，是敢于任事、能断能行的实干之才。",
+      弱: "金气不足，则意志不坚、遇难易怯，常有志难伸。宜历练以砺其锋。"
+    },
+    "辛": {
+      base: "辛金为珠玉之金，性精锐，重颜面、讲品味，敏感细腻。",
+      旺: "金气过旺，则孤高自许、近乎挑剔，易因小事伤和气。宜宽厚待人。",
+      中和: "金气得中，秀气外显、审美出众，心思锐利而不失雅致，长于精细之事与文艺。",
+      弱: "金气不足，则易自卑敏感、患得患失，常有明珠蒙尘之感。宜自信而进。"
+    },
+    "壬": {
+      base: "壬水为江河之水，性浩荡，聪慧多智，志向远大。",
+      旺: "水气过旺，则心思游移、易生异想，兴趣过杂而难专，行事多变。宜专注守一。",
+      中和: "水气得中，聪颖多谋、气度开阔，善蓄势而行，应变力极强，是极具智略的谋划之才。",
+      弱: "水气不足，则智慧难展、气短易懈，常思虑过多而行动不足。宜养定力。"
+    },
+    "癸": {
+      base: "癸水为雨露之水，性至柔，心思细密，内秀而多情。",
+      旺: "水气过旺，则多愁善感、思虑过重，易陷情绪而难自拔。宜开朗疏泄。",
+      中和: "水气得中，心思缜密、体察入微，善解人意，长于研究与文艺，是细腻聪敏的智巧型人物。",
+      弱: "水气不足，则心志易馁、情绪低落，思虑虽多而难成。宜见行动、忌空想。"
+    }
+  };
+
+  // ============================================================
+  // 内心性格：十二长生权重法
+  // 逐柱取「日主对该柱地支」的长生阶段 → 赋强弱分值 → 加权求和
+  // 与「月令旺衰系数法」并列互补：前者论日主与月令之气的旺弱，
+  // 后者论日主在各柱所处的生长阶段（内心气象）。
+  // ============================================================
+
+  // 十二阶段强弱分值（长生强弱分值法）
+  // 长生 冠带 临官 帝旺 → 强；沐浴 衰 病 死 墓 绝 → 弱；胎 养 → 中性偏弱
+  var CS_SCORE = {
+    "长生":  1.0,
+    "沐浴":  0.2,
+    "冠带":  0.8,
+    "临官":  1.2,
+    "帝旺":  1.5,
+    "衰":   -0.5,
+    "病":   -0.9,
+    "死":   -1.2,
+    "墓":   -0.6,
+    "绝":   -1.4,
+    "胎":    0.3,
+    "养":    0.4
+  };
+
+  // 十二阶段对内心的取象（用于逐柱一句话点评）
+  var CS_NOTE = {
+    "长生": "初生之气，内心常怀新生之念，好奇、向上而富有生机。",
+    "沐浴": "沐浴之地，心性未定、易受外物摇动，情感上多起伏与试探。",
+    "冠带": "渐入成人之境，自尊心萌芽，重视体面与规矩，上进心强。",
+    "临官": "气已旺足而将极，内心自有主张，敢负责、能任事。",
+    "帝旺": "气之极盛，内心极有主见与自信，锐气逼人，然亦容易过刚。",
+    "衰":   "盛极而衰，内心易生倦意与迟暮之感，行事趋于守成。",
+    "病":   "气弱而滞，内心多忧思与自我怀疑，敏感而需要抚慰。",
+    "死":   "气尽之际，内心易消沉闭塞，对事物提不起持久的热情。",
+    "墓":   "气藏于库，内心深沉内敛，喜好收藏、积累，不轻易外露。",
+    "绝":   "气至断绝，内心常感孤立无援，遇挫易生退缩之意。",
+    "胎":   "孕育之始，内心潜藏新念，看似平静实则在默默酝酿。",
+    "养":   "受养之时，内心安于被照顾，性情温顺而缺乏争斗之心。"
+  };
+
+  // 四柱权重：月支（提纲）最重，日支（内心/夫妻宫）次之
+  var CS_WEIGHT = [0.8, 1.5, 1.2, 0.8];   // 年支 月支 日支 时支
+
+  // 逐柱长生阶段（复用 changsheng：以日干对各地支取）
+  function calcChangsheng(pillars) {
+    var dayIdx = pillars[2];
+    var positions = ["年支", "月支", "日支", "时支"];
+    var detail = [];
+    var score = 0, wSum = 0;
+
+    for (var i = 0; i < 4; i++) {
+      var stage = changsheng(dayIdx, pillars[i]);
+      var base = CS_SCORE[stage] !== undefined ? CS_SCORE[stage] : 0;
+      var w = CS_WEIGHT[i];
+      var val = base * w;
+      score += val;
+      wSum += w;
+      detail.push({ pos: positions[i], stage: stage, base: base, weight: w,
+                    val: Math.round(val * 100) / 100, note: CS_NOTE[stage] });
+    }
+
+    // 归一化到 [-1.5, 1.5] 区间（除以权重和），便于分档
+    var norm = wSum > 0 ? score / wSum : 0;
+    norm = Math.round(norm * 100) / 100;
+
+    // 分档
+    var level, levelShort;
+    if (norm >= 0.6)       { level = "内心强旺"; levelShort = "强"; }
+    else if (norm >= 0.15) { level = "内心偏强"; levelShort = "偏强"; }
+    else if (norm > -0.15) { level = "内心中和"; levelShort = "中和"; }
+    else if (norm > -0.6)  { level = "内心偏弱"; levelShort = "偏弱"; }
+    else                   { level = "内心柔弱"; levelShort = "弱"; }
+
+    // 主导阶段（权重×分值最高者）与最弱阶段
+    var top = detail[0], low = detail[0];
+    detail.forEach(function (d) {
+      if (d.val > top.val) top = d;
+      if (d.val < low.val) low = d;
+    });
+
+    return {
+      detail: detail,
+      score: Math.round(score * 100) / 100,
+      norm: norm,
+      level: level,
+      levelShort: levelShort,
+      top: top,
+      low: low,
+      // 供文案使用的三态简称（强/偏强 → 强；偏弱/弱 → 弱）
+      short3: (levelShort === "强" || levelShort === "偏强") ? "强"
+            : (levelShort === "中和" ? "中和" : "弱")
+    };
+  }
+
+  // 内心性格文案：日主基础论述 × 长生强弱三态
+  var NEIXIN = {
+    "甲": {
+      base: "甲木之心如参天大树，内心正直、向上，认定的事很难改变。",
+      强: "长生之气在四柱得力，内心极为笃定，认准方向便一往无前；但独木易折，需留意听不进旁人劝。",
+      中和: "长生之气有起有伏，内心刚柔相济，既有原则也懂转圜，是能长期扛事的类型。",
+      弱: "长生之气不足，内心虽有大志却常觉气短，遇挫容易动摇，需要外在的支持与肯定来撑住心气。"
+    },
+    "乙": {
+      base: "乙木之心如藤蔓花草，内心柔软、敏感，善于依附也善于变通。",
+      强: "长生之气充沛，内心的韧性极强，能在夹缝中生长；但心思过密，容易在细节上反复纠结。",
+      中和: "长生之气得中，内心柔中有骨，能屈能伸，对人情世故的感知格外细腻。",
+      弱: "长生之气偏弱，内心容易随境而转、缺乏定见，情绪上需靠亲近之人托底。"
+    },
+    "丙": {
+      base: "丙火之心如太阳，内心热烈、外放，喜怒形于色，不爱藏事。",
+      强: "长生之气旺盛，内心如火难抑，热情极具感染力；但气太盛时易冲动，需要给情绪找个出口。",
+      中和: "长生之气调和，内心明亮而稳定，热情却不失分寸，是天生的鼓舞者。",
+      弱: "长生之气不足，内心的光热时明时暗，容易因外界的冷淡而自我怀疑、提不起劲。"
+    },
+    "丁": {
+      base: "丁火之心如灯烛，内心细腻、内敛，外表温和而内里敏感。",
+      强: "长生之气得力，内心有极坚定的信念，看似温和却极难被动摇；然思虑过甚易内耗。",
+      中和: "长生之气适中，内心温润有光，善于体察人心，久处而不觉厌。",
+      弱: "长生之气单薄，内心容易敏感多思、患得患失，需要稳定的环境来安放心神。"
+    },
+    "戊": {
+      base: "戊土之心如城墙高山，内心沉稳、厚重，重视承诺与秩序。",
+      强: "长生之气厚实，内心极有定力与分寸感，泰山崩于前而色不变；但过稳则易固执难变通。",
+      中和: "长生之气平正，内心安稳而不僵化，能守也能应时而动，是可靠的中坚。",
+      弱: "长生之气不固，内心看似镇定实则易被撼动，安全感不足时常靠惯性硬撑。"
+    },
+    "己": {
+      base: "己土之心如田园之土，内心包容、体贴，善于滋养与成全他人。",
+      强: "长生之气丰足，内心有极强的承载力与耐性，能容人所不能容；然易过度操心他人之事。",
+      中和: "长生之气调和，内心温厚而知界限，既能照顾人也懂得留余地给自己。",
+      弱: "长生之气偏虚，内心容易过度在意他人评价而委屈自己，需学会先顾好自身。"
+    },
+    "庚": {
+      base: "庚金之心如刀剑钢铁，内心刚毅、果决，是非分明，行动力强。",
+      强: "长生之气锐利，内心果断刚强，遇事敢断敢当；但锋芒过露时易伤人伤己，需学会收势。",
+      中和: "长生之气刚柔适中，内心坚定而能纳谏，是既讲原则又通人情的中坚之才。",
+      弱: "长生之气不充，内心虽想果决却常迟疑，容易在关键时刻泄气，需要以目标感来撑持。"
+    },
+    "辛": {
+      base: "辛金之心如珠玉首饰，内心精致、自尊心强，重视体面与自我价值。",
+      强: "长生之气清锐，内心自我要求极高、不容瑕疵，气质夺目；但过于苛求则易苦了自己。",
+      中和: "长生之气合度，内心优雅而有分寸，既有格调又不失亲和，人缘与品位俱佳。",
+      弱: "长生之气不足，内心易自卑敏感，过分在意他人眼光，需要被肯定来稳固自信。"
+    },
+    "壬": {
+      base: "壬水之心如江海奔流，内心开阔、聪敏，思路活络而不喜受拘。",
+      强: "长生之气浩荡，内心视野极广、气魄过人，能容能变；但心气太盛时易好高骛远。",
+      中和: "长生之气顺畅，内心通达而有定力，智略与应变兼备，是长于谋划的角色。",
+      弱: "长生之气不聚，内心主意多变、难以专一，热情来去都快，需要靠制度与目标收束。"
+    },
+    "癸": {
+      base: "癸水之心如雨露清泉，内心极其细腻、内秀，情感丰富而不外露。",
+      强: "长生之气充盈，内心感受力极强，直觉敏锐过人；但情绪易满溢，需要留一个疏泄的出口。",
+      中和: "长生之气平和，内心澄澈而通透，共情力强，长于体察幽微之处。",
+      弱: "长生之气微弱，内心容易感伤低落、陷入思绪难以自拨，宜多接触阳光与人群。"
+    }
+  };
+
+  function calcNeixin(pillars) {
+    var dayGan = TIANGAN[pillars[2] % 10];
+    var cs = calcChangsheng(pillars);
+    var entry = NEIXIN[dayGan];
+    if (!entry) return null;
+
+    return {
+      dayGan: dayGan,
+      base: entry.base,
+      mainText: entry[cs.short3],
+      changsheng: cs,
+      summary: "日主【" + dayGan + "】四柱长生：年" + cs.detail[0].stage +
+               " · 月" + cs.detail[1].stage + " · 日" + cs.detail[2].stage +
+               " · 时" + cs.detail[3].stage + "，内心" + cs.level
+    };
+  }
+
+  // 生成性格解读
+  function calcXingge(pillars, monthZhi, wx) {
+    var dayGan = TIANGAN[pillars[2] % 10];
+    var st = calcStrength(pillars, monthZhi, wx);
+    var entry = XINGGE[dayGan];
+    if (!entry) return null;
+
+    var seg = st.levelShort;   // "旺" / "中和" / "弱"
+    var mainText = entry[seg];
+
+    // 主导十神（用于补充一句，增强个性化）
+    var gans = pillars.map(function (p) { return p % 10; });
+    var counts = {};
+    gans.forEach(function (g, i) {
+      if (i === 2) return;   // 跳过日主
+      var ss = shiShen(pillars[2] % 10, g);
+      counts[ss] = (counts[ss] || 0) + 1;
+    });
+    var mainSS = null, maxN = 0;
+    Object.keys(counts).forEach(function (k) {
+      if (counts[k] > maxN) { maxN = counts[k]; mainSS = k; }
+    });
+
+    return {
+      dayGan: dayGan,
+      base: entry.base,
+      mainText: mainText,
+      strength: st,
+      mainShiShen: mainSS,
+      // 十二长生权重法（内心性格）
+      neixin: calcNeixin(pillars),
+      summary: "日主【" + dayGan + "】" + st.dayWx + "，生于" + st.monthWx +
+               "月令，" + st.level + "（旺衰分 " + st.score + "）"
+    };
+  }
+
   // ---------- 排盘主体 ----------
   function paipan(year, month, day, hour, minute, gender, ziAdvance, correct) {
     if (ziAdvance === undefined) ziAdvance = true;
@@ -1494,6 +1990,9 @@
     var shensha = shaResult.perPillar;
     var shenshaDetail = shaResult.detail;
 
+    // 人物性格（月令旺衰系数法 + 三命通会日主论）
+    var xingge = calcXingge(pillars, monthZhiForSha, wx);
+
     // 大运：阳男阴女顺排，阴男阳女逆排
     var yangYear = (yearIdx % 2 === 0);
     var forward = (gender === "男") === yangYear;
@@ -1560,6 +2059,7 @@
       tongDang: tong, yiDang: 8 - tong,
       xunkong: DIZHI[kong[0]] + DIZHI[kong[1]],
       shenshaDetail: shenshaDetail,
+      xingge: xingge,
       dayunQiyun: qyInt + " 岁 " + qyMonth + " 个月起运（参考节气：" + refName + "）",
       dayun: dayun,
       liunian: liunian,
@@ -1584,6 +2084,10 @@
     jieOfYear: jieOfYear,
     liuyueList: liuyueList,
     jdn: jdn,
+    calcStrength: calcStrength,
+    calcXingge: calcXingge,
+    calcChangsheng: calcChangsheng,
+    calcNeixin: calcNeixin,
     isDST: isDST,
     equationOfTime: equationOfTime,
     normalizeTime: normalizeTime,
@@ -1642,6 +2146,112 @@
   function hideErr() { document.getElementById("err").style.display = "none"; }
 
   function fmt2(n) { return (n < 10 ? "0" : "") + n; }
+
+  // ---------- 人物性格 ----------
+  // 月令旺衰系数法判定日主旺弱，再取《三命通会》论日主之性（基础 + 旺/中和/弱）转述
+  function renderXingge(r) {
+    var el = document.getElementById("xingge");
+    var xg = r.xingge;
+    if (!xg) { el.innerHTML = '<div class="hint">暂无数据</div>'; return; }
+
+    var st = xg.strength;
+    var lvlCls = xg.strength.levelShort === "旺" ? "lvl-strong"
+               : (xg.strength.levelShort === "中和" ? "lvl-mid" : "lvl-weak");
+
+    var html = "";
+    // 头部：日主大字 + 五行 + 旺衰标签 + 分数
+    html += '<div class="xg-head">' +
+      '<span class="xg-gan">' + xg.dayGan + "</span>" +
+      '<span class="xg-wx">日主 · ' + st.dayWx + "（生于" + st.monthWx + "月）</span>" +
+      '<span class="xg-level ' + lvlCls + '">' + st.level + "</span>" +
+      '<span class="xg-score">旺衰分 ' + st.score + "</span>" +
+      "</div>";
+
+    // 段一：五行本性（基础）
+    html += '<div class="xg-sec">' +
+      '<div class="xg-tag">五行本性</div>' +
+      '<div class="xg-text base">' + xg.base + "</div>" +
+      "</div>";
+
+    // 段二：旺衰影响下的性格
+    var tagText = "旺衰解析 · " + xg.strength.levelShort;
+    if (xg.mainShiShen) tagText += " · 主导十神「" + xg.mainShiShen + "」";
+    html += '<div class="xg-sec">' +
+      '<div class="xg-tag">' + tagText + "</div>" +
+      '<div class="xg-text">' + xg.mainText + "</div>" +
+      "</div>";
+
+    // 段三：旺衰判定明细
+    var parts = st.detail.map(function (d) {
+      var relName = { "同": "比劫", "生": "印", "被生": "食伤", "被克": "财", "克": "官杀" }[d.rel] || d.rel;
+      var sign = d.val > 0 ? "+" : "";
+      return d.pos + "·" + d.wx + "（" + relName + "）" + sign + d.val;
+    }).join("　");
+
+    html += '<div class="xg-strength">' +
+      "<b>旺衰判定</b>　月令系数 " + st.monthCoef + "（" + st.monthWx + "月对" + st.dayWx + "日主）" +
+      "，原始分 " + st.rawScore + " × " + st.monthCoef + " = <b>" + st.score + "</b> → <b>" + st.level + "</b>" +
+      "<br>" + parts +
+      "</div>";
+
+    // ===== 内心性格子卡（十二长生权重法）=====
+    var nx = xg.neixin;
+    if (nx) {
+      var cs = nx.changsheng;
+      html += '<div class="xg-sub">' +
+        '<div class="xg-sub-hd">' +
+        '<span class="t">内心性格</span>' +
+        '<span class="m">以日主对各柱地支所临长生阶段加权，论内心气象</span>' +
+        "</div>";
+
+      // 四柱长生方块
+      html += '<div class="cs-grid">';
+      cs.detail.forEach(function (d) {
+        var cls = d.val >= 0.5 ? "strong" : (d.val <= -0.5 ? "weak" : "mid");
+        html += '<div class="cs-cell ' + cls + '">' +
+          '<div class="cs-pos">' + d.pos + "</div>" +
+          '<div class="cs-stage">' + d.stage + "</div>" +
+          '<div class="cs-val">' + (d.val > 0 ? "+" : "") + d.val + "</div>" +
+          "</div>";
+      });
+      html += "</div>";
+
+      // 汇总
+      var sumCls = cs.short3 === "强" ? "lvl-strong" : (cs.short3 === "中和" ? "lvl-mid" : "lvl-weak");
+      html += '<div class="cs-sum">' +
+        '<span class="lbl">内心强度</span>' +
+        '<span class="xg-level ' + sumCls + '">' + cs.level + "</span>" +
+        '<span class="lbl">加权分</span><b>' + cs.score + "</b>" +
+        '<span class="lbl">归一</span><b>' + cs.norm + "</b>" +
+        '<span class="lbl">最强</span><b>' + cs.top.pos + "·" + cs.top.stage + "</b>" +
+        (cs.low.stage !== cs.top.stage
+          ? '<span class="lbl">最弱</span><b>' + cs.low.pos + "·" + cs.low.stage + "</b>" : "") +
+        "</div>";
+
+      // 日主内心基础论述
+      html += '<div class="xg-sec">' +
+        '<div class="xg-tag">内心本性 · ' + nx.dayGan + "</div>" +
+        '<div class="xg-text base">' + nx.base + "</div>" +
+        '<div class="xg-text" style="margin-top:5px">' + nx.mainText + "</div>" +
+        "</div>";
+
+      // 逐柱点评
+      html += '<div class="cs-notes">';
+      cs.detail.forEach(function (d, i) {
+        var cls = d.val >= 0.5 ? "strong" : (d.val <= -0.5 ? "weak" : "mid");
+        var isTop = (d.pos === cs.top.pos && d.stage === cs.top.stage);
+        html += '<div class="cs-note">' +
+          '<span class="k ' + cls + '">' + d.pos + "</span>" +
+          '<span class="v">【' + d.stage + (isTop ? "·最重" : "") + "】" + d.note + "</span>" +
+          "</div>";
+      });
+      html += "</div>";
+
+      html += "</div>";
+    }
+
+    el.innerHTML = html;
+  }
 
   function render(r) {
     hideErr();
@@ -1737,7 +2347,7 @@
     });
     document.getElementById("wuxing").innerHTML = wxHtml;
     // 给条形上色（用 Array.prototype.forEach.call 兼容旧 Safari 的 NodeList）
-    var barColors = { "木": "#2f7a48", "火": "#b93a2b", "土": "#9a7009", "金": "#6b6152", "水": "#26618f" };
+    var barColors = { "木": "#2f7a48", "火": "#b93a2b", "土": "#6b6152", "金": "#9a7009", "水": "#26618f" };
     Array.prototype.forEach.call(
       document.querySelectorAll("#wuxing .wx-bar"),
       function (el) { el.style.background = barColors[el.getAttribute("data-w")]; }
@@ -1746,6 +2356,9 @@
     document.getElementById("wxsum").innerHTML =
       "按四柱天干与地支本气各计 1（不含藏干中余气）。日主【" + r.rizhuWuxing +
       "】· 同党 " + r.tongDang + " 对 异党 " + r.yiDang + " → <b>" + strong + "</b>（粗略参考）";
+
+    // 人物性格（月令旺衰系数法 + 三命通会论日主）
+    renderXingge(r);
 
     // 神煞详解
     var kindCls = { "吉": "kind-ji", "凶": "kind-xiong", "中": "kind-zhong" };
