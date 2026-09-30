@@ -18,6 +18,14 @@
 <meta name="twitter:title" content="八字排盘 · 四柱命理">
 <meta name="twitter:description" content="输入出生日期时辰，即刻排出四柱八字、十神、纳音、神煞、大运流年流月。">
 <meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="data:application/manifest+json;charset=UTF-8,%7B%22name%22%3A%22%E5%85%AB%E5%AD%97%E6%8E%92%E7%9B%98%20%C2%B7%20%E5%9B%9B%E6%9F%B1%E5%91%BD%E7%90%86%22%2C%22short_name%22%3A%22%E5%85%AB%E5%AD%97%E6%8E%92%E7%9B%98%22%2C%22description%22%3A%22%E8%BE%93%E5%85%A5%E5%87%BA%E7%94%9F%E6%97%A5%E6%9C%9F%E6%97%B6%E8%BE%B0%EF%BC%8C%E5%8D%B3%E5%88%BB%E6%8E%92%E5%87%BA%E5%9B%9B%E6%9F%B1%E5%85%AB%E5%AD%97%E3%80%81%E5%8D%81%E7%A5%9E%E3%80%81%E7%BA%B3%E9%9F%B3%E3%80%81%E7%A5%9E%E7%85%9E%E3%80%81%E5%A4%A7%E8%BF%90%E6%B5%81%E5%B9%B4%E6%B5%81%E6%9C%88%E3%80%82%22%2C%22lang%22%3A%22zh-CN%22%2C%22start_url%22%3A%22https%3A%2F%2Fliangziqianshan18-eng.github.io%2Fbazi%2Findex.html%22%2C%22scope%22%3A%22https%3A%2F%2Fliangziqianshan18-eng.github.io%2Fbazi%2F%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait%22%2C%22background_color%22%3A%22%23ffffff%22%2C%22theme_color%22%3A%22%23a83226%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fliangziqianshan18-eng.github.io%2Fbazi%2Ficon-192.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%22%7D%2C%7B%22src%22%3A%22https%3A%2F%2Fliangziqianshan18-eng.github.io%2Fbazi%2Ficon-512.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+<meta name="theme-color" content="#a83226">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="八字排盘">
 <style>
   :root {
     --bg: #ffffff;
@@ -231,11 +239,68 @@
     text-align: center; color: var(--ink-faint); font-size: 12px;
     margin-top: 26px; line-height: 1.8; letter-spacing: 1px;
   }
+  /* ===== 时间校正（折叠面板）===== */
+  .corr-toggle {
+    display: flex; align-items: center; gap: 8px;
+    margin-top: 12px; padding: 9px 12px;
+    background: var(--card2); border: 1px solid var(--line);
+    border-radius: 8px; cursor: pointer; user-select: none;
+    font-size: 14px; color: var(--ink-dim);
+  }
+  .corr-toggle .arrow {
+    display: inline-block; transition: transform .18s ease;
+    font-size: 11px; color: var(--ink-faint);
+  }
+  .corr-toggle.open .arrow { transform: rotate(90deg); }
+  .corr-toggle b { color: var(--ink); font-weight: 600; }
+  .corr-toggle .on-tag {
+    margin-left: auto; font-size: 11px; padding: 1px 8px;
+    border-radius: 9px; color: #2f7a48;
+    background: rgba(63,138,86,.12); border: 1px solid rgba(63,138,86,.35);
+    display: none;
+  }
+  .corr-toggle.has-on .on-tag { display: inline-block; }
+  .corr-body {
+    display: none; margin-top: 10px; padding: 12px;
+    background: var(--card2); border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+  .corr-body.open { display: block; }
+  .corr-row { margin-bottom: 14px; }
+  .corr-row:last-child { margin-bottom: 0; }
+  .corr-row > label.corr-label {
+    display: block; font-size: 13px; color: var(--ink-dim);
+    margin-bottom: 6px;
+  }
+  .corr-switch {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 14px; line-height: 1.5;
+  }
+  .corr-switch input { margin-top: 4px; flex-shrink: 0; }
+  .corr-switch .st { display: block; color: var(--ink); font-weight: 600; }
+  .corr-switch .sd { display: block; font-size: 12px; color: var(--ink-faint); margin-top: 2px; }
+  .corr-select {
+    width: 100%; max-width: 100%; padding: 7px 9px;
+    border: 1px solid var(--line); border-radius: 6px;
+    background: var(--card); color: var(--ink); font-size: 14px;
+    font-family: inherit;
+  }
+  .corr-detail {
+    margin-top: 10px; padding-top: 10px;
+    border-top: 1px dashed var(--line);
+    font-size: 12px; color: var(--ink-dim); line-height: 1.7;
+  }
+  .corr-detail .cd-line { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .corr-detail .cd-line .cd-v { color: var(--ink); }
+  .corr-detail .cd-sum { margin-top: 6px; font-weight: 600; color: var(--ink); }
   @media (max-width: 560px) {
     .gz { font-size: 30px; width: 46px; height: 46px; }
     header h1 { font-size: 26px; letter-spacing: 8px; text-indent: 8px; }
     .dy-col { min-width: 64px; padding: 7px 4px 8px; }
     .cgz .cn { font-size: 18px; }
+    .corr-toggle { font-size: 13px; padding: 8px 10px; }
+    .corr-body { padding: 10px; }
+    .corr-select { font-size: 13px; }
   }
 </style>
 </head>
@@ -298,7 +363,38 @@
     <div class="checks" style="margin-top:12px">
       <label><input type="checkbox" id="ziadvance" checked>晚子时（23:00 后）日柱进位到次日（子时换日派；取消则按早晚子时派，日柱不进位）</label>
     </div>
-    <div class="hint">支持年份 1900—2100。农历模式请输入农历年（正月初一所在公历年）、月号与日；年柱以立春分界，月柱以节气分界。时辰按北京时间（东八区 120°E）计算。</div>
+
+    <div class="corr-toggle" id="corr-toggle">
+      <span class="arrow">▶</span>
+      <span>时辰校正（<b>出生地 · 夏令时</b>）</span>
+      <span class="on-tag" id="corr-tag">已启用</span>
+    </div>
+    <div class="corr-body" id="corr-body">
+      <div class="corr-row">
+        <label class="corr-switch">
+          <input type="checkbox" id="corr-tst">
+          <span>
+            <span class="st">按出生地校正（真太阳时）</span>
+            <span class="sd">按出生地经度与均时差换算真太阳时，西部地区影响较大</span>
+          </span>
+        </label>
+        <div style="margin-top:8px">
+          <select class="corr-select" id="corr-city"></select>
+        </div>
+      </div>
+      <div class="corr-row">
+        <label class="corr-switch">
+          <input type="checkbox" id="corr-dst">
+          <span>
+            <span class="st">夏令时回退</span>
+            <span class="sd">1986—1991 年全国实行夏令时，出生在此区间自动回退 1 小时</span>
+          </span>
+        </label>
+      </div>
+      <div class="corr-detail" id="corr-detail" style="display:none"></div>
+    </div>
+
+    <div class="hint">支持年份 1900—2100。农历模式请输入农历年（正月初一所在公历年）、月号与日；年柱以立春分界，月柱以节气分界。默认按北京时间（东八区 120°E）计算，如需更精确可展开「时辰校正」。</div>
   </div>
 
   <!-- 基本信息 -->
@@ -811,7 +907,22 @@
     "阴差阳错": ["凶", "婚姻不顺之煞，主感情错位、聚散无常（专查日柱）"],
     "十恶大败": ["凶", "禄犯空亡，主财聚财散、事业多成多败（专查日柱）"],
     "孤鸾煞":   ["凶", "婚姻不利之煞，主夫妻缘分浅（专查日柱）"],
-    "四废":     ["凶", "失时无气，主体弱、做事少成（按季节查日柱）"]
+    "四废":     ["凶", "失时无气，主体弱、做事少成（按季节查日柱）"],
+    // ---------- 补充 ----------
+    "禄神":     ["吉", "日干临官之位，主衣食丰足、有自立之能，身旺逢之为吉"],
+    "天赦":     ["吉", "四时赦宥之神，主逢凶化吉、解厄消灾，一生少大难"],
+    "德秀贵人": ["吉", "主禀性聪慧、气质清秀，利文才与名望"],
+    "天罗地网": ["凶", "辰戌为天罗、丑未为地网，主束缚缠身、做事多阻"],
+    "元辰":     ["凶", "又名大耗，主耗损破败、精神不安，忌与凶煞并见"],
+    "血刃":     ["凶", "主血光之灾，需留意意外伤损"],
+    "勾绞煞":   ["凶", "主牵连纠纷、官非口舌，做事易受牵绊"],
+    "丧门":     ["凶", "主孝服忧戚、六亲不利，岁运逢之宜谨慎"],
+    "吊客":     ["凶", "主门户忧患、亲友吊丧之事，与丧门同忌"],
+    "披麻":     ["凶", "主孝服之事，忌与丧门、吊客并见"],
+    "童子煞":   ["中", "民间说法，主幼年多病、性情孤高，宜重在自省而非迷信"],
+    "六秀日":   ["吉", "日柱为六秀，主聪颖秀气、才艺出众"],
+    "龙德":     ["吉", "主贵显逢时、多得助力，逢凶有解"],
+    "福德":     ["吉", "主福泽绵长、一生安顺，衣食无忧"]
   };
 
   var GAN_ZHI_SHA = {
@@ -873,7 +984,77 @@
                 11: ["丙午", "丁巳"], 0: ["丙午", "丁巳"], 1: ["丙午", "丁巳"] };
   var SANQI = ["甲戊庚", "乙丙丁", "壬癸辛"];
 
-  function calcShensha(pillars, monthZhi) {
+  // ---------- 补充神煞数据表 ----------
+
+  // 禄神（日干临官位）：甲禄在寅、乙禄在卯、丙戊禄在巳、丁己禄在午、
+  // 庚禄在申、辛禄在酉、壬禄在亥、癸禄在子
+  var LU_SHEN = { 0: 2, 1: 3, 2: 5, 3: 6, 4: 5, 5: 6, 6: 8, 7: 9, 8: 11, 9: 0 };
+
+  // 天赦日（按季节查日柱）：春戊寅、夏甲午、秋戊申、冬甲子
+  // 季节以月支划分：寅卯辰为春、巳午未为夏、申酉戌为秋、亥子丑为冬
+  var TIAN_SHE = {
+    春: "戊寅", 夏: "甲午", 秋: "戊申", 冬: "甲子"
+  };
+  var SEASON_OF_ZHI = {
+    2: "春", 3: "春", 4: "春",
+    5: "夏", 6: "夏", 7: "夏",
+    8: "秋", 9: "秋", 10: "秋",
+    11: "冬", 0: "冬", 1: "冬"
+  };
+
+  // 德秀贵人（月支三合局查天干）：
+  // 寅午戌月见丙丁；申子辰月见壬癸戊己；巳酉丑月见庚辛；亥卯未见甲乙
+  var DEXIU = {
+    2: ["丙", "丁"], 6: ["丙", "丁"], 10: ["丙", "丁"],
+    8: ["壬", "癸", "戊", "己"], 0: ["壬", "癸", "戊", "己"], 4: ["壬", "癸", "戊", "己"],
+    5: ["庚", "辛"], 9: ["庚", "辛"], 1: ["庚", "辛"],
+    11: ["甲", "乙"], 3: ["甲", "乙"], 7: ["甲", "乙"]
+  };
+
+  // 天罗地网：天罗 = 戌亥（男忌）、地网 = 辰巳（女忌）；此处按辰戌丑未论
+  // 传统另说：辰为天罗、戌为地网（男怕天罗、女怕地网）
+  var TIANLUO = [4, 10];   // 辰、戌
+
+  // 元辰（大耗）：阳男阴女，年支退一位之冲；阴男阳女，年支进一位之冲
+  function yuanChenZhi(yearZhi, isYangYear, isMale) {
+    var forward = (isMale === isYangYear);   // 阳男阴女 顺取冲，阴男阳女 逆取冲
+    var base = forward ? mod(yearZhi + 1, 12) : mod(yearZhi - 1, 12);
+    return mod(base + 6, 12);                // 冲位
+  }
+
+  // 血刃（月支查）：正月丑、二月未、三月寅、四月申…
+  var XUE_REN = { 2: 1, 3: 7, 4: 2, 5: 8, 6: 3, 7: 9,
+                  8: 4, 9: 10, 10: 5, 11: 11, 0: 6, 1: 0 };
+
+  // 勾绞煞（年支查）：勾神、绞神
+  var GOU_SHEN = { 2: 4, 3: 5, 4: 6, 5: 7, 6: 8, 7: 9,
+                   8: 10, 9: 11, 10: 0, 11: 1, 0: 2, 1: 3 };
+  var JIAO_SHEN = { 2: 10, 3: 11, 4: 0, 5: 1, 6: 2, 7: 3,
+                    8: 4, 9: 5, 10: 6, 11: 7, 0: 8, 1: 9 };
+
+  // 丧门 / 吊客（年支前二位 / 后二位）
+  function sangMenZhi(yearZhi) { return mod(yearZhi + 2, 12); }
+  function diaoKeZhi(yearZhi) { return mod(yearZhi - 2, 12); }
+
+  // 披麻（年支后三位）
+  function piMaZhi(yearZhi) { return mod(yearZhi - 3, 12); }
+
+  // 童子煞口诀：春秋寅子、冬夏卯未（按季节查日支/时支）
+  // 另说：春秋寅子、冬夏卯未；辰戌丑未为"假童子"（此处只取正童子）
+  var TONGZI = {
+    春: [2, 0], 夏: [3, 7], 秋: [2, 0], 冬: [3, 7]
+  };
+
+  // 六秀日：丙午、丁未、戊子、戊午、己丑、己未
+  var LIU_XIU = ["丙午", "丁未", "戊子", "戊午", "己丑", "己未"];
+
+  // 龙德 / 福德（月支查地支）
+  var LONG_DE = { 2: 7, 3: 8, 4: 9, 5: 6, 6: 3, 7: 0,
+                  8: 9, 9: 10, 10: 11, 11: 8, 0: 5, 1: 6 };
+  var FU_DE  = { 2: 5, 3: 6, 4: 7, 5: 8, 6: 9, 7: 10,
+                 8: 11, 9: 0, 10: 1, 11: 2, 0: 3, 1: 4 };
+
+  function calcShensha(pillars, monthZhi, gender) {
     var gans = pillars.map(function (p) { return p % 10; });
     var zhis = pillars.map(function (p) { return p % 12; });
     var dayGan = gans[2], yearGan = gans[0], yearZhi = zhis[0];
@@ -955,6 +1136,86 @@
       if (dayName === gz) mark(2, "四废");
     });
 
+    // ========== 补充神煞 ==========
+
+    // 9) 禄神（日干临官位）
+    if (LU_SHEN[dayGan] !== undefined) {
+      for (var p4 = 0; p4 < 4; p4++) {
+        if (zhis[p4] === LU_SHEN[dayGan]) mark(p4, "禄神");
+      }
+    }
+
+    // 10) 天赦（按季节查日柱）
+    var season = SEASON_OF_ZHI[monthZhi];
+    if (season && dayName === TIAN_SHE[season]) mark(2, "天赦");
+
+    // 11) 德秀贵人（月支三合局查天干）
+    if (DEXIU[monthZhi]) {
+      DEXIU[monthZhi].forEach(function (g) {
+        for (var p5 = 0; p5 < 4; p5++) {
+          if (TIANGAN[gans[p5]] === g) mark(p5, "德秀贵人");
+        }
+      });
+    }
+
+    // 12) 天罗地网（辰戌丑未全见或辰戌并见）
+    var hasChen = zhis.indexOf(4) >= 0, hasXu = zhis.indexOf(10) >= 0;
+    var hasChou = zhis.indexOf(1) >= 0, hasWei = zhis.indexOf(7) >= 0;
+    if (hasChen && hasXu) {
+      for (var p6 = 0; p6 < 4; p6++) if (zhis[p6] === 4 || zhis[p6] === 10) mark(p6, "天罗地网");
+    } else if (hasChou && hasWei) {
+      for (var p7 = 0; p7 < 4; p7++) if (zhis[p7] === 1 || zhis[p7] === 7) mark(p7, "天罗地网");
+    }
+
+    // 13) 元辰（大耗）：阳男阴女 / 阴男阳女 分顺逆
+    var isMale = (gender !== "女");
+    var isYangYear = (yearGan % 2 === 0);
+    var yc = yuanChenZhi(yearZhi, isYangYear, isMale);
+    for (var p6b = 0; p6b < 4; p6b++) {
+      if (zhis[p6b] === yc) mark(p6b, "元辰");
+    }
+
+    // 14) 血刃（月支查）
+    if (XUE_REN[monthZhi] !== undefined) {
+      for (var p8 = 0; p8 < 4; p8++) {
+        if (zhis[p8] === XUE_REN[monthZhi]) mark(p8, "血刃");
+      }
+    }
+
+    // 15) 勾绞煞（年支查）
+    if (GOU_SHEN[yearZhi] !== undefined && zhis.indexOf(GOU_SHEN[yearZhi]) >= 0) {
+      for (var p9 = 0; p9 < 4; p9++) if (zhis[p9] === GOU_SHEN[yearZhi]) mark(p9, "勾绞煞");
+    }
+    if (JIAO_SHEN[yearZhi] !== undefined && zhis.indexOf(JIAO_SHEN[yearZhi]) >= 0) {
+      for (var p9b = 0; p9b < 4; p9b++) if (zhis[p9b] === JIAO_SHEN[yearZhi]) mark(p9b, "勾绞煞");
+    }
+
+    // 16) 丧门 / 吊客 / 披麻（年支查）
+    var sm = sangMenZhi(yearZhi), dk = diaoKeZhi(yearZhi), pm = piMaZhi(yearZhi);
+    for (var p10 = 0; p10 < 4; p10++) {
+      if (zhis[p10] === sm) mark(p10, "丧门");
+      if (zhis[p10] === dk) mark(p10, "吊客");
+      if (zhis[p10] === pm) mark(p10, "披麻");
+    }
+
+    // 17) 童子煞（按季节查日支、时支）
+    if (season && TONGZI[season]) {
+      [2, 3].forEach(function (pi) {
+        if (TONGZI[season].indexOf(zhis[pi]) >= 0) mark(pi, "童子煞");
+      });
+    }
+
+    // 18) 六秀日（日柱）
+    if (LIU_XIU.indexOf(dayName) >= 0) mark(2, "六秀日");
+
+    // 19) 龙德 / 福德（月支查）
+    if (LONG_DE[monthZhi] !== undefined) {
+      for (var p11 = 0; p11 < 4; p11++) if (zhis[p11] === LONG_DE[monthZhi]) mark(p11, "龙德");
+    }
+    if (FU_DE[monthZhi] !== undefined) {
+      for (var p12 = 0; p12 < 4; p12++) if (zhis[p12] === FU_DE[monthZhi]) mark(p12, "福德");
+    }
+
     var detail = Object.keys(hits).map(function (n) {
       return { name: n, columns: hits[n].slice().sort(function (a, b) { return a - b; }),
                kind: SHENSHA_NOTES[n][0], note: SHENSHA_NOTES[n][1] };
@@ -962,9 +1223,191 @@
     return { perPillar: perPillar, detail: detail };
   }
 
+  // ============================================================
+  // 时间校正模块：夏令时回退 → 经度校正 → 均时差（真太阳时）
+  // ============================================================
+
+  // 中国省份/直辖市/自治区主要城市经度（度，东经为正）
+  var CITY_LON = {
+    "北京": 116.41, "天津": 117.20, "上海": 121.47, "重庆": 106.55,
+    "河北": 114.50, "山西": 112.55, "辽宁": 123.43, "吉林": 125.32,
+    "黑龙江": 126.63, "江苏": 118.80, "浙江": 120.15, "安徽": 117.28,
+    "福建": 119.30, "江西": 115.89, "山东": 117.00, "河南": 113.65,
+    "湖北": 114.30, "湖南": 113.00, "广东": 113.26, "海南": 110.35,
+    "四川": 104.07, "贵州": 106.71, "云南": 102.71, "陕西": 108.95,
+    "甘肃": 103.73, "青海": 101.74, "内蒙古": 111.65, "广西": 108.33,
+    "西藏": 91.11, "宁夏": 106.27, "新疆": 87.68,
+    "中国香港": 114.17, "中国澳门": 113.55, "中国台湾": 121.52,
+    "其他": 120.00
+  };
+
+  // 中国夏令时实施区间 [起始年月日时, 结束年月日时]（北京时间，8 位数组）
+  // 1986—1991 年全国统一实行；1949 年前为部分地区史料值，此处不纳入
+  var DST_RANGES = [
+    [1986, 5, 4, 2, 1986, 9, 14, 2],
+    [1987, 4, 12, 2, 1987, 9, 13, 2],
+    [1988, 4, 10, 2, 1988, 9, 11, 2],
+    [1989, 4, 16, 2, 1989, 9, 17, 2],
+    [1990, 4, 15, 2, 1990, 9, 16, 2],
+    [1991, 4, 14, 2, 1991, 9, 15, 2]
+  ];
+
+  // 判断某北京时间是否落在夏令时区间内
+  function isDST(y, m, d, h, mi) {
+    var t = jdn(y, m, d) * 1440 + h * 60 + mi;   // 分钟序
+    for (var i = 0; i < DST_RANGES.length; i++) {
+      var r = DST_RANGES[i];
+      var a = jdn(r[0], r[1], r[2]) * 1440 + r[3] * 60;
+      var b = jdn(r[4], r[5], r[6]) * 1440 + r[7] * 60;
+      if (t >= a && t < b) return true;
+    }
+    return false;
+  }
+
+  // 均时差（分钟）：真太阳时 - 平太阳时，Meeus 第 28 章
+  // 返回分钟数，正值表示真太阳时快于平太阳时
+  function equationOfTime(y, m, d, h, mi) {
+    if (h === undefined || h === null) h = 12;   // 注意 0 时为合法值，不可用 || 
+    if (mi === undefined || mi === null) mi = 0;
+    // 用儒略日算 Meeus 的 t（以 J2000 起算的世纪数）
+    var jd = jdn(y, m, d) - 0.5 + (h - 8 + mi / 60) / 24 + 8 / 24;
+    var t = (jd - 2451545.0) / 36525.0;
+    var deg = Math.PI / 180;
+    var L0 = mod(280.4664567 + 360007.6982779 * t / 10
+             + 0.03032028 * t * t
+             + t * t * t / 49931
+             - t * t * t * t / 15300
+             - t * t * t * t * t / 2000000, 360);
+    var M = mod(357.52911 + 35999.05029 * t - 0.0001537 * t * t, 360) * deg;
+    var C = (1.914602 - 0.004817 * t - 0.000014 * t * t) * Math.sin(M)
+          + (0.019993 - 0.000101 * t) * Math.sin(2 * M)
+          + 0.000289 * Math.sin(3 * M);
+    var sunLon = mod(L0 + C, 360);
+    var omega = mod(125.04 - 1934.136 * t, 360) * deg;
+    var lambda = sunLon - 0.00569 - 0.00478 * Math.sin(omega);
+    var eps0 = 23 + 26 / 60 + 21.448 / 3600
+             - (46.8150 * t + 0.00059 * t * t - 0.001813 * t * t * t) / 3600;
+    var eps = eps0 + 0.00256 * Math.cos(omega);
+    var alpha = mod(Math.atan2(Math.cos(eps * deg) * Math.sin(lambda * deg),
+                               Math.cos(lambda * deg)) / deg, 360);
+    // 均时差 = 平太阳时 - 真太阳时（转成分钟后再取反，得到 真-平）
+    var eot = L0 - 0.0057183 - alpha + 0.000000000000000000000000000001;
+    // 归一到 ±180°
+    eot = mod(eot + 180, 360) - 180;
+    return eot * 4;   // 1° = 4 分钟（L0 - α 即均时差，正=真太阳时快）
+  }
+
+  // 经度对应的地方平太阳时与北京时间的差（分钟）
+  // 北京时间基准经线 120°E：每偏西 1° 慢 4 分钟
+  function zoneMeridian() { return 120; }
+
+  // 时间归一化：把用户输入的钟表时间换算为排盘用的真太阳时
+  // opts: { city, lon, dst, tst } 三个开关
+  // 返回 { y,m,d,h,mi, steps:[...], totalOffset }
+  function normalizeTime(y, m, d, h, mi, opts) {
+    opts = opts || {};
+    var steps = [];
+    var cy = y, cm = m, cd = d, ch = h, cmi = mi;
+    var totalMin = 0;
+
+    // 1) 夏令时回退（1986—1991，+1 小时 → 减 60 分钟）
+    if (opts.dst) {
+      if (isDST(cy, cm, cd, ch, cmi)) {
+        totalMin -= 60;
+        steps.push({ name: "夏令时回退", min: -60, note: "出生时间落在夏令时区间，回退 1 小时" });
+      } else {
+        steps.push({ name: "夏令时回退", min: 0, note: "出生时间不在夏令时区间" });
+      }
+    }
+
+    // 2) 经度校正：出生地经度与 120°E 的差
+    if (opts.tst) {
+      var lon = opts.lon;
+      if (lon === undefined || lon === null) {
+        lon = CITY_LON[opts.city] !== undefined ? CITY_LON[opts.city] : 120;
+      }
+      var lonMin = (lon - zoneMeridian()) * 4;
+      totalMin += lonMin;
+      steps.push({
+        name: "经度校正", min: Math.round(lonMin * 100) / 100,
+        note: "出生地经度 " + Math.round(lon * 100) / 100 + "°E，与 120°E 相差 " +
+              (Math.round(lonMin * 100) / 100) + " 分钟"
+      });
+
+      // 3) 均时差：需要用经度校正后的时刻来算更精确
+      var tmpTotal = totalMin;
+      var eot = equationOfTimeFromJd(jdn(y, m, d) * 1440 + h * 60 + mi + tmpTotal);
+      totalMin += eot;
+      steps.push({
+        name: "均时差", min: Math.round(eot * 100) / 100,
+        note: "地球轨道椭圆与黄赤交角导致的偏差 " + (Math.round(eot * 100) / 100) + " 分钟"
+      });
+    }
+
+    // 应用总偏移
+    var absMin = jdn(cy, cm, cd) * 1440 + ch * 60 + cmi + Math.round(totalMin);
+    var newDay = Math.floor(absMin / 1440);
+    var rest = absMin - newDay * 1440;
+    var ymd = jdnToDate(newDay);
+    var nh = Math.floor(rest / 60), nmi = rest % 60;
+
+    return {
+      y: ymd[0], m: ymd[1], d: ymd[2], h: nh, mi: nmi,
+      input: { y: y, m: m, d: d, h: h, mi: mi },
+      steps: steps,
+      totalOffset: Math.round(totalMin * 100) / 100
+    };
+  }
+
+  // 由"分钟序"直接求均时差（内部用，避免浮点小时误差）
+  function equationOfTimeFromJd(minutesSinceEpoch) {
+    var jd = minutesSinceEpoch / 1440;
+    var t = (jd - 2451545.0) / 36525.0;
+    var deg = Math.PI / 180;
+    var L0 = mod(280.4664567 + 360007.6982779 * t / 10
+             + 0.03032028 * t * t
+             + t * t * t / 49931
+             - t * t * t * t / 15300
+             - t * t * t * t * t / 2000000, 360);
+    var M = mod(357.52911 + 35999.05029 * t - 0.0001537 * t * t, 360) * deg;
+    var C = (1.914602 - 0.004817 * t - 0.000014 * t * t) * Math.sin(M)
+          + (0.019993 - 0.000101 * t) * Math.sin(2 * M)
+          + 0.000289 * Math.sin(3 * M);
+    var sunLon = mod(L0 + C, 360);
+    var omega = mod(125.04 - 1934.136 * t, 360) * deg;
+    var lambda = sunLon - 0.00569 - 0.00478 * Math.sin(omega);
+    var eps0 = 23 + 26 / 60 + 21.448 / 3600
+             - (46.8150 * t + 0.00059 * t * t - 0.001813 * t * t * t) / 3600;
+    var eps = eps0 + 0.00256 * Math.cos(omega);
+    var alpha = mod(Math.atan2(Math.cos(eps * deg) * Math.sin(lambda * deg),
+                               Math.cos(lambda * deg)) / deg, 360);
+    var eot = L0 - 0.0057183 - alpha;
+    eot = mod(eot + 180, 360) - 180;
+    return eot * 4;
+  }
+
   // ---------- 排盘主体 ----------
-  function paipan(year, month, day, hour, minute, gender, ziAdvance) {
+  function paipan(year, month, day, hour, minute, gender, ziAdvance, correct) {
     if (ziAdvance === undefined) ziAdvance = true;
+
+    // 时间校正（可选）：夏令时回退 + 经度校正 + 均时差
+    var solarCorrect = null;
+    var solarInput = null;
+    if (correct && (correct.dst || correct.tst)) {
+      var nz = normalizeTime(year, month, day, hour, minute, correct);
+      solarInput = nz.input;
+      solarCorrect = {
+        steps: nz.steps,
+        totalOffset: nz.totalOffset,
+        adjusted: { y: nz.y, m: nz.m, d: nz.d, h: nz.h, mi: nz.mi },
+        city: correct.city,
+        lon: (correct.lon !== undefined && correct.lon !== null)
+              ? correct.lon
+              : (CITY_LON[correct.city] !== undefined ? CITY_LON[correct.city] : 120)
+      };
+      year = nz.y; month = nz.m; day = nz.d; hour = nz.h; minute = nz.mi;
+    }
+
     var y = year;
     var birthJd = jdFromBeijing(y, month, day, hour, minute, 0);
 
@@ -1055,7 +1498,7 @@
 
     // 神煞（25 种，详见神煞详解）
     var monthZhiForSha = best.zhi;
-    var shaResult = calcShensha(pillars, monthZhiForSha);
+    var shaResult = calcShensha(pillars, monthZhiForSha, gender);
     var shensha = shaResult.perPillar;
     var shenshaDetail = shaResult.detail;
 
@@ -1130,7 +1573,9 @@
       dayun: dayun,
       liunian: liunian,
       forward: forward,
-      ziAdvance: ziAdvance
+      ziAdvance: ziAdvance,
+      solarCorrect: solarCorrect,
+      solarInput: solarInput
     };
   }
 
@@ -1147,7 +1592,12 @@
     ganzhiShishen: ganzhiShishen,
     jieOfYear: jieOfYear,
     liuyueList: liuyueList,
-    jdn: jdn
+    jdn: jdn,
+    isDST: isDST,
+    equationOfTime: equationOfTime,
+    normalizeTime: normalizeTime,
+    CITY_LON: CITY_LON,
+    DST_RANGES: DST_RANGES
   };
 
   if (typeof module !== "undefined" && module.exports) module.exports = api;
@@ -1207,8 +1657,14 @@
     var b = r.bazi;
     // 基本信息
     var jie = b.month.jie + "（" + b.month.jieDt.m + "月" + b.month.jieDt.d + "日 " + fmt2(b.month.jieDt.h) + ":" + fmt2(b.month.jieDt.mi) + " 后交" + b.month.jie + "）";
+    var solarLine = r.solar;
+    if (r.solarCorrect && r.solarInput) {
+      var si = r.solarInput;
+      solarLine = si.y + "-" + fmt2(si.m) + "-" + fmt2(si.d) + " " + fmt2(si.h) + ":" + fmt2(si.mi) +
+                  "（钟表）→ " + r.solar + "（真太阳时）";
+    }
     document.getElementById("meta").innerHTML =
-      "<span>公历</span><b>" + r.solar + "</b>" +
+      "<span>公历</span><b>" + solarLine + "</b>" +
       "<span>农历</span><b>" + r.lunar + "</b>" +
       "<span>生肖</span><b>" + r.zodiac + "</b>" +
       "<span>月令</span><b>" + jie + "</b>" +
@@ -1443,6 +1899,14 @@
     renderDyRows(true);
   });
 
+  function readCorrect() {
+    var tst = document.getElementById("corr-tst").checked;
+    var dst = document.getElementById("corr-dst").checked;
+    if (!tst && !dst) return null;
+    var city = document.getElementById("corr-city").value;
+    return { city: city, tst: tst, dst: dst };
+  }
+
   function readForm() {
     var calmode = document.querySelector('input[name=calmode]:checked').value;
     var y = parseInt(document.getElementById("year").value, 10);
@@ -1456,19 +1920,49 @@
     if (!y || y < 1900 || y > 2100) throw new Error("年份需在 1900—2100 之间");
     if (calmode === "lunar") {
       var g = Bazi.lunarToGregorian(y, mo, leap, d);
-      return { year: g[0], month: g[1], day: g[2], hour: hh, minute: mi, gender: gender, zi: zi };
+      return { year: g[0], month: g[1], day: g[2], hour: hh, minute: mi, gender: gender, zi: zi, correct: readCorrect() };
     }
-    return { year: y, month: mo, day: d, hour: hh, minute: mi, gender: gender, zi: zi };
+    return { year: y, month: mo, day: d, hour: hh, minute: mi, gender: gender, zi: zi, correct: readCorrect() };
   }
 
   function update() {
     try {
       var p = readForm();
-      var r = Bazi.paipan(p.year, p.month, p.day, p.hour, p.minute, p.gender, p.zi);
+      var r = Bazi.paipan(p.year, p.month, p.day, p.hour, p.minute, p.gender, p.zi, p.correct);
+      renderCorrect(r);
       render(r);
     } catch (e) {
       showErr("排盘失败：" + e.message);
     }
+  }
+
+  // 渲染校正结果详情
+  function renderCorrect(r) {
+    var box = document.getElementById("corr-detail");
+    var tg = document.getElementById("corr-tag");
+    var tst = document.getElementById("corr-tst").checked;
+    var dst = document.getElementById("corr-dst").checked;
+    tg.style.display = (tst || dst) ? "" : "none";
+    document.getElementById("corr-toggle").className =
+      "corr-toggle" + (document.getElementById("corr-body").className.indexOf("open") >= 0 ? " open" : "")
+      + ((tst || dst) ? " has-on" : "");
+    if (!r.solarCorrect || !r.solarInput) { box.style.display = "none"; return; }
+    var sc = r.solarCorrect, si = r.solarInput, a = sc.adjusted;
+    function p2(n) { return ("0" + n).slice(-2); }
+    var html = "";
+    html += '<div class="cd-line"><span>钟表时间</span><span class="cd-v">' +
+            si.y + "-" + p2(si.m) + "-" + p2(si.d) + " " + p2(si.h) + ":" + p2(si.mi) + "</span></div>";
+    html += '<div class="cd-line"><span>校正后时刻</span><span class="cd-v">' +
+            a.y + "-" + p2(a.m) + "-" + p2(a.d) + " " + p2(a.h) + ":" + p2(a.mi) + "</span></div>";
+    sc.steps.forEach(function (s) {
+      html += '<div class="cd-line"><span>' + s.name + '</span><span class="cd-v">' +
+              (s.min > 0 ? "+" : "") + s.min + " 分</span></div>";
+    });
+    var tot = sc.totalOffset;
+    html += '<div class="cd-sum">合计偏移 ' + (tot > 0 ? "+" : "") + tot + ' 分钟' +
+            (sc.lon ? "（出生地经度 " + sc.lon + "°E）" : "") + "</div>";
+    box.innerHTML = html;
+    box.style.display = "";
   }
 
   // 农历模式切换显示闰月选项
@@ -1490,8 +1984,48 @@
     function (el) { el.addEventListener("change", update); }
   );
 
+  // 时辰校正：城市下拉 + 折叠 + 开关
+  (function () {
+    var sel = document.getElementById("corr-city");
+    var keys = Object.keys(Bazi.CITY_LON);
+    keys.forEach(function (k) {
+      var o = document.createElement("option");
+      o.value = k;
+      o.textContent = k + "（" + Bazi.CITY_LON[k] + "°E）";
+      sel.appendChild(o);
+    });
+    sel.value = "北京";
+
+    var tg = document.getElementById("corr-toggle");
+    var body = document.getElementById("corr-body");
+    tg.addEventListener("click", function () {
+      var open = body.className.indexOf("open") >= 0;
+      body.className = open ? "corr-body" : "corr-body open";
+      tg.className = (open ? "corr-toggle" : "corr-toggle open") +
+        (document.getElementById("corr-tst").checked || document.getElementById("corr-dst").checked ? " has-on" : "");
+    });
+
+    ["corr-tst", "corr-dst", "corr-city"].forEach(function (id) {
+      document.getElementById(id).addEventListener("change", function () {
+        // 勾选任一开关时自动展开面板，便于看到结果
+        if (id !== "corr-city" && document.getElementById(id).checked) {
+          body.className = "corr-body open";
+          tg.className = "corr-toggle open";
+        }
+        update();
+      });
+    });
+  })();
+
   update();  // 初始排盘
 })();
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("sw.js").catch(function(){});
+  });
+}
 </script>
 </body>
 </html>
