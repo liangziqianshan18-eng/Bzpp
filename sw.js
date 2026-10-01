@@ -1,6 +1,6 @@
 /* 八字排盘 Service Worker：离线缓存
  * 版本号递增即可强制刷新全部缓存 */
-var CACHE = "bazi-v9";
+var CACHE = "bazi-v15";
 var ASSETS = [
   "./",
   "./index.html",
