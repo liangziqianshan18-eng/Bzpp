@@ -85,13 +85,64 @@
   }
   .field input[type=number] { width: 96px; }
   .field.narrow select, .field.narrow input { min-width: 72px; }
-  .radios { display: flex; gap: 10px; align-items: center; }
+  .radios { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
   .radios label {
     display: flex; gap: 5px; align-items: center; cursor: pointer;
-    font-size: 15px; color: var(--ink); padding: 7px 10px;
+    font-size: 15px; color: var(--ink); padding: 7px 10px; white-space: nowrap;
     border: 1px solid var(--line); border-radius: 6px; background: var(--card2);
   }
   .radios input { accent-color: var(--red); }
+  /* ===== 四柱反查（迭代 50）===== */
+  .sz-panel { margin-top: 14px; }
+  .sz-cols { display: flex; gap: 10px; justify-content: space-between; }
+  .sz-col { flex: 1; text-align: center; min-width: 0; }
+  .sz-col .sz-label { font-size: 13px; color: var(--ink-dim); margin-bottom: 8px; }
+  /* 圆圈自适应列宽（问真式大圆），浅灰实心、无虚线 */
+  .sz-circle {
+    width: 100%; max-width: 80px; aspect-ratio: 1; margin: 0 auto 10px;
+    border-radius: 50%; border: 1px solid var(--line); background: var(--card2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: clamp(22px, 7vw, 32px); font-weight: 600; cursor: pointer; user-select: none;
+    overflow: hidden; box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .sz-circle.active { border: 2px solid var(--red); background: #fff7f5; }
+  .sz-circle.filled { background: #fff; border: 1px solid var(--line); }
+  /* 老版 iOS Safari 不支持 aspect-ratio 的回退：固定高度近似圆形 */
+  @supports not (aspect-ratio: 1) {
+    .sz-circle { height: 76px; }
+  }
+  .sz-kb { margin-top: 14px; }
+  .sz-kb-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .sz-key {
+    flex: 1; height: clamp(54px, 15vw, 68px); border: 1px solid var(--line); border-radius: 10px;
+    background: var(--card2); font-size: clamp(21px, 6vw, 27px); font-weight: 600; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .sz-key:active { background: #f3e3e0; }
+  .sz-kb-tip { font-size: 12px; color: var(--ink-faint); margin: 4px 0 8px; }
+  .sz-search {
+    width: 100%; margin-top: 10px; padding: 12px 0; font-size: 16px; font-weight: 600;
+    color: #fff; background: var(--red); border: 0; border-radius: 8px; cursor: pointer;
+  }
+  .sz-results { margin-top: 12px; }
+  .sz-res-item {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 9px 10px; border: 1px solid var(--line); border-radius: 8px;
+    margin-bottom: 8px; background: var(--card2); font-size: 14px;
+  }
+  .sz-res-item b { font-size: 15px; }
+  .sz-res-item .sz-tag {
+    font-size: 11px; color: var(--red); border: 1px solid var(--red);
+    border-radius: 4px; padding: 0 4px; margin-left: 6px;
+  }
+  .sz-res-use {
+    padding: 6px 12px; font-size: 13px; color: var(--red);
+    border: 1px solid var(--red); border-radius: 6px; background: #fff; cursor: pointer;
+    white-space: nowrap;
+  }
+  .sz-res-empty { font-size: 13px; color: var(--ink-dim); padding: 8px 2px; }
   .checks { display: flex; gap: 16px; flex-wrap: wrap; }
   .checks label {
     display: flex; gap: 6px; align-items: center; cursor: pointer;
@@ -1328,6 +1379,7 @@
         <div class="radios">
           <label><input type="radio" name="calmode" value="solar" checked>公历</label>
           <label><input type="radio" name="calmode" value="lunar">农历</label>
+          <label><input type="radio" name="calmode" value="sizhu">四柱</label>
         </div>
       </div>
       <div class="field narrow">
@@ -1364,8 +1416,17 @@
         </div>
       </div>
     </div>
+
+    <!-- 四柱反查面板（迭代 50，历法选「四柱」时显示） -->
+    <div class="sz-panel" id="sz-panel" style="display:none">
+      <div class="sz-cols" id="sz-cols"></div>
+      <div class="sz-kb" id="sz-kb" style="display:none"></div>
+      <button type="button" class="sz-search" id="sz-search">查找出生时间（1900—2100）</button>
+      <div class="sz-results" id="sz-results"></div>
+    </div>
+
     <div class="checks" style="margin-top:12px">
-      <label><input type="checkbox" id="ziadvance" checked>晚子时（23:00 后）日柱进位到次日（子时换日派；取消则按早晚子时派，日柱不进位）</label>
+      <label><input type="checkbox" id="ziadvance">晚子时（23:00 后）日柱进位到次日（子时换日派；取消则按早晚子时派，日柱不进位。默认早晚子时派）</label>
     </div>
 
     <div class="corr-toggle" id="corr-toggle">
@@ -3309,6 +3370,157 @@
       gender: gender,
       monthZhi: monthZhiForSha
     };
+  }
+
+  // ============================================================
+  // 四柱反查（迭代 50）：由四柱干支反推公历出生时刻
+  // ============================================================
+  // 用法：sizhuReverse([年柱,月柱,日柱,时柱], y0, y1, ziAdvance)
+  //   target 各柱为六十甲子序号 0—59；y0/y1 查找范围（1900—2100）；
+  //   ziAdvance 与页面「晚子时日柱进位」口径一致。
+  // 返回：{ results: [{y,m,d,h,mi,ziNote}], count } 或 { error: 原因 }。
+  //
+  // 算法：
+  //   ① 四柱自洽校验（月柱↔年柱五虎遁、时柱↔日柱五鼠遁），矛盾直接报无解；
+  //   ② 遍历候选年（年柱 60 年一循环，仅 3—4 个候选年），年柱以立春分界；
+  //   ③ 目标月支定节气月区间（寅月=立春~惊蛰 … 子月=大雪~小寒(次年)、
+  //      丑月=小寒(次年)~立春(次年)）；
+  //   ④ 区间内日柱以 60 天为周期，由儒略日直接定位候选日（含晚子进位的
+  //      「日柱为 td-1 之日」）；
+  //   ⑤ 每个候选日生成时辰代表时刻（非子时取时辰起点整点；子时取早子 0 点、
+  //      晚子 23 点），逐一刻做「正向轻量四柱」（完全复刻 paipan 的
+  //      年/月/日/时四步口径），四柱全等者收入结果 —— 保证与正向排盘零偏差。
+  // 性能：候选年 ≈ 范围年数/60，每候选年 3—5 次天文节气计算，全程毫秒级。
+  function sizhuReverse(target, y0, y1, ziAdvance) {
+    if (ziAdvance === undefined) ziAdvance = true;
+    if (y0 === undefined || y0 === null) y0 = 1900;
+    if (y1 === undefined || y1 === null) y1 = 2100;
+    y0 = Math.max(1900, Math.floor(y0));
+    y1 = Math.min(2100, Math.floor(y1));
+    if (y0 > y1) return { error: "查找范围无效。" };
+    if (!target || target.length !== 4) return { error: "须选定完整的四柱干支。" };
+    for (var qi = 0; qi < 4; qi++) {
+      var tv = target[qi];
+      if (typeof tv !== "number" || isNaN(tv) || Math.floor(tv) !== tv || tv < 0 || tv > 59)
+        return { error: "四柱干支未选完整，无法反查。" };
+    }
+
+    var ty = target[0], tm = target[1], td = target[2], th = target[3];
+    var tyG = ty % 10, tmZ = tm % 12, tdG = td % 10, thZ = th % 12;
+
+    // ① 五虎遁：月柱须与年柱自洽
+    if (monthGanzhi(tyG, tmZ) !== tm) {
+      return { error: "月柱「" + ganzhiName(tm) + "」与年柱「" + ganzhiName(ty) +
+               "」不符五虎遁（甲己之年丙作首、乙庚之岁戊为头、丙辛必定寻庚起、" +
+               "丁壬壬位顺行流、戊癸甲寅四方求），四柱自相矛盾，无解。" };
+    }
+    // ① 五鼠遁：时柱须与日柱自洽（子时早晚两派任一符合即可）
+    var shiOk;
+    if (thZ !== 0) {
+      shiOk = (hourGanzhi(tdG, 2 * thZ - 1) === th);
+    } else {
+      shiOk = (hourGanzhi(tdG, 0) === th) || (hourGanzhi((tdG + 1) % 10, 23) === th);
+    }
+    if (!shiOk) {
+      return { error: "时柱「" + ganzhiName(th) + "」与日柱「" + ganzhiName(td) +
+               "」不符五鼠遁（甲己还加甲、乙庚丙作初、丙辛从戊起、丁壬庚子居、" +
+               "戊癸何方发，壬子是真途），四柱自相矛盾，无解。" };
+    }
+
+    // ③ 正向轻量四柱 —— 与 paipan 主流程完全同口径（北京时间，无时辰校正）
+    function pillarsAt(y, m, d, h, mi) {
+      var birthDt = { y: y, m: m, d: d, h: h, mi: mi, s: 0 };
+      var lichun = solarLongitudeTime(y, 315);
+      function before(a, b) {
+        return jdFromBeijing(a.y, a.m, a.d, a.h, a.mi, a.s) <
+               jdFromBeijing(b.y, b.m, b.d, b.h, b.mi, b.s);
+      }
+      var ygzYear = before(birthDt, lichun) ? y - 1 : y;
+      var yearIdx = yearGanzhiIndex(ygzYear);
+      var best = null;
+      for (var yy = y - 1; yy <= y + 1; yy++) {
+        var jies = jieOfYear(yy);
+        for (var i = 0; i < jies.length; i++) {
+          if (!before(birthDt, jies[i].dt)) {
+            if (!best || before(best.dt, jies[i].dt)) best = jies[i];
+          }
+        }
+      }
+      var monthIdx = monthGanzhi(yearIdx % 10, best.zhi);
+      var nxYmd = jdnToDate(jdn(y, m, d) + 1);
+      var hourDayYmd = (h >= 23) ? nxYmd : [y, m, d];
+      var dayIdx = (ziAdvance && h >= 23)
+        ? dayGanzhiIndex(nxYmd[0], nxYmd[1], nxYmd[2])
+        : dayGanzhiIndex(y, m, d);
+      var hourIdx = hourGanzhi(dayGanzhiIndex(hourDayYmd[0], hourDayYmd[1], hourDayYmd[2]) % 10, h);
+      return [yearIdx, monthIdx, dayIdx, hourIdx];
+    }
+
+    // ② ③ ④ ⑤ 主扫描
+    var results = [], seen = {};
+    var rangeLoJd = jdFromBeijing(y0, 1, 1, 0, 0, 0);        // 查找范围下界
+    var rangeHiJd = jdFromBeijing(y1 + 1, 1, 1, 0, 0, 0);    // 上界（不含）
+    for (var y = y0 - 1; y <= y1; y++) {                     // y0-1：覆盖 y0 立春前的盘
+      if (yearGanzhiIndex(y) !== ty) continue;
+      var lc  = solarLongitudeTime(y, 315);
+      var lcJd = jdFromBeijing(lc.y, lc.m, lc.d, lc.h, lc.mi, lc.s || 0);
+      var lc2 = solarLongitudeTime(y + 1, 315);
+      var lc2Jd = jdFromBeijing(lc2.y, lc2.m, lc2.d, lc2.h, lc2.mi, lc2.s || 0);
+
+      // 目标节气月区间 [a, b)：月支 → 月序 n（寅=1 … 丑=12）
+      var n = mod(tmZ - 2, 12) + 1;
+      var sDtc, eDtc;
+      if (n <= 10) {                    // 寅月~亥月：两端都在 y 年
+        sDtc = solarLongitudeTime(y, JIE_LON[n - 1]);
+        eDtc = solarLongitudeTime(y, JIE_LON[n % 12]);
+      } else if (n === 11) {            // 子月：大雪(y年12月) ~ 小寒(y+1年1月)
+        sDtc = solarLongitudeTime(y, JIE_LON[10]);
+        eDtc = solarLongitudeTime(y + 1, JIE_LON[11]);
+      } else {                          // 丑月：小寒(y+1年1月) ~ 立春(y+1)
+        sDtc = solarLongitudeTime(y + 1, JIE_LON[11]);
+        eDtc = lc2;
+      }
+      var aJd = jdFromBeijing(sDtc.y, sDtc.m, sDtc.d, sDtc.h, sDtc.mi, sDtc.s || 0);
+      var bJd = jdFromBeijing(eDtc.y, eDtc.m, eDtc.d, eDtc.h, eDtc.mi, eDtc.s || 0);
+      var a = Math.max(aJd, lcJd), b = Math.min(bJd, lc2Jd);
+      if (a >= b) continue;
+
+      // 候选日：节气月区间前后各扩 2 天内，日柱 == td（白天/早子/晚子不进位）
+      // 或 == td-1（晚子进位派：该日 23 点日柱进为 td）
+      var sbA = beijingFromJd(a - 2), sbB = beijingFromJd(b + 2);
+      var jdn0 = jdn(sbA.y, sbA.m, sbA.d), jdn1 = jdn(sbB.y, sbB.m, sbB.d);
+      for (var j = jdn0; j <= jdn1; j++) {
+        var dg = mod(j - 2433191, 60);
+        if (dg !== td && dg !== mod(td - 1, 60)) continue;
+        var ymd = jdnToDate(j);
+        var times = [];
+        if (thZ !== 0) {
+          if (dg === td) times.push([ymd[0], ymd[1], ymd[2], 2 * thZ - 1, 0, ""]);
+        } else if (dg === td) {
+          times.push([ymd[0], ymd[1], ymd[2], 0, 0, "早子时"]);
+          times.push([ymd[0], ymd[1], ymd[2], 23, 0, "晚子时"]);
+        } else {                        // dg === td-1：晚子进位派专属
+          times.push([ymd[0], ymd[1], ymd[2], 23, 0, "晚子时"]);
+        }
+        for (var ti = 0; ti < times.length; ti++) {
+          var tt = times[ti];
+          var tJd = jdFromBeijing(tt[0], tt[1], tt[2], tt[3], tt[4], 0);
+          if (tJd < a || tJd >= b) continue;          // 须落在本节气月内
+          if (tJd < rangeLoJd || tJd >= rangeHiJd) continue;   // 须落在查找范围内
+          var p = pillarsAt(tt[0], tt[1], tt[2], tt[3], tt[4]);
+          if (p[0] !== ty || p[1] !== tm || p[2] !== td || p[3] !== th) continue;
+          var key = tt[0] + "-" + tt[1] + "-" + tt[2] + "-" + tt[3];
+          if (seen[key]) continue;
+          seen[key] = 1;
+          results.push({ y: tt[0], m: tt[1], d: tt[2], h: tt[3], mi: tt[4], ziNote: tt[5] });
+        }
+      }
+    }
+    results.sort(function (x, y2) {
+      return (x.y * 1e10 + x.m * 1e8 + x.d * 1e6 + x.h * 1e4 + x.mi * 100) -
+             (y2.y * 1e10 + y2.m * 1e8 + y2.d * 1e6 + y2.h * 1e4 + y2.mi * 100);
+    });
+    return { results: results, count: results.length };
   }
 
   // ============================================================
@@ -5847,6 +6059,226 @@ function tkGrade(pillars, monthZhi) {
   }
 
   // ------------------------------------------------------------
+  // 三·五、专旺五格（《滴天髓》纯从派 · 最严口径）（迭代49）
+  //
+  //   曲直仁寿格（木）/ 炎上格（火）/ 稼穑格（土）/ 从革格（金）/ 润下格（水）
+  //
+  //   五条判据（①②③ 为硬前置，任一不过即不成立；全过再议 ④⑤）：
+  //     ① 月令当令：月支「本气」五行 = 日主五行（日主当令得气）
+  //     ② 日主通根：四支藏干之本气，至少一处与日主同五行（专旺以日主为旺神，须自坐根基）
+  //     ③ 地支成方成局：三会（方）优先，其次三合（局）；三支须齐现，半合不算
+  //     ④ 无克神透干：除日干外三干，不得见克制日主之五行（木格忌金、火格忌水…）
+  //     ⑤ 支局无冲刑：构成方局之三支两两之间，不得为六冲 / 刑 / 自刑
+  //
+  //   ①②③ 全过 → ④⑤ 全过为「成格」，有碍为「近格」（假专旺）。
+  //
+  //   【典籍依据 · 迭代49 修正】
+  //   《渊海子平》「弃命从杀格」云：「…身主无气，只得舍身而从之，要行杀旺及财乡，
+  //     忌日主有根及比肩之地。」——「无根」是「从格」（日主极弱、弃命相从）的条件。
+  //   《三命通会》「弃命从财」：「弃命从财，须要会财，若逢根气，命损无猜。」同此。
+  //
+  //   专旺格（一行得气）与此相反：日主**极旺**，自身即旺神，须当令、通根、比劫印
+  //   帮身，忌官杀克破。古籍例证：
+  //     《渊海子平》李侍郎：乙酉 乙酉 乙酉 甲申（弃命从杀 —— 从格例，日主无根）
+  //     曲直格例：壬寅 癸卯 甲辰 甲子（甲木生卯月，卯即甲之根 —— 专旺例，日主有根）
+  //   「忌日主有根」与「日主通根」分属两格，判据不可互串。
+  // ------------------------------------------------------------
+
+  // 三会（方）：寅卯辰会东方木 …（土为辰戌丑未四库）
+  var ZW_SANHUI = { "木": [2, 3, 4], "火": [5, 6, 7], "金": [8, 9, 10],
+                    "水": [11, 0, 1], "土": [3, 6, 9, 0] };
+  // 三合（局）：亥卯未合木局 …（土无三合，仅四库会）
+  var ZW_SANHE = { "木": [11, 3, 7], "火": [2, 6, 10], "金": [5, 9, 1],
+                   "水": [8, 0, 4], "土": [] };
+  var ZW_NAME = { "木": "曲直仁寿格", "火": "炎上格", "土": "稼穑格",
+                  "金": "从革格", "水": "润下格" };
+  // 五行相克（用于判「克神」）：木克土、土克水、水克火、火克金、金克木
+  var ZW_KE = { "木": "土", "土": "水", "水": "火", "火": "金", "金": "木" };
+
+  function gjZhuanwang(pillars) {
+    var gans = [], zhis = [], k;
+    for (k = 0; k < 4; k++) { gans.push(pillars[k] % 10); zhis.push(pillars[k] % 12); }
+    var dayIdx = gans[2];
+    var dayGanName = TIANGAN[dayIdx];
+    var dayWx = GAN_WUXING[dayIdx];
+    var monthZhiName = DIZHI[zhis[1]];
+
+    // ① 月令当令 —— 日主当令得气。只认月支「本气」（charAt(0)），
+    //    不可用整串，否则巳月（藏丙戊庚）会火 / 土 / 金同时「当令」。
+    var mBenQi = CANGGAN[zhis[1]].charAt(0);
+    var mBenQiWx = GAN_WUXING[TIANGAN.indexOf(mBenQi)];
+    if (mBenQiWx !== dayWx) return null;
+
+    var w = dayWx;
+    var keWx = ZW_KE[w];   // 克制本格之五行（如木格之金）
+
+    // ② 日主通根 —— 四支藏干「本气」至少一处与日主同五行。
+    //    专旺以日主自身为旺神，须自坐根基（古籍曲直格例：甲木生卯月，卯即甲之根）。
+    //    注：此与「从格忌有根」相反，分属两格，不可混。
+    var hasRoot = false, rootAt = "";
+    for (k = 0; k < 4; k++) {
+      var bq = CANGGAN[zhis[k]].charAt(0);
+      if (GAN_WUXING[TIANGAN.indexOf(bq)] === w) {
+        hasRoot = true;
+        rootAt = ["年", "月", "日", "时"][k] + "支 " + DIZHI[zhis[k]] + "（本气 " + bq + "）";
+        break;
+      }
+    }
+
+    // ③ 地支成方成局（三条路径，满足其一即可）
+    //    ③a 三会（方）：寅卯辰之类，须三支齐现
+    //    ③b 三合（局）：亥卯未之类，须三支齐现（半合不算）
+    //    ③c 党众而强：无三合三会，但「干支同类」结党成势
+    //        古籍原文：「…或干支壬、癸、亥、子、申党众而强」（润下格例：癸亥×4）
+    //        判定：地支中「正五行 = 日主五行」或「本气 = 日主五行」者 ≥ 3 支
+    var form = null, formZhis = [];
+    var tables = [{ t: "三会", o: ZW_SANHUI }, { t: "三合", o: ZW_SANHE }];
+    for (var ti = 0; ti < tables.length; ti++) {
+      var need = tables[ti].o[w] || [];
+      if (need.length < 3) continue;
+      var hitZ = [];
+      for (var ni = 0; ni < need.length; ni++) {
+        if (zhis.indexOf(need[ni]) >= 0) hitZ.push(need[ni]);
+      }
+      if (hitZ.length === need.length) { form = tables[ti].t; formZhis = need; break; }
+    }
+
+    // ③c 党众：地支中与日主同类者（支之五行 = w，或支之本气 = w）计数
+    var dangZhis = [];
+    for (k = 0; k < 4; k++) {
+      var zwx = ZHI_WUXING[zhis[k]];
+      var zbq = CANGGAN[zhis[k]].charAt(0);
+      if (zwx === w || GAN_WUXING[TIANGAN.indexOf(zbq)] === w) dangZhis.push(zhis[k]);
+    }
+    if (!form) {
+      if (dangZhis.length >= 3) {
+        form = "党众"; formZhis = dangZhis;
+      } else {
+        return null;
+      }
+    }
+
+    var formTxt = formZhis.map(function (z) { return DIZHI[z]; }).join("");
+    // 去重且**按四柱顺序**排列的地支串（党众路径下原数组含重复支，需先排序再查重）
+    //   排序用支序号（0=子…11=亥），即从「子」到「亥」的传统顺序，
+    //   使输出稳定、可读，如「丑申」而非「申丑」。
+    function zwUniqZhis(arr) {
+      var sorted = arr.slice().sort(function (x, y) { return x - y; });
+      var u = [], i;
+      for (i = 0; i < sorted.length; i++) {
+        if (u.length === 0 || u[u.length - 1] !== sorted[i]) u.push(sorted[i]);
+      }
+      return u;
+    }
+    var participating = zwUniqZhis(formZhis);
+    var formTxtUniq = participating.map(function (z) { return DIZHI[z]; }).join("");
+
+    // ④ 克神须有力方为破格 —— 除日干外三干，见「克日主之五行」者，须**通根**方论破。
+    //    如木专旺忌庚辛（金）、火专旺忌壬癸（水）、土专旺忌甲乙（木）、
+    //    金专旺忌丙丁（火）、水专旺忌戊己（土）。
+    //    口径（据古籍例）：天干孤露而无根之克神「无力破局」，不作破格论。
+    //      《渊海子平》稼穑格例 戊戌 己未 戊辰 癸丑 —— 时干癸水财星，
+    //      癸虽于辰、丑中见余气（辰藏戊乙癸、丑藏己癸辛），然四库本属土，
+    //      其中癸仅为墓库余气，原文谓「虽有癸水财星，但无力破局」。
+    //    判定「有力」：该克神天干，须在地支中得「本气根」或坐「同五行之支」；
+    //      墓库中的中余气（如辰丑中之癸）不足以论有力。
+    var keGans = [], keWeakGans = [];
+    for (k = 0; k < 4; k++) {
+      if (k === 2) continue;
+      if (GAN_WUXING[gans[k]] !== keWx) continue;
+      var keRooted = false, keRootAt = "";
+      for (var rk = 0; rk < 4; rk++) {
+        // 该支自身五行为克神五行（如癸见子）→ 有力
+        if (ZHI_WUXING[zhis[rk]] === keWx) { keRooted = true; keRootAt = DIZHI[zhis[rk]]; break; }
+        // 该支「本气」为克神五行（如庚见申）→ 有力
+        var rbq = CANGGAN[zhis[rk]].charAt(0);
+        if (GAN_WUXING[TIANGAN.indexOf(rbq)] === keWx) { keRooted = true; keRootAt = DIZHI[zhis[rk]] + "（本气 " + rbq + "）"; break; }
+      }
+      var posName = ["年", "月", "时"][k === 0 ? 0 : k === 1 ? 1 : 2] + "干 " + TIANGAN[gans[k]];
+      if (keRooted) keGans.push(posName + "（得根于" + keRootAt + "，有力破局）");
+      else keWeakGans.push(posName + "（虚浮无根或仅墓库余气，无力破局）");
+    }
+    // 天干同类（比劫）与生我者（印）皆为帮身，不破格
+    var bangGans = [];
+    for (k = 0; k < 4; k++) {
+      if (k === 2) continue;
+      var gw = GAN_WUXING[gans[k]];
+      if (gw === w || ZW_KE[gw] === w) bangGans.push(TIANGAN[gans[k]]);
+    }
+
+    // ⑤ 支局无冲刑 —— 只在**成局之支（去重后）之间**两两相看。
+    //    注意：不可用 formZhis 全量两两相看 —— 党众路径下它含重复支，
+    //    会把「同一支自比」或「冲支本不参与成局」误计为破格。
+    //    participating 即上文由 formZhis 去重所得（三会/三合路径恒为 3 支，无重复）。
+    var chongXing = [];
+    for (var a = 0; a < participating.length; a++) {
+      for (var b = a + 1; b < participating.length; b++) {
+        var rel = mpPairRel(DIZHI[participating[a]], DIZHI[participating[b]]);
+        if (rel === "六冲" || rel === "刑" || rel === "自刑") {
+          chongXing.push(DIZHI[participating[a]] + DIZHI[participating[b]] + rel);
+        }
+      }
+    }
+
+    // 汇总判定
+    var poiList = [];
+    if (!hasRoot) poiList.push("日主不通根（四支本气皆非同气），孤旺无依");
+    if (keGans.length) poiList.push("天干见克神 " + keGans.join("、") + "，逆其旺势");
+    if (chongXing.length) poiList.push("支局受 " + chongXing.join("、") + " 冲破");
+    var hit = poiList.length === 0;
+
+    var chain = [];
+    chain.push("月令 " + monthZhiName + " 本气 " + mBenQi + " 属" + w +
+               "，与日主 " + dayGanName + " 同气，日主当令得气");
+    chain.push("日主 " + dayGanName + " 于四支" + (hasRoot ? "通根（" + rootAt + "）"
+                                                          : "不通根（四支本气皆非" + w + "）"));
+    chain.push("地支 " + formTxtUniq +
+               (form === "党众" ? ("（" + participating.length + " 支同类，党众而强）")
+                                : (" 成" + form + w + "局")));
+    chain.push(keGans.length
+      ? ("天干见克神 " + keGans.join("、") + "（" + keWx + "克" + w + "），有力破格")
+      : ("天干无有力之克神" +
+         (keWeakGans.length ? "（虽有 " + keWeakGans.join("、") + "，然虚浮无根，不破）" : "") +
+         (bangGans.length ? "，反见 " + bangGans.join("") + " 帮身" : "")));
+    chain.push(chongXing.length ? ("支局受 " + chongXing.join("、") + " 破") : "支局无冲刑");
+
+    var formDesc = (form === "党众")
+      ? ("地支 " + formTxtUniq + " 共 " + participating.length + " 支同类，党众而强")
+      : ("地支 " + formTxtUniq + " 成" + form + w + "局");
+
+    var txt;
+    if (hit) {
+      txt = "日主 " + dayGanName + " 生于 " + monthZhiName + " 月，当令得气，" + formDesc +
+            "，日主通根而天干不见" + keWx +
+            " 来克、支局亦无冲刑 —— 一行得气，" + w + "势纯一，" +
+            "依《渊海子平》《三命通会》之旨，当以「" + ZW_NAME[w] + "」专旺论。";
+    } else {
+      txt = "日主 " + dayGanName + " 生于 " + monthZhiName + " 月，" + formDesc +
+            "，" + w + "势已成气候；然" + poiList.join("、") +
+            "，未尽纯粹，为「假专旺」之象，须以岁运定其真伪。";
+    }
+
+    var note = "〔五判依据〕" + chain.join(" ｜ ") +
+               "。典籍依据：专旺格为「一行得气」，日主自身即旺神，须当令、通根、得比劫印帮身，" +
+               "所忌者在克神（" + w + "格忌" + keWx + "）。" +
+               "成局三途：地支三会（" + (ZW_SANHUI[w] || []).map(function (z) { return DIZHI[z]; }).join("") +
+               "）、三合（" + ((ZW_SANHE[w] || []).length ? ZW_SANHE[w].map(function (z) { return DIZHI[z]; }).join("") : "土无三合") +
+               "），或「干支同类党众而强」（古籍原文：「…或干支壬癸亥子申党众而强」）。" +
+               "注意与「从格」区别：《渊海子平》论弃命从杀云「忌日主有根及比肩之地」，" +
+               "《三命通会》论弃命从财云「若逢根气，命损无猜」——" +
+               "「无根」乃从格（日主极弱、弃命相从）之条件，非专旺格之条件，两者判据相反，不可混用。";
+
+    return {
+      hit: hit,
+      name: ZW_NAME[w],
+      level: hit ? "成格" : "近格",
+      txt: txt,
+      note: note,
+      chain: chain
+    };
+  }
+
+  // ------------------------------------------------------------
   // 四、兜底校验（《三命通会》）
   //   仅作参考，不参与主算法
   // ------------------------------------------------------------
@@ -5893,6 +6325,17 @@ function tkGrade(pillars, monthZhi) {
         });
       }
     });
+
+    // 1.5) 专旺五格 —— 严格判定（《滴天髓》纯从派 · 最严口径，迭代49）
+    //      宽松版（上）为「象」，此版为「断」；严格版置顶。
+    var zw = gjZhuanwang(pillars);
+    if (zw) {
+      if (zw.hit) {
+        // 严格成格 → 移除同名宽松条目，避免同名双列
+        out.items = out.items.filter(function (x) { return x.name !== zw.name; });
+      }
+      out.items.unshift({ name: zw.name, level: zw.level, txt: zw.txt, note: zw.note });
+    }
 
     // 2) 化气格：日干与月/时干五合，且生于化神当令之月
     var HE_TO = { "甲己": "土", "乙庚": "金", "丙辛": "水", "丁壬": "木", "戊癸": "火" };
@@ -6120,6 +6563,8 @@ function tkGrade(pillars, monthZhi) {
     tkWxState: tkWxState,
     duanyu: duanyu,
     geju: geju,
+    __zw: gjZhuanwang,   // 专旺五格严格判定（迭代49，供测试/调试）
+    sizhuReverse: sizhuReverse,  // 四柱反查（迭代50）：四柱干支 → 公历时刻列表
     jieOfYear: jieOfYear,
     liuyueList: liuyueList,
     jdn: jdn,
@@ -7929,6 +8374,11 @@ function tkGrade(pillars, monthZhi) {
   duanyuRender();  // 综合断语（依本盘组合推演；未排盘时显示占位）
   gejuRender();    // 格局判断（四书规则；未排盘时显示占位）
   window.__baziTk = { render: tkRender };   // 供测试/调试：手动触发日主笔记重渲染（如门禁态切换后）
+  window.__baziGeju = {                     // 供测试/调试：直接调用格局引擎与专旺格判定
+    geju: Bazi.geju,
+    doudi: function (pillars) { return Bazi.geju(pillars).doudi; },
+    zhuanwang: Bazi.__zw
+  };
   document.getElementById("note-save").addEventListener("click", archiveSaveNote);
 
   // ---- 专业版弹层接线 ----
@@ -8014,13 +8464,25 @@ function tkGrade(pillars, monthZhi) {
     box.style.display = "";
   }
 
-  // 农历模式切换显示闰月选项
+  // 历法模式切换：公历 / 农历 / 四柱反查（迭代 50）
+  function applyCalMode() {
+    var mode = document.querySelector('input[name=calmode]:checked').value;
+    document.getElementById("leap-field").style.display = mode === "lunar" ? "" : "none";
+    // 年月日时分字段：四柱模式下隐藏
+    var hideYmd = mode === "sizhu";
+    ["year", "month", "day", "hour", "minute"].forEach(function (id) {
+      var el = document.getElementById(id);
+      var fd = el.closest ? el.closest(".field") : null;
+      if (fd) fd.style.display = hideYmd ? "none" : "";
+    });
+    document.getElementById("sz-panel").style.display = hideYmd ? "" : "none";
+    if (hideYmd) szRenderCols();
+  }
   Array.prototype.forEach.call(
     document.querySelectorAll('input[name=calmode]'),
     function (el) {
       el.addEventListener("change", function () {
-        document.getElementById("leap-field").style.display =
-          document.querySelector('input[name=calmode]:checked').value === "lunar" ? "" : "none";
+        applyCalMode();
         update();
       });
     }
@@ -8032,6 +8494,164 @@ function tkGrade(pillars, monthZhi) {
     document.querySelectorAll('input[name=gender]'),
     function (el) { el.addEventListener("change", update); }
   );
+
+  /* ============ 四柱反查（迭代 50）============ */
+  var SZ_COLS = ["年柱", "月柱", "日柱", "时柱"];
+  var szSel = [null, null, null, null];   // 每柱 {g: 干序号0-9, z: 支序号0-11}
+  var szCur = null;                       // 当前编辑 {p: 柱0-3, t: "g"|"z"}
+
+  function szWxClassOfGan(g) { return gzClass(GAN_WUXING[g]); }
+  function szWxClassOfZhi(z) { return gzClass(ZHI_WUXING[z]); }
+
+  function szRenderCols() {
+    var html = "";
+    for (var p = 0; p < 4; p++) {
+      var s = szSel[p];
+      // 干/支分别判断是否已选（半选中间态：只选了干或只选了支，另一侧仍显示占位符）
+      var gOk = !!(s && s.g !== null && s.g !== undefined);
+      var zOk = !!(s && s.z !== null && s.z !== undefined);
+      // 未选：圆圈留空（不显示占位文字），与问真风格一致
+      var gHtml = gOk ? '<span class="' + szWxClassOfGan(s.g) + '">' + TIANGAN[s.g] + "</span>" : "";
+      var zHtml = zOk ? '<span class="' + szWxClassOfZhi(s.z) + '">' + DIZHI[s.z] + "</span>" : "";
+      var gCls = "sz-circle" + (gOk ? " filled" : "") + (szCur && szCur.p === p && szCur.t === "g" ? " active" : "");
+      var zCls = "sz-circle" + (zOk ? " filled" : "") + (szCur && szCur.p === p && szCur.t === "z" ? " active" : "");
+      html += '<div class="sz-col">' +
+        '<div class="sz-label">' + SZ_COLS[p] + "</div>" +
+        '<div class="' + gCls + '" data-p="' + p + '" data-t="g">' + gHtml + "</div>" +
+        '<div class="' + zCls + '" data-p="' + p + '" data-t="z">' + zHtml + "</div>" +
+        "</div>";
+    }
+    var cols = document.getElementById("sz-cols");
+    cols.innerHTML = html;
+    Array.prototype.forEach.call(cols.querySelectorAll(".sz-circle"), function (el) {
+      el.addEventListener("click", function () {
+        var p = parseInt(el.getAttribute("data-p"), 10);
+        var t = el.getAttribute("data-t");
+        if (szCur && szCur.p === p && szCur.t === t) {
+          szCur = null;
+          document.getElementById("sz-kb").style.display = "none";
+        } else {
+          szCur = { p: p, t: t };
+          szRenderKb();
+        }
+        szRenderCols();
+      });
+    });
+  }
+
+  function szRenderKb() {
+    var kb = document.getElementById("sz-kb");
+    var isGan = szCur.t === "g";
+    var chars = isGan ? TIANGAN : DIZHI;
+    var wxOf = isGan ? GAN_WUXING : ZHI_WUXING;
+    var html = '<div class="sz-kb-tip">请选择' + (isGan ? "天干" : "地支") +
+               "（" + SZ_COLS[szCur.p] + (isGan ? "·天干" : "·地支") + "）</div>";
+    for (var r = 0; r < chars.length; r += 5) {
+      html += '<div class="sz-kb-row">';
+      for (var i = r; i < Math.min(r + 5, chars.length); i++) {
+        html += '<div class="sz-key" data-k="' + i + '"><span class="' + gzClass(wxOf[i]) + '">' + chars[i] + "</span></div>";
+      }
+      html += "</div>";
+    }
+    kb.innerHTML = html;
+    kb.style.display = "";
+    Array.prototype.forEach.call(kb.querySelectorAll(".sz-key"), function (el) {
+      el.addEventListener("click", function () {
+        var k = parseInt(el.getAttribute("data-k"), 10);
+        if (!szSel[szCur.p]) szSel[szCur.p] = { g: null, z: null };
+        szSel[szCur.p][szCur.t] = k;
+        szCur = null;
+        document.getElementById("sz-kb").style.display = "none";
+        szRenderCols();
+        document.getElementById("sz-results").innerHTML = "";
+      });
+    });
+  }
+
+  function szResultLine(rr) {
+    var mm = rr.m < 10 ? "0" + rr.m : "" + rr.m;
+    var dd = rr.d < 10 ? "0" + rr.d : "" + rr.d;
+    var hh = rr.h < 10 ? "0" + rr.h : "" + rr.h;
+    var mi = rr.mi < 10 ? "0" + rr.mi : "" + rr.mi;
+    var zhi = DIZHI[Math.floor(((rr.h + 1) / 2) % 12)];
+    return rr.y + "-" + mm + "-" + dd + " " + hh + ":" + mi + "（" + zhi + "时）";
+  }
+
+  function szSearch() {
+    var box = document.getElementById("sz-results");
+    // 校验四柱选齐
+    var target = [];
+    for (var p = 0; p < 4; p++) {
+      var s = szSel[p];
+      if (!s || s.g == null || s.z == null) {
+        box.innerHTML = '<div class="sz-res-empty">请先选全四柱的天干与地支（点击圆圈选择）。</div>';
+        return;
+      }
+      var k = -1, i;
+      for (i = 0; i < 60; i++) { if (i % 10 === s.g && i % 12 === s.z) { k = i; break; } }
+      target.push(k);
+    }
+    var zi = document.getElementById("ziadvance").checked;
+    var R = Bazi.sizhuReverse(target, 1900, 2100, zi);
+    if (R.error) {
+      box.innerHTML = '<div class="sz-res-empty" style="color:#a83226">' + R.error + "</div>";
+      return;
+    }
+    if (!R.results.length) {
+      box.innerHTML = '<div class="sz-res-empty">1900—2100 年间未找到此四柱的出生时刻' +
+        '（该干支组合在此范围内未出现）。</div>';
+      return;
+    }
+    var html = '<div class="sz-res-empty">共找到 ' + R.count + " 个匹配时刻" +
+      "（同一时辰内任一时刻排盘结果相同）：";
+    for (var q = 0; q < R.results.length; q++) {
+      var rr = R.results[q];
+      html += '<div class="sz-res-item"><span><b>' + szResultLine(rr) + "</b>" +
+        (rr.ziNote ? '<span class="sz-tag">' + rr.ziNote + "</span>" : "") +
+        "</span>" +
+        '<button type="button" class="sz-res-use" data-i="' + q + '">用此盘</button></div>';
+    }
+    html += "</div>";
+    box.innerHTML = html;
+    Array.prototype.forEach.call(box.querySelectorAll(".sz-res-use"), function (el) {
+      el.addEventListener("click", function () {
+        var rr = R.results[parseInt(el.getAttribute("data-i"), 10)];
+        szUseResult(rr);
+      });
+    });
+  }
+
+  function szUseResult(rr) {
+    // 切回公历模式并回填；反查按北京时间口径，自动关闭时辰校正以免四柱偏移
+    var solarRadio = document.querySelector('input[name=calmode][value="solar"]');
+    if (solarRadio && !solarRadio.checked) {
+      solarRadio.checked = true;
+      applyCalMode();
+    }
+    document.getElementById("year").value = rr.y;
+    document.getElementById("month").value = rr.m;
+    document.getElementById("day").value = rr.d;
+    document.getElementById("hour").value = rr.h;
+    document.getElementById("minute").value = rr.mi;
+    var tst = document.getElementById("corr-tst"), dst = document.getElementById("corr-dst");
+    if (tst.checked || dst.checked) {
+      tst.checked = false; dst.checked = false;
+      var det = document.getElementById("corr-detail");
+      if (det) det.style.display = "none";
+    }
+    update();
+    // 与「确定」按钮一致：展开结果区并**直接进入「基本排盘」**
+    var errEl = document.getElementById("err");
+    if (errEl.style.display === "block") {
+      errEl.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    expandResult("paipan");
+    var tgt = document.getElementById("tabbar") || resultView;
+    tgt.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  document.getElementById("sz-search").addEventListener("click", szSearch);
 
   // 时辰校正：城市下拉 + 折叠 + 开关
   (function () {
@@ -8205,9 +8825,47 @@ function tkGrade(pillars, monthZhi) {
 })();
 </script>
 <script>
+/* ===== Service Worker 注册 / 更新 =====
+   注意：sw.js 的 URL 必须带版本查询串。iOS Safari 对 sw.js 自身的 HTTP 缓存较激进，
+   若 URL 字节始终不变，Safari 可能永远不向服务器比对，导致更新永远发现不了。
+   每次改动版本号时，这里连同 sw.js 里的 CACHE 一起改。 */
 if ("serviceWorker" in navigator) {
+  var SW_VER = "70";
+  // 必须在 register 之前读：若在 then 回调里读，首访的 clients.claim() 可能已完成，
+  // controller 已非空，会被误判为「旧版接管」而触发多余刷新。
+  var hadController = !!navigator.serviceWorker.controller;
+  var reloading = false;
   window.addEventListener("load", function () {
-    navigator.serviceWorker.register("sw.js").catch(function(){});
+    navigator.serviceWorker.register("sw.js?v=" + SW_VER).then(function (reg) {
+      // 主动向服务器要一次新版本，不依赖浏览器的默认节奏
+      try { reg.update(); } catch (e) {}
+
+      // 页面原先已被旧 SW 接管 → 新 SW 接管后自动刷新一次（首次安装不刷新）
+      navigator.serviceWorker.addEventListener("controllerchange", function () {
+        if (!hadController || reloading) return;
+        reloading = true;
+        location.reload();
+      });
+
+      // 发现新版本正在安装 → 装好后让它立刻激活（配合 sw.js 里的 skipWaiting）
+      reg.addEventListener("updatefound", function () {
+        var nw = reg.installing;
+        if (!nw) return;
+        nw.addEventListener("statechange", function () {
+          if (nw.state === "installed" && navigator.serviceWorker.controller) {
+            try { nw.postMessage({ type: "SKIP_WAITING" }); } catch (e) {}
+          }
+        });
+      });
+    }).catch(function () {});
+
+    // 回到前台时再查一次更新（iOS 切回 App 的常见场景）
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState !== "visible") return;
+      navigator.serviceWorker.getRegistration().then(function (reg) {
+        if (reg) { try { reg.update(); } catch (e) {} }
+      }).catch(function () {});
+    });
   });
 }
 </script>

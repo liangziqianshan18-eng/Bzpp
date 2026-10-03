@@ -19,7 +19,7 @@
 <meta name="twitter:description" content="输入出生日期时辰，即刻排出四柱八字、十神、纳音、神煞、大运流年流月。">
 <meta name="format-detection" content="telephone=no">
 <link rel="manifest" href="data:application/manifest+json;charset=UTF-8,%7B%22name%22%3A%22%E5%85%AB%E5%AD%97%E6%8E%92%E7%9B%98%20%C2%B7%20%E5%9B%9B%E6%9F%B1%E5%91%BD%E7%90%86%22%2C%22short_name%22%3A%22%E5%85%AB%E5%AD%97%E6%8E%92%E7%9B%98%22%2C%22description%22%3A%22%E8%BE%93%E5%85%A5%E5%87%BA%E7%94%9F%E6%97%A5%E6%9C%9F%E6%97%B6%E8%BE%B0%EF%BC%8C%E5%8D%B3%E5%88%BB%E6%8E%92%E5%87%BA%E5%9B%9B%E6%9F%B1%E5%85%AB%E5%AD%97%E3%80%81%E5%8D%81%E7%A5%9E%E3%80%81%E7%BA%B3%E9%9F%B3%E3%80%81%E7%A5%9E%E7%85%9E%E3%80%81%E5%A4%A7%E8%BF%90%E6%B5%81%E5%B9%B4%E6%B5%81%E6%9C%88%E3%80%82%22%2C%22lang%22%3A%22zh-CN%22%2C%22start_url%22%3A%22https%3A%2F%2Fliangziqianshan18-eng.github.io%2FBzpp%2Findex.html%22%2C%22scope%22%3A%22https%3A%2F%2Fliangziqianshan18-eng.github.io%2FBzpp%2F%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait%22%2C%22background_color%22%3A%22%23ffffff%22%2C%22theme_color%22%3A%22%23a83226%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fliangziqianshan18-eng.github.io%2FBzpp%2Ficon-192.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%22%7D%2C%7B%22src%22%3A%22https%3A%2F%2Fliangziqianshan18-eng.github.io%2FBzpp%2Ficon-512.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
-<meta name="theme-color" content="#a83226">
+<meta name="theme-color" content="#fafaf9">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -28,51 +28,75 @@
 <meta name="apple-mobile-web-app-title" content="八字排盘">
 <style>
   :root {
-    --bg: #ffffff;
+    --bg: #fafaf9;
     --card: #ffffff;
-    --card2: #f7f5f0;
-    --ink: #2a241c;
-    --ink-dim: #635a4d;
-    --ink-faint: #857a6a;
-    --red: #a83226;
-    --gold: #8a6d3b;
-    --line: #e3ddd2;
+    --card2: #f6f6f4;
+    --ink: #23201c;
+    --ink-dim: #5f584e;
+    --ink-faint: #8a8278;
+    --red: #b03a2e;
+    --gold: #8f7040;
+    --line: #ececE8;
+    --line-strong: #e0e0da;
     --wx-mu: #2f7a48;   /* 木 */
     --wx-huo: #b93a2b;  /* 火 */
     --wx-tu: #6b6152;   /* 土 */
     --wx-jin: #9a7009;  /* 金 */
     --wx-shui: #26618f; /* 水 */
+    --sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+            "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    --serif: Georgia, "Noto Serif SC", "Songti SC", "SimSun", serif;
+    --shadow-1: 0 1px 2px rgba(40,36,30,.04), 0 4px 14px rgba(40,36,30,.045);
+    --shadow-2: 0 2px 6px rgba(40,36,30,.06), 0 10px 30px rgba(40,36,30,.06);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    background: var(--bg);
+    background-color: var(--bg);
+    /* 含蓄点缀：顶部一层极淡的暖色光晕 + 极细星点，正文区保持干净 */
+    background-image:
+      radial-gradient(1100px 520px at 50% -180px, rgba(176,58,46,.055), rgba(176,58,46,0) 70%),
+      radial-gradient(760px 420px at 88% 4%, rgba(143,112,64,.05), rgba(143,112,64,0) 72%),
+      radial-gradient(rgba(35,32,28,.055) 1px, rgba(0,0,0,0) 1px);
+    background-size: auto, auto, 26px 26px;
+    background-repeat: no-repeat, no-repeat, repeat;
+    background-attachment: scroll, scroll, scroll;
     color: var(--ink);
-    font-family: Georgia, "Noto Serif SC", "Songti SC", "SimSun", serif;
-    line-height: 1.6;
+    font-family: var(--serif);
+    line-height: 1.68;
     padding: 24px 12px 48px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   .wrap { max-width: 780px; margin: 0 auto; }
-  header { text-align: center; margin-bottom: 22px; }
+  header { text-align: center; margin-bottom: 24px; }
   header h1 {
-    font-size: 34px; letter-spacing: 14px; font-weight: 600;
-    color: var(--ink); text-indent: 14px;
+    font-family: var(--sans);
+    font-size: 32px; letter-spacing: 12px; font-weight: 600;
+    color: var(--ink); text-indent: 12px;
   }
-  header .sub { color: var(--ink-faint); font-size: 13px; letter-spacing: 4px; margin-top: 4px; }
+  header .sub {
+    font-family: var(--sans);
+    color: var(--ink-faint); font-size: 12.5px; letter-spacing: 3px; margin-top: 6px;
+  }
   header .seal {
-    display: inline-block; margin-top: 8px; padding: 1px 10px;
+    display: inline-block; margin-top: 10px; padding: 2px 11px;
     border: 1px solid var(--red); color: var(--red);
-    font-size: 12px; letter-spacing: 3px; border-radius: 2px;
+    font-size: 11.5px; letter-spacing: 3px; border-radius: 999px;
   }
   .card {
     background: var(--card); border: 1px solid var(--line);
-    border-radius: 10px; padding: 18px 20px; margin-bottom: 18px;
-    box-shadow: 0 1px 3px rgba(80,70,55,.06);
+    border-radius: 16px; padding: 20px 22px; margin-bottom: 16px;
+    box-shadow: var(--shadow-1);
   }
   .card h2 {
-    font-size: 14px; letter-spacing: 6px; color: var(--gold);
+    font-family: var(--sans);
+    font-size: 13.5px; letter-spacing: 5px; color: var(--gold);
     border-left: 3px solid var(--red); padding-left: 10px;
-    margin-bottom: 14px; font-weight: 600;
+    margin-bottom: 16px; font-weight: 600;
   }
+  /* 迭代51 补记：四柱与大运流年合并同卡，dy-subcard 为卡内小节 */
+  .dy-subcard { margin-top: 18px; padding-top: 16px; border-top: 1px dashed var(--line); }
+  .dy-subcard > h2 { margin-bottom: 12px; }
   /* 表单 */
   .form-grid { display: flex; flex-wrap: wrap; gap: 12px 16px; align-items: flex-end; }
   .field { display: flex; flex-direction: column; gap: 4px; }
@@ -85,13 +109,128 @@
   }
   .field input[type=number] { width: 96px; }
   .field.narrow select, .field.narrow input { min-width: 72px; }
-  .radios { display: flex; gap: 10px; align-items: center; }
+  .radios { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
   .radios label {
     display: flex; gap: 5px; align-items: center; cursor: pointer;
-    font-size: 15px; color: var(--ink); padding: 7px 10px;
+    font-size: 15px; color: var(--ink); padding: 7px 10px; white-space: nowrap;
     border: 1px solid var(--line); border-radius: 6px; background: var(--card2);
   }
   .radios input { accent-color: var(--red); }
+  /* ===== 四柱反查（迭代 50）===== */
+  .sz-panel { margin-top: 14px; }
+  .sz-cols { display: flex; gap: 10px; justify-content: space-between; }
+  .sz-col { flex: 1; text-align: center; min-width: 0; }
+  .sz-col .sz-label { font-size: 13px; color: var(--ink-dim); margin-bottom: 8px; }
+  /* 圆圈自适应列宽（问真式大圆），浅灰实心、无虚线 */
+  .sz-circle {
+    width: 100%; max-width: 80px; aspect-ratio: 1; margin: 0 auto 10px;
+    border-radius: 50%; border: 1px solid var(--line); background: var(--card2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: clamp(22px, 7vw, 32px); font-weight: 600; cursor: pointer; user-select: none;
+    overflow: hidden; box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .sz-circle.active { border: 2px solid var(--red); background: #fff8f6; }
+  .sz-circle.filled { background: #fff; border: 1px solid var(--line); }
+  /* 老版 iOS Safari 不支持 aspect-ratio 的回退：固定高度近似圆形 */
+  @supports not (aspect-ratio: 1) {
+    .sz-circle { height: 76px; }
+  }
+  .sz-kb { margin-top: 14px; }
+  .sz-kb-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .sz-key {
+    flex: 1; height: clamp(54px, 15vw, 68px); border: 1px solid var(--line); border-radius: 10px;
+    background: var(--card2); font-size: clamp(21px, 6vw, 27px); font-weight: 600; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .sz-key:active { background: #f4e6e3; }
+  .sz-kb-tip { font-size: 12px; color: var(--ink-faint); margin: 4px 0 8px; }
+  .sz-search {
+    width: 100%; margin-top: 10px; padding: 12px 0; font-size: 16px; font-weight: 600;
+    color: #fff; background: var(--red); border: 0; border-radius: 8px; cursor: pointer;
+  }
+  .sz-results { margin-top: 12px; }
+  .sz-res-item {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 9px 10px; border: 1px solid var(--line); border-radius: 8px;
+    margin-bottom: 8px; background: var(--card2); font-size: 14px;
+  }
+  .sz-res-item b { font-size: 15px; }
+  .sz-res-item .sz-tag {
+    font-size: 11px; color: var(--red); border: 1px solid var(--red);
+    border-radius: 4px; padding: 0 4px; margin-left: 6px;
+  }
+  .sz-res-use {
+    padding: 6px 12px; font-size: 13px; color: var(--red);
+    border: 1px solid var(--red); border-radius: 6px; background: #fff; cursor: pointer;
+    white-space: nowrap;
+  }
+  .sz-res-empty { font-size: 13px; color: var(--ink-dim); padding: 8px 2px; }
+  /* ---- 迭代51：大运白话解读（专业版内容） ---- */
+  #dy-read {
+    margin-top: 12px; border: 1px solid var(--line); border-radius: 12px;
+    padding: 12px 12px 10px; background: var(--card2);
+  }
+  /* 模块头：标题 + 专业版角标 */
+  .dr-read-head {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 9px; padding-bottom: 8px; border-bottom: 1px solid var(--line);
+  }
+  .dr-read-h { font-weight: 700; font-size: 14px; color: var(--ink); letter-spacing: 1px; }
+  .dr-read-badge {
+    font-size: 11px; font-weight: 600; letter-spacing: .5px;
+    color: var(--gold); border: 1px solid var(--gold);
+    border-radius: 4px; padding: 0 6px; line-height: 17px;
+  }
+  .dr-read-badge.on { color: #2f7a52; border-color: #2f7a52; }
+  .dr-none { color: var(--ink-faint); font-size: 13px; line-height: 1.6; }
+  .dr-head { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+  .dr-title { font-weight: 700; font-size: 15px; color: var(--ink); }
+  .dr-grade { padding: 2px 11px; border-radius: 999px; font-size: 13px; font-weight: 700; color: #fff; }
+  .dg0 { background: #c0392b; }  /* 大吉·红 */
+  .dg1 { background: #d9772f; }  /* 吉·橙 */
+  .dg2 { background: #8d99ae; }  /* 平·灰 */
+  .dg3 { background: #a9836d; }  /* 滞·土 */
+  .dg4 { background: #5c677d; }  /* 凶·冷灰 */
+  .dr-theme {
+    font-size: 12px; color: var(--red); border: 1px solid currentColor;
+    border-radius: 999px; padding: 1px 9px; white-space: nowrap;
+  }
+  .dr-main { font-size: 14px; line-height: 1.7; margin: 4px 0; color: var(--ink); }
+  .dr-half { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0; }
+  .dr-half > div {
+    flex: 1 1 46%; min-width: 150px; background: var(--card);
+    border: 1px solid var(--line); border-radius: 10px;
+    padding: 8px 10px; font-size: 13px; line-height: 1.65; color: var(--ink-dim);
+  }
+  .dr-dims { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
+  @media (max-width: 420px) { .dr-dims { grid-template-columns: 1fr; } }
+  .dr-dim { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; }
+  .dr-dim-h {
+    font-weight: 700; font-size: 13px; color: var(--ink); margin-bottom: 3px;
+    border-left: 3px solid var(--gold); padding-left: 7px;
+  }
+  .dr-dim-t { font-size: 13px; line-height: 1.65; color: var(--ink-dim); }
+  .dr-ky-h { font-weight: 700; font-size: 13px; color: var(--ink); margin: 8px 0 2px; }
+  .dr-ky {
+    display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px;
+    padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: 13px;
+  }
+  .dr-ky:last-child { border-bottom: 0; }
+  .dr-ky-y { font-weight: 700; color: var(--ink); }
+  .dr-ky-t { color: var(--red); font-size: 12px; border: 1px solid currentColor; border-radius: 999px; padding: 0 8px; white-space: nowrap; }
+  .dr-ky-n { color: var(--ink-faint); flex: 1 1 100%; font-size: 12.5px; }
+  .dr-judge { margin-top: 8px; font-size: 13px; }
+  .dr-judge summary { cursor: pointer; color: var(--ink-faint); font-size: 12.5px; }
+  .dr-judge-b { padding: 8px 2px 0; line-height: 1.7; color: var(--ink-faint); font-size: 12.5px; }
+  .dr-note { margin-top: 8px; font-size: 12px; color: var(--ink-faint); }
+  /* ---- 迭代51：四柱总诀白话小注 ---- */
+  .tk-blurb {
+    font-size: 13px; line-height: 1.65; color: var(--ink-dim);
+    background: var(--card2); border-left: 3px solid var(--gold);
+    border-radius: 0 8px 8px 0; padding: 6px 10px; margin: 7px 0;
+  }
   .checks { display: flex; gap: 16px; flex-wrap: wrap; }
   .checks label {
     display: flex; gap: 6px; align-items: center; cursor: pointer;
@@ -101,7 +240,7 @@
   .hint { font-size: 12px; color: var(--ink-faint); margin-top: 10px; }
   .error {
     display: none; background: #fdf3f1; border: 1px solid #e5b8b0;
-    color: #a83226; padding: 10px 14px; border-radius: 8px;
+    color: #b03a2e; padding: 10px 14px; border-radius: 8px;
     margin-bottom: 16px; font-size: 14px;
   }
   /* 基本信息 */
@@ -125,14 +264,14 @@
   /* 首列属性名 */
   .pgrid th.plabel {
     width: 72px; font-weight: 500; font-size: 12px;
-    color: var(--ink-faint); background: #faf8f4;
+    color: var(--ink-faint); background: #f7f7f5;
     letter-spacing: 1px; text-align: center; white-space: nowrap;
   }
   /* 表头：年月日时 */
   .pgrid thead th {
     font-size: 13px; color: var(--gold); font-weight: 600;
     letter-spacing: 3px; text-indent: 3px; padding: 9px 6px;
-    background: #faf8f4;
+    background: #f7f7f5;
   }
   .pgrid thead th.plabel { letter-spacing: 1px; text-indent: 1px; }
   /* 天干 / 地支 大字 */
@@ -251,8 +390,8 @@
   .sha-name { font-size: 15px; font-weight: 600; }
   .sha-kind { font-size: 11px; padding: 1px 7px; border-radius: 9px; letter-spacing: 1px; }
   .kind-you { color: #2f7a48; background: rgba(63,138,86,.12); border: 1px solid rgba(63,138,86,.35); }
-  .kind-lie { color: #a83226; background: rgba(192,57,43,.10); border: 1px solid rgba(192,57,43,.32); }
-  .kind-zhong { color: #8a6d3b; background: rgba(184,134,11,.10); border: 1px solid rgba(184,134,11,.32); }
+  .kind-lie { color: #b03a2e; background: rgba(192,57,43,.10); border: 1px solid rgba(192,57,43,.32); }
+  .kind-zhong { color: #8f7040; background: rgba(184,134,11,.10); border: 1px solid rgba(184,134,11,.32); }
   .ent-note { display: flex; align-items: flex-start; gap: 8px; margin-top: 14px; color: #9a9a9a; font-size: 13px; line-height: 1.75; }
   .ent-ico { flex: 0 0 auto; width: 16px; height: 16px; border-radius: 50%; background: #8c8c8c; color: #fff; font-size: 11px; font-weight: 700; text-align: center; line-height: 16px; margin-top: 3px; }
   .sha-loc { color: var(--ink-dim); }
@@ -267,7 +406,7 @@
   .foot-links a { margin: 0 7px; }
   .foot-disc {
     margin: 0 auto 9px; max-width: 620px; padding: 9px 12px;
-    background: #f7f6f3; border: 1px solid var(--line); border-radius: 8px;
+    background: #f5f5f3; border: 1px solid var(--line); border-radius: 8px;
     color: #8f8b84; font-size: 11.5px; line-height: 1.75; letter-spacing: 0;
     text-align: left;
   }
@@ -289,8 +428,9 @@
   /* ===== Tab 导航栏 ===== */
   .tabbar {
     display: flex; margin: 0 0 16px;
-    background: var(--card2); border: 1px solid var(--line);
-    border-radius: 10px;
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow-1);
     overflow-x: auto; overflow-y: hidden;   /* 极窄屏放不下时横滑兜底 */
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;                  /* Firefox：隐藏滚动条 */
@@ -299,21 +439,21 @@
   .tabbar[hidden] { display: none !important; }
   .tab {
     flex: 1 1 0; padding: 13px 2px; border: none; background: transparent;
-    /* 字体沿用 body 继承的公有领域/开源字体栈（Georgia / Noto Serif SC·OFL / Songti SC·系统内置），
+    /* 字体沿用开源/系统内置字体栈（-apple-system / PingFang SC / Noto Serif SC·OFL），
        仅调整字重与字号，不引入任何商业字体文件，无版权风险 */
     /* 字号随视口自适应：320px 窄屏 15px 防溢出，375px 起稳定 16px。
        5 个标签在极窄屏放不下时由 .tabbar 横向滚动兜底，不缩字 */
-    font-family: inherit; font-size: clamp(15px, 4.3vw, 16px);
-    font-weight: 700; letter-spacing: 0;
+    font-family: var(--sans); font-size: clamp(15px, 4.3vw, 16px);
+    font-weight: 600; letter-spacing: 0;
     color: var(--ink-dim); cursor: pointer; border-right: 1px solid var(--line);
     -webkit-appearance: none; appearance: none; white-space: nowrap;
     flex-shrink: 0; min-width: 62px;   /* 不压缩；4 字标签 @15px 的实测需求宽 */
   }
   .tab:last-child { border-right: none; }
   .tab.active {
-    color: var(--red); font-weight: 800;
+    color: var(--red); font-weight: 700;
     text-shadow: 0 0 0.5px currentColor;
-    background: var(--card); box-shadow: 0 2px 0 var(--red) inset;
+    background: var(--card2); box-shadow: 0 2px 0 var(--red) inset;
   }
   .tab-panel { display: none; }
   .tab-panel.active { display: block; }
@@ -721,7 +861,7 @@
     padding: 1.5px 6px; border-radius: 4px; white-space: nowrap;
     border: 1px solid transparent;
   }
-  .gj-bk.b1 { color: #8a6d3b; background: rgba(138,109,59,.10); border-color: rgba(138,109,59,.28); }
+  .gj-bk.b1 { color: #8f7040; background: rgba(138,109,59,.10); border-color: rgba(138,109,59,.28); }
   .gj-bk.b2 { color: #a03030; background: rgba(160,48,48,.09); border-color: rgba(160,48,48,.26); }
   .gj-bk.b3 { color: #2f7a52; background: rgba(47,122,82,.09); border-color: rgba(47,122,82,.26); }
   .gj-bk.b4 { color: #3a5f8a; background: rgba(58,95,138,.09); border-color: rgba(58,95,138,.26); }
@@ -1051,7 +1191,7 @@
   .vip-terms.fold .vip-terms-b { display: none; }
   .vip-terms-b {
     font-size: 11.5px; line-height: 1.78; color: #8a8680;
-    background: #f8f7f4; border: 1px solid var(--line);
+    background: #f7f7f5; border: 1px solid var(--line);
     border-radius: 8px; padding: 10px 12px;
   }
   .vip-terms-b p { margin: 0 0 7px; }
@@ -1199,7 +1339,7 @@
     font-size: 12px; padding: 3px 10px; border-radius: 10px;
     letter-spacing: 1px; font-weight: 600;
   }
-  .lvl-strong { color: #a83226; background: rgba(192,57,43,.10); border: 1px solid rgba(192,57,43,.32); }
+  .lvl-strong { color: #b03a2e; background: rgba(192,57,43,.10); border: 1px solid rgba(192,57,43,.32); }
   .lvl-mid    { color: #2f7a48; background: rgba(63,138,86,.12); border: 1px solid rgba(63,138,86,.35); }
   .lvl-weak   { color: #26618f; background: rgba(38,97,143,.10); border: 1px solid rgba(38,97,143,.30); }
   .xg-score {
@@ -1257,7 +1397,7 @@
   .cs-stage { font-size: 16px; font-weight: 700; line-height: 1.15; letter-spacing: 1px; }
   .cs-val { font-size: 10.5px; color: var(--ink-faint); margin-top: 3px; letter-spacing: .3px; }
   .cs-cell.strong { border-color: rgba(192,57,43,.35); background: rgba(192,57,43,.05); }
-  .cs-cell.strong .cs-stage { color: #a83226; }
+  .cs-cell.strong .cs-stage { color: #b03a2e; }
   .cs-cell.mid { border-color: rgba(63,138,86,.32); background: rgba(63,138,86,.05); }
   .cs-cell.mid .cs-stage { color: #2f7a48; }
   .cs-cell.weak { border-color: rgba(38,97,143,.30); background: rgba(38,97,143,.05); }
@@ -1281,7 +1421,7 @@
     border: 1px solid var(--line); background: var(--card);
     color: var(--ink-faint); letter-spacing: .5px;
   }
-  .cs-note .k.strong { color: #a83226; border-color: rgba(192,57,43,.32); }
+  .cs-note .k.strong { color: #b03a2e; border-color: rgba(192,57,43,.32); }
   .cs-note .k.mid { color: #2f7a48; border-color: rgba(63,138,86,.32); }
   .cs-note .k.weak { color: #26618f; border-color: rgba(38,97,143,.30); }
   .cs-note .v { flex: 1 1 auto; }
@@ -1328,6 +1468,7 @@
         <div class="radios">
           <label><input type="radio" name="calmode" value="solar" checked>公历</label>
           <label><input type="radio" name="calmode" value="lunar">农历</label>
+          <label><input type="radio" name="calmode" value="sizhu">四柱</label>
         </div>
       </div>
       <div class="field narrow">
@@ -1364,8 +1505,17 @@
         </div>
       </div>
     </div>
+
+    <!-- 四柱反查面板（迭代 50，历法选「四柱」时显示） -->
+    <div class="sz-panel" id="sz-panel" style="display:none">
+      <div class="sz-cols" id="sz-cols"></div>
+      <div class="sz-kb" id="sz-kb" style="display:none"></div>
+      <button type="button" class="sz-search" id="sz-search">查找出生时间（1900—2100）</button>
+      <div class="sz-results" id="sz-results"></div>
+    </div>
+
     <div class="checks" style="margin-top:12px">
-      <label><input type="checkbox" id="ziadvance" checked>晚子时（23:00 后）日柱进位到次日（子时换日派；取消则按早晚子时派，日柱不进位）</label>
+      <label><input type="checkbox" id="ziadvance">晚子时（23:00 后）日柱进位到次日（子时换日派；取消则按早晚子时派，日柱不进位。默认早晚子时派）</label>
     </div>
 
     <div class="corr-toggle" id="corr-toggle">
@@ -1475,30 +1625,31 @@
 
   <!-- ===== Tab3 细盘分析 ===== -->
   <section class="tab-panel" id="panel-detail" data-panel="detail">
-    <!-- 四柱八字（含流年/大运列，与下方大运流年横滑联动） -->
+    <!-- 四柱八字 + 大运流年流月（合并为一张卡，减少割裂感） -->
     <div class="card" id="card-pillars">
       <h2>四柱八字</h2>
       <div class="pgrid-scroll"><div id="pillars"></div></div>
-      <div class="hint">行=属性，列=流年·大运·年·月·日·时。左两列为下方当前选中的流年与大运，点选横滑卡片即联动更新；藏干小字为其对日主的十神，金色下划线为本气；流年/大运神煞按日干系规则取；每柱神煞默认只显示一个，点击左侧「神煞」标签展开/收起整行。</div>
-    </div>
 
-    <!-- 大运 · 流年 · 流月：三行横滑联动 -->
-    <div class="card" id="card-dayun">
-      <h2>大运 · 流年 · 流月</h2>
-      <div class="qiyun" id="qiyun"></div>
-      <div class="dy-row">
-        <div class="dy-label">大运</div>
-        <div class="dy-scroll"><div class="dy-cols" id="dayun-cols"></div></div>
+      <!-- 大运 · 流年 · 流月：三行横滑联动（同卡小节） -->
+      <div class="dy-subcard" id="card-dayun">
+        <h2>大运 · 流年 · 流月</h2>
+        <div class="qiyun" id="qiyun"></div>
+        <div class="dy-row">
+          <div class="dy-label">大运</div>
+          <div class="dy-scroll"><div class="dy-cols" id="dayun-cols"></div></div>
+        </div>
+        <div class="dy-row">
+          <div class="dy-label">流年</div>
+          <div class="dy-scroll"><div class="dy-cols" id="liunian-cols"></div></div>
+        </div>
+        <div class="dy-row">
+          <div class="dy-label">流月</div>
+          <div class="dy-scroll"><div class="dy-cols" id="liuyue-cols"></div></div>
+        </div>
+        <!-- 迭代51：大运白话解读（随选中大运联动） -->
+        <div id="dy-read" style="display:none"></div>
+        <div class="hint" style="margin-top:10px">点击大运切换流年行，点击流年切换流月行；干支右上角红色小字为十神简称（比·劫·食·伤·财·才·官·杀·印·枭），地支十神取藏干本气。左右滑动可查看全部。</div>
       </div>
-      <div class="dy-row">
-        <div class="dy-label">流年</div>
-        <div class="dy-scroll"><div class="dy-cols" id="liunian-cols"></div></div>
-      </div>
-      <div class="dy-row">
-        <div class="dy-label">流月</div>
-        <div class="dy-scroll"><div class="dy-cols" id="liuyue-cols"></div></div>
-      </div>
-      <div class="hint" style="margin-top:10px">点击大运切换流年行，点击流年切换流月行；干支右上角红色小字为十神简称（比·劫·食·伤·财·才·官·杀·印·枭），地支十神取藏干本气。左右滑动可查看全部。</div>
     </div>
 
     <!-- 神煞：四柱神煞 + 大运神煞（补充在细盘分析最后，基本排盘的「神煞详解」保持独立） -->
@@ -1528,9 +1679,9 @@
     <!-- 四柱断语 · 依典籍：从《三命通会》《渊海子平》摘录原文（迭代39 古籍溯源重写） -->
     <div class="card" id="card-tk">
       <h2>四柱断语 · 依典籍</h2>
-      <div class="tk-orig">依本命四柱，从<b>《三命通会》</b>与<b>《渊海子平》</b>中摘出原文并<b>逐柱核验</b>：日主诗按<b>日干 + 日支</b>取对应句，总诀按十神<b>落宫</b>与<b>月令</b>判定，疾病/性情按本盘五行实测核验前提；总纲区依<b>《穷通宝鉴》</b>取<b>调候用神</b>、扶抑取<b>五行用神</b>，参<b>四时旺相休囚死</b>与<b>月令十二长生</b>断日主状态，古法计分断<b>富贵 / 平淡 / 困顿</b>层次，逐条标注出处与本盘依据。其中<b>「用神 · 调候 · 月令」总纲</b>为专业版内容（¥9.9 永久解锁）。</div>
+      <div class="tk-orig">依本命四柱，从<b>《三命通会》</b>与<b>《渊海子平》</b>中摘出原文并<b>逐柱核验</b>：日主诗按<b>日干 + 日支</b>取对应句，总诀按十神<b>落宫</b>与<b>月令</b>判定（<b>每条附白话小注</b>，便于读懂古文），疾病/性情按本盘五行实测核验前提；总纲区依<b>《穷通宝鉴》</b>取<b>调候用神</b>、扶抑取<b>五行用神</b>，参<b>四时旺相休囚死</b>与<b>月令十二长生</b>断日主状态，古法计分断<b>富贵 / 平淡 / 困顿</b>层次，逐条标注出处与本盘依据。其中<b>「用神 · 调候 · 月令」总纲</b>为专业版内容（¥9.9 永久解锁）。</div>
       <div id="tk-area"></div>
-      <div class="hint" style="margin-top:10px">本页只做<b>原文摘录与检索</b>：依本盘实见的日主日支、十神落宫、五行多寡、旺衰分数与地支关系，从典籍中取出对应断语，并逐条写明「本盘依据」（落在哪一柱、几见、是否当令、前提是否成立），与本盘无关者不列出。所有条目均标明出处，可对照原著核对；<b>不作改写、不作增补、不加论断</b>。古籍所论为古人经验总结，非现代科学结论。</div>
+      <div class="hint" style="margin-top:10px">本页以<b>原文摘录与检索</b>为主：依本盘实见的日主日支、十神落宫、五行多寡、旺衰分数与地支关系，从典籍中取出对应断语，并逐条写明「本盘依据」（落在哪一柱、几见、是否当令、前提是否成立），与本盘无关者不列出。所有条目均标明出处，可对照原著核对；<b>总诀下方的白话小注为本页为便于理解所作的整理</b>（并将重断语转为平和表达），如与原文理解有出入，<b>以原文为准</b>。古籍所论为古人经验总结，非现代科学结论，仅供传统文化学习研究与娱乐参考。</div>
       <div class="ent-note"><span class="ent-ico">!</span><span>当前内容信息仅供您娱乐使用，不等于专业测评，不代表价值评判，无任何现实指导意义，仅供娱乐参考。</span></div>
     </div>
 
@@ -1787,12 +1938,12 @@
         <p><b>商品名称</b>：八字排盘工具 · 专业版功能使用权限（永久）<br>
         <b>服务提供方</b>：北京易鸣堂文化传承有限公司</p>
         <p><b>商品性质</b>：虚拟商品（软件功能解锁码），非实物、无物流，付款后经客服发放激活码即时交付。</p>
-        <p><b>商品内容</b>：解锁「综合断语」中的分维度断语条目（含逐条推演依据与规则编号）。基础排盘、总评与事实依据等功能保持免费。激活信息保存在本机浏览器，清除浏览器数据会导致授权失效，可凭付款记录联系客服重新发放。</p>
+        <p><b>商品内容</b>：解锁本软件专业版功能的查看权限，含三块程序自动生成的文字内容：①「综合断语」的分维度分析条目（含逐条推演依据与规则编号）；②「用神 · 调候 · 层次」总纲（依《穷通宝鉴》等典籍规则）；③「大运白话解读」（十年趋势、前后五年分段、事业/财运/感情/健康参考维度与关键年份提示）。基础排盘、四柱表、神煞、总评与事实依据等功能保持免费。激活信息保存在本机浏览器，清除浏览器数据会导致授权失效，可凭付款记录联系客服重新发放。</p>
         <p><b>价格与有效期</b>：<b>¥9.9 一次买断，永久有效，无需续费。</b></p>
         <p><b>关于续费（重要）</b>：本商品为<b>一次性付费商品，不存在任何形式的自动续费、自动扣款</b>。我们<b>不会获取您的支付账户授权</b>，不会在您未主动付款的情况下收取任何费用。购买后无需也不会产生后续费用。</p>
         <p><b>授权说明</b>：激活码一经发放，<b>仅供购买者本人使用</b>。如需在多台设备上使用，请联系客服协助，我们将免费为您处理。</p>
         <p><b>退款规则</b>：虚拟商品一经激活成功，非质量问题不支持退款；激活码无法使用或发放错误的，经核实后补发或退还相应款项。</p>
-        <p class="vip-terms-warn">付费仅代表获得该软件功能使用权限，<b>不构成对推演结果准确性、应验性的承诺或保证</b>，亦不代表提供任何形式的人工咨询服务。本工具不提供任何「改运」「化解」类服务。内容依传统典籍由程序自动生成，仅供传统文化学习研究参考。</p>
+        <p class="vip-terms-warn">付费性质（重要）：您购买的是<b>本软件专业版功能的查看权限</b>，解锁的全部内容（分析条目、解读文字）均由<b>程序依传统典籍规则自动生成</b>，属<b>传统民俗文化学习研究与娱乐参考</b>性质。<b>本软件不提供人工算命、命理咨询、占卜服务，不提供任何「改运」「转运」「化解」「消灾」类内容或服务</b>，不构成对推演结果准确性、应验性的承诺或保证，也不构成事业、婚恋、健康、投资等任何现实决策依据。请理性看待，请勿过度沉迷。</p>
       </div>
       <div class="vip-terms-f">扫码付款即视为已阅读并同意上述条款 · 客服微信 YL240421YL · 完整条款见页脚《<a href="#disclaimer" id="vip-todisclaimer">免责声明</a>》《<a href="#privacy" id="vip-toprivacy">隐私政策</a>》</div>
     </div>
@@ -3312,6 +3463,157 @@
   }
 
   // ============================================================
+  // 四柱反查（迭代 50）：由四柱干支反推公历出生时刻
+  // ============================================================
+  // 用法：sizhuReverse([年柱,月柱,日柱,时柱], y0, y1, ziAdvance)
+  //   target 各柱为六十甲子序号 0—59；y0/y1 查找范围（1900—2100）；
+  //   ziAdvance 与页面「晚子时日柱进位」口径一致。
+  // 返回：{ results: [{y,m,d,h,mi,ziNote}], count } 或 { error: 原因 }。
+  //
+  // 算法：
+  //   ① 四柱自洽校验（月柱↔年柱五虎遁、时柱↔日柱五鼠遁），矛盾直接报无解；
+  //   ② 遍历候选年（年柱 60 年一循环，仅 3—4 个候选年），年柱以立春分界；
+  //   ③ 目标月支定节气月区间（寅月=立春~惊蛰 … 子月=大雪~小寒(次年)、
+  //      丑月=小寒(次年)~立春(次年)）；
+  //   ④ 区间内日柱以 60 天为周期，由儒略日直接定位候选日（含晚子进位的
+  //      「日柱为 td-1 之日」）；
+  //   ⑤ 每个候选日生成时辰代表时刻（非子时取时辰起点整点；子时取早子 0 点、
+  //      晚子 23 点），逐一刻做「正向轻量四柱」（完全复刻 paipan 的
+  //      年/月/日/时四步口径），四柱全等者收入结果 —— 保证与正向排盘零偏差。
+  // 性能：候选年 ≈ 范围年数/60，每候选年 3—5 次天文节气计算，全程毫秒级。
+  function sizhuReverse(target, y0, y1, ziAdvance) {
+    if (ziAdvance === undefined) ziAdvance = true;
+    if (y0 === undefined || y0 === null) y0 = 1900;
+    if (y1 === undefined || y1 === null) y1 = 2100;
+    y0 = Math.max(1900, Math.floor(y0));
+    y1 = Math.min(2100, Math.floor(y1));
+    if (y0 > y1) return { error: "查找范围无效。" };
+    if (!target || target.length !== 4) return { error: "须选定完整的四柱干支。" };
+    for (var qi = 0; qi < 4; qi++) {
+      var tv = target[qi];
+      if (typeof tv !== "number" || isNaN(tv) || Math.floor(tv) !== tv || tv < 0 || tv > 59)
+        return { error: "四柱干支未选完整，无法反查。" };
+    }
+
+    var ty = target[0], tm = target[1], td = target[2], th = target[3];
+    var tyG = ty % 10, tmZ = tm % 12, tdG = td % 10, thZ = th % 12;
+
+    // ① 五虎遁：月柱须与年柱自洽
+    if (monthGanzhi(tyG, tmZ) !== tm) {
+      return { error: "月柱「" + ganzhiName(tm) + "」与年柱「" + ganzhiName(ty) +
+               "」不符五虎遁（甲己之年丙作首、乙庚之岁戊为头、丙辛必定寻庚起、" +
+               "丁壬壬位顺行流、戊癸甲寅四方求），四柱自相矛盾，无解。" };
+    }
+    // ① 五鼠遁：时柱须与日柱自洽（子时早晚两派任一符合即可）
+    var shiOk;
+    if (thZ !== 0) {
+      shiOk = (hourGanzhi(tdG, 2 * thZ - 1) === th);
+    } else {
+      shiOk = (hourGanzhi(tdG, 0) === th) || (hourGanzhi((tdG + 1) % 10, 23) === th);
+    }
+    if (!shiOk) {
+      return { error: "时柱「" + ganzhiName(th) + "」与日柱「" + ganzhiName(td) +
+               "」不符五鼠遁（甲己还加甲、乙庚丙作初、丙辛从戊起、丁壬庚子居、" +
+               "戊癸何方发，壬子是真途），四柱自相矛盾，无解。" };
+    }
+
+    // ③ 正向轻量四柱 —— 与 paipan 主流程完全同口径（北京时间，无时辰校正）
+    function pillarsAt(y, m, d, h, mi) {
+      var birthDt = { y: y, m: m, d: d, h: h, mi: mi, s: 0 };
+      var lichun = solarLongitudeTime(y, 315);
+      function before(a, b) {
+        return jdFromBeijing(a.y, a.m, a.d, a.h, a.mi, a.s) <
+               jdFromBeijing(b.y, b.m, b.d, b.h, b.mi, b.s);
+      }
+      var ygzYear = before(birthDt, lichun) ? y - 1 : y;
+      var yearIdx = yearGanzhiIndex(ygzYear);
+      var best = null;
+      for (var yy = y - 1; yy <= y + 1; yy++) {
+        var jies = jieOfYear(yy);
+        for (var i = 0; i < jies.length; i++) {
+          if (!before(birthDt, jies[i].dt)) {
+            if (!best || before(best.dt, jies[i].dt)) best = jies[i];
+          }
+        }
+      }
+      var monthIdx = monthGanzhi(yearIdx % 10, best.zhi);
+      var nxYmd = jdnToDate(jdn(y, m, d) + 1);
+      var hourDayYmd = (h >= 23) ? nxYmd : [y, m, d];
+      var dayIdx = (ziAdvance && h >= 23)
+        ? dayGanzhiIndex(nxYmd[0], nxYmd[1], nxYmd[2])
+        : dayGanzhiIndex(y, m, d);
+      var hourIdx = hourGanzhi(dayGanzhiIndex(hourDayYmd[0], hourDayYmd[1], hourDayYmd[2]) % 10, h);
+      return [yearIdx, monthIdx, dayIdx, hourIdx];
+    }
+
+    // ② ③ ④ ⑤ 主扫描
+    var results = [], seen = {};
+    var rangeLoJd = jdFromBeijing(y0, 1, 1, 0, 0, 0);        // 查找范围下界
+    var rangeHiJd = jdFromBeijing(y1 + 1, 1, 1, 0, 0, 0);    // 上界（不含）
+    for (var y = y0 - 1; y <= y1; y++) {                     // y0-1：覆盖 y0 立春前的盘
+      if (yearGanzhiIndex(y) !== ty) continue;
+      var lc  = solarLongitudeTime(y, 315);
+      var lcJd = jdFromBeijing(lc.y, lc.m, lc.d, lc.h, lc.mi, lc.s || 0);
+      var lc2 = solarLongitudeTime(y + 1, 315);
+      var lc2Jd = jdFromBeijing(lc2.y, lc2.m, lc2.d, lc2.h, lc2.mi, lc2.s || 0);
+
+      // 目标节气月区间 [a, b)：月支 → 月序 n（寅=1 … 丑=12）
+      var n = mod(tmZ - 2, 12) + 1;
+      var sDtc, eDtc;
+      if (n <= 10) {                    // 寅月~亥月：两端都在 y 年
+        sDtc = solarLongitudeTime(y, JIE_LON[n - 1]);
+        eDtc = solarLongitudeTime(y, JIE_LON[n % 12]);
+      } else if (n === 11) {            // 子月：大雪(y年12月) ~ 小寒(y+1年1月)
+        sDtc = solarLongitudeTime(y, JIE_LON[10]);
+        eDtc = solarLongitudeTime(y + 1, JIE_LON[11]);
+      } else {                          // 丑月：小寒(y+1年1月) ~ 立春(y+1)
+        sDtc = solarLongitudeTime(y + 1, JIE_LON[11]);
+        eDtc = lc2;
+      }
+      var aJd = jdFromBeijing(sDtc.y, sDtc.m, sDtc.d, sDtc.h, sDtc.mi, sDtc.s || 0);
+      var bJd = jdFromBeijing(eDtc.y, eDtc.m, eDtc.d, eDtc.h, eDtc.mi, eDtc.s || 0);
+      var a = Math.max(aJd, lcJd), b = Math.min(bJd, lc2Jd);
+      if (a >= b) continue;
+
+      // 候选日：节气月区间前后各扩 2 天内，日柱 == td（白天/早子/晚子不进位）
+      // 或 == td-1（晚子进位派：该日 23 点日柱进为 td）
+      var sbA = beijingFromJd(a - 2), sbB = beijingFromJd(b + 2);
+      var jdn0 = jdn(sbA.y, sbA.m, sbA.d), jdn1 = jdn(sbB.y, sbB.m, sbB.d);
+      for (var j = jdn0; j <= jdn1; j++) {
+        var dg = mod(j - 2433191, 60);
+        if (dg !== td && dg !== mod(td - 1, 60)) continue;
+        var ymd = jdnToDate(j);
+        var times = [];
+        if (thZ !== 0) {
+          if (dg === td) times.push([ymd[0], ymd[1], ymd[2], 2 * thZ - 1, 0, ""]);
+        } else if (dg === td) {
+          times.push([ymd[0], ymd[1], ymd[2], 0, 0, "早子时"]);
+          times.push([ymd[0], ymd[1], ymd[2], 23, 0, "晚子时"]);
+        } else {                        // dg === td-1：晚子进位派专属
+          times.push([ymd[0], ymd[1], ymd[2], 23, 0, "晚子时"]);
+        }
+        for (var ti = 0; ti < times.length; ti++) {
+          var tt = times[ti];
+          var tJd = jdFromBeijing(tt[0], tt[1], tt[2], tt[3], tt[4], 0);
+          if (tJd < a || tJd >= b) continue;          // 须落在本节气月内
+          if (tJd < rangeLoJd || tJd >= rangeHiJd) continue;   // 须落在查找范围内
+          var p = pillarsAt(tt[0], tt[1], tt[2], tt[3], tt[4]);
+          if (p[0] !== ty || p[1] !== tm || p[2] !== td || p[3] !== th) continue;
+          var key = tt[0] + "-" + tt[1] + "-" + tt[2] + "-" + tt[3];
+          if (seen[key]) continue;
+          seen[key] = 1;
+          results.push({ y: tt[0], m: tt[1], d: tt[2], h: tt[3], mi: tt[4], ziNote: tt[5] });
+        }
+      }
+    }
+    results.sort(function (x, y2) {
+      return (x.y * 1e10 + x.m * 1e8 + x.d * 1e6 + x.h * 1e4 + x.mi * 100) -
+             (y2.y * 1e10 + y2.m * 1e8 + y2.d * 1e6 + y2.h * 1e4 + y2.mi * 100);
+    });
+    return { results: results, count: results.length };
+  }
+
+  // ============================================================
   // 地支关系常量与工具（供「四柱断语」「综合断语」「格局判断」等模块复用）
   // ============================================================
 
@@ -3483,49 +3785,89 @@ function tkRizhuJu(gan, zhi) {
 // k = 触发关键词（在盘面「特征」中命中即显示）；src = 书名·篇名
 var TK_ZHONG = [
   // —— 《渊海子平·万金赋》（卷四）——
-  { t: "官杀混杂当知审，去杀留官仔细评。留官去杀莫逢杀，留杀去官官莫逢。", k: ["官杀混杂"], src: "《渊海子平·万金赋》" },
-  { t: "官杀受伤人必夭，更宜财格定前程。有财官运须荣发，财地官乡是福胎。", k: ["官杀受伤"], src: "《渊海子平·万金赋》" },
-  { t: "只怕日干元自弱，财多生杀或身衰。日时偏正问何财，又怕干头带杀来。", k: ["身弱财多"], src: "《渊海子平·万金赋》" },
-  { t: "劫若重逢人夭寿，孰知偏正甚为灾。财多身弱行财运，此处方知入泉台。", k: ["劫逢劫", "财多身弱"], src: "《渊海子平·万金赋》" },
-  { t: "若是逢财来害印，堕崖落水恶中亡。为官在任他乡死，作官逢丧在路傍。", k: ["财害印"], src: "《渊海子平·万金赋》" },
-  { t: "食神有气胜财官，只怕残伤前后截。却分轻重细推详，大忌财官临死绝。", k: ["食神"], src: "《渊海子平·万金赋》" },
-  { t: "伤官命运再逢官，断是徒流祸百端。", k: ["伤官见官"], src: "《渊海子平·万金赋》" },
+  // blurb = 白话小注（迭代51）：把古文翻成大白话并弱化重断语，原文仍为准
+  { t: "官杀混杂当知审，去杀留官仔细评。留官去杀莫逢杀，留杀去官官莫逢。", k: ["官杀混杂"], src: "《渊海子平·万金赋》",
+    blurb: "管束与压力两种星混在一起、主次不清时，要先理清「谁说了算」：留下一种、化去另一种，人生节奏会更清爽。" },
+  { t: "官杀受伤人必夭，更宜财格定前程。有财官运须荣发，财地官乡是福胎。", k: ["官杀受伤"], src: "《渊海子平·万金赋》",
+    blurb: "开头的断语是古人的夸张写法，别照字面对号。实际含义：管束之星受损的盘，宜靠务实的目标与财富规划来平衡；行财官之运的阶段反而容易起势。" },
+  { t: "只怕日干元自弱，财多生杀或身衰。日时偏正问何财，又怕干头带杀来。", k: ["身弱财多"], src: "《渊海子平·万金赋》",
+    blurb: "自己根基偏弱时，钱多事也多，容易为钱奔波伤神。这盘的功课是：先养好身体与精力，再谈求财。" },
+  { t: "劫若重逢人夭寿，孰知偏正甚为灾。财多身弱行财运，此处方知入泉台。", k: ["劫逢劫", "财多身弱"], src: "《渊海子平·万金赋》",
+    blurb: "原文断语很重，别被吓到。核心是：竞争星太多而自身偏弱时，走求财大运反而吃力——这个阶段守成比进攻重要，别加杠杆。" },
+  { t: "若是逢财来害印，堕崖落水恶中亡。为官在任他乡死，作官逢丧在路傍。", k: ["财害印"], src: "《渊海子平·万金赋》",
+    blurb: "开头的凶险字眼是警句式写法，别照字面理解。实际提醒：为赚钱荒废学习进修的阶段要警惕取舍——该考的证、该积累的资历别省，那是护身的东西。" },
+  { t: "食神有气胜财官，只怕残伤前后截。却分轻重细推详，大忌财官临死绝。", k: ["食神"], src: "《渊海子平·万金赋》",
+    blurb: "表达、才艺、生活情趣这些「福气星」有力时，日子往往过得比单纯追名逐利更滋润；怕的是它被压制得施展不开。" },
+  { t: "伤官命运再逢官，断是徒流祸百端。", k: ["伤官见官"], src: "《渊海子平·万金赋》",
+    blurb: "个性张扬的阶段再遇上讲规矩的运，容易与上司、规则顶牛。这期间说话留三分、别硬碰硬，是非自然少。" },
 
   // —— 《渊海子平·继善篇》——
-  { t: "岁月时中，大怕杀官混杂。", k: ["官杀混杂"], src: "《渊海子平·继善篇》" },
-  { t: "财多身弱，正为富屋贫人。", k: ["身弱财多", "财多身弱"], src: "《渊海子平·继善篇》" },
-  { t: "非夭则贫，必是身衰遇鬼。", k: ["身弱财多"], src: "《渊海子平·继善篇》" },
-  { t: "杀重身轻，终身有损。", k: ["身弱财多", "官杀混杂"], src: "《渊海子平·继善篇》" },
-  { t: "富而且贵，定因财旺生官。", k: ["财旺生官"], src: "《渊海子平·继善篇》" },
-  { t: "印绶被伤，倘若荣华不久。", k: ["财害印"], src: "《渊海子平·继善篇》" },
-  { t: "伤官复行官运，不测灾来。", k: ["伤官见官"], src: "《渊海子平·继善篇》" },
-  { t: "阳刃冲合岁君，勃然祸至。", k: ["日时天克地冲"], src: "《渊海子平·继善篇》" },
-  { t: "生平少病，日主高强。", k: ["日主高强"], src: "《渊海子平·继善篇》" },
-  { t: "少乐多忧，盖因日主自弱。", k: ["日主自弱"], src: "《渊海子平·继善篇》" },
-  { t: "身强杀浅，假杀为权。", k: ["日主高强"], src: "《渊海子平·继善篇》" },
-  { t: "金弱遇火炎之地，血疾无疑。", k: ["金弱火旺"], src: "《渊海子平·继善篇》" },
-  { t: "土虚逢木旺之乡，脾伤定论。", k: ["土虚木旺"], src: "《渊海子平·继善篇》" },
-  { t: "筋疼骨痛，盖因木被金伤。", k: ["木被金伤"], src: "《渊海子平·继善篇》" },
-  { t: "眼昏目暗，必是火遭水克。", k: ["火遭水克"], src: "《渊海子平·继善篇》" },
-  { t: "下元冷疾，必是水值火伤。", k: ["水值土伤"], src: "《渊海子平·继善篇》" },
-  { t: "木从水养，水盛而木则漂流。", k: ["水多木漂"], src: "《渊海子平·继善篇》" },
-  { t: "金赖土生，土厚而金遭埋没。", k: ["土多金埋"], src: "《渊海子平·继善篇》" },
-  { t: "太岁乃众杀之主，入命未必为灾；若遇斗战之乡，必主刑于本命。", k: ["日时天克地冲"], src: "《渊海子平·继善篇》" },
+  { t: "岁月时中，大怕杀官混杂。", k: ["官杀混杂"], src: "《渊海子平·继善篇》",
+    blurb: "压力星混杂是忌讳：多头管束、方向摇摆。理清主次、一次只对一个目标负责，事就顺了。" },
+  { t: "财多身弱，正为富屋贫人。", k: ["身弱财多", "财多身弱"], src: "《渊海子平·继善篇》",
+    blurb: "机会和钱景看得到、抓起来却累，像守着金山的看守——先补足自己的精力与能力，才轮得到收获。" },
+  { t: "非夭则贫，必是身衰遇鬼。", k: ["身弱财多"], src: "《渊海子平·继善篇》",
+    blurb: "原文极言其凶，听听就好。实际是：自身太弱而压力大，健康与钱包都容易吃亏；减压、健身、少揽事是正解。" },
+  { t: "杀重身轻，终身有损。", k: ["身弱财多", "官杀混杂"], src: "《渊海子平·继善篇》",
+    blurb: "压力星过重而自身偏弱：长期高压会侵蚀健康与心情。学会卸力——运动、倾诉、把责任分出去，比硬扛聪明。" },
+  { t: "富而且贵，定因财旺生官。", k: ["财旺生官"], src: "《渊海子平·继善篇》",
+    blurb: "钱与事业互相成全的顺结构：财养名声、名带动财，是相当好的组合，值得持续经营。" },
+  { t: "印绶被伤，倘若荣华不久。", k: ["财害印"], src: "《渊海子平·继善篇》",
+    blurb: "靠资历、学历、长辈撑起来的好处，最怕被眼前的利益冲掉；护住根基，荣华才长久。" },
+  { t: "伤官复行官运，不测灾来。", k: ["伤官见官"], src: "《渊海子平·继善篇》",
+    blurb: "个性星当值又走规矩之运，冲突说来就来。收敛锋芒、按流程办事，是这阶段最好的护身符。" },
+  { t: "阳刃冲合岁君，勃然祸至。", k: ["日时天克地冲"], src: "《渊海子平·继善篇》",
+    blurb: "原文语气重。含义是：刃星被流年冲动时，情绪与意外风险都在高点——开车、签约、动怒，都多一分克制。" },
+  { t: "生平少病，日主高强。", k: ["日主高强"], src: "《渊海子平·继善篇》",
+    blurb: "自身底子强的盘，抵抗力与恢复力都好，一生小灾小病少——这是先天的好本钱，也别透支。" },
+  { t: "少乐多忧，盖因日主自弱。", k: ["日主自弱"], src: "《渊海子平·继善篇》",
+    blurb: "自身偏弱的人容易想得多、快乐少。这不是命苦，是能量要省着用：先养身体，再养心情。" },
+  { t: "身强杀浅，假杀为权。", k: ["日主高强"], src: "《渊海子平·继善篇》",
+    blurb: "自身强而压力星少的人，压力反而变成权力：扛得住事，就能管得住人，适合扛责任。" },
+  { t: "金弱遇火炎之地，血疾无疑。", k: ["金弱火旺"], src: "《渊海子平·继善篇》",
+    blurb: "古人直断口吻较重，别照字面理解。弱行长期被克，对应部位要多留意保养——金弱火旺的盘，呼吸道与皮肤宜早养护、定期体检。" },
+  { t: "土虚逢木旺之乡，脾伤定论。", k: ["土虚木旺"], src: "《渊海子平·继善篇》",
+    blurb: "脾胃对应土：土弱木旺的盘，三餐规律、少思虑焦虑，肠胃会感谢你。" },
+  { t: "筋疼骨痛，盖因木被金伤。", k: ["木被金伤"], src: "《渊海子平·继善篇》",
+    blurb: "筋骨对应木：木被金克的盘，久坐久站都伤筋骨，拉伸、运动、别硬扛重活。" },
+  { t: "眼昏目暗，必是火遭水克。", k: ["火遭水克"], src: "《渊海子平·继善篇》",
+    blurb: "眼睛对应火：火被水克的盘，用眼要节制，屏幕时间管起来，别在暗处刷手机。" },
+  { t: "下元冷疾，必是水值火伤。", k: ["水值土伤"], src: "《渊海子平·继善篇》",
+    blurb: "下焦寒凉对应水：注意保暖、少生冷，天冷护好腰腹，寒气不积则无患。" },
+  { t: "木从水养，水盛而木则漂流。", k: ["水多木漂"], src: "《渊海子平·继善篇》",
+    blurb: "帮助太多也是负担：支持过载反而让人失去主心骨。别人的援手是浮木，自己的根才立得住。" },
+  { t: "金赖土生，土厚而金遭埋没。", k: ["土多金埋"], src: "《渊海子平·继善篇》",
+    blurb: "资源给过头会埋没锋芒：被保护得太好，反而施展不开。适当走出舒适圈，让本事见光。" },
+  { t: "太岁乃众杀之主，入命未必为灾；若遇斗战之乡，必主刑于本命。", k: ["日时天克地冲"], src: "《渊海子平·继善篇》",
+    blurb: "流年与日柱正面冲突的年份，古人提醒官非口角或伤灾之说。现代理解：这年低调、守法、慢行，别逞强斗气。" },
 
   // —— 《渊海子平·杂论口诀》——
-  { t: "年上伤官，富贵不久。", k: ["年伤官"], src: "《渊海子平·杂论口诀》" },
-  { t: "月上伤官，父母不完。", k: ["月伤官"], src: "《渊海子平·杂论口诀》" },
-  { t: "日上伤官，难为妻妾。", k: ["日伤官"], src: "《渊海子平·杂论口诀》" },
-  { t: "时上伤官，子孙无传。", k: ["时伤官"], src: "《渊海子平·杂论口诀》" },
-  { t: "印绶见财，愈多愈灾。", k: ["财害印"], src: "《渊海子平·杂论口诀》" },
-  { t: "官杀混杂，有财者吉；无财印者凶。", k: ["官杀混杂"], src: "《渊海子平·杂论口诀》" },
-  { t: "柱有劫财比刃多者，刑父伤妻，不聚财也。", k: ["比劫多"], src: "《渊海子平·杂论口诀》" },
-  { t: "刑多者，为人不义；合多者，疏者亦亲。", k: ["刑多", "合多"], src: "《渊海子平·杂论口诀》" },
-  { t: "辰多好斗，戌多好讼。", k: ["辰多", "戌多"], src: "《渊海子平·杂论口诀》" },
-  { t: "食神干旺，胜似财官。", k: ["食神"], src: "《渊海子平·杂论口诀》" },
-  { t: "食衰枭旺，不死也灾。", k: ["枭神重"], src: "《渊海子平·杂论口诀》" },
-  { t: "伤官见官，为祸百端；若非疾病伤躯，必当官讼囚系、子丧妻伤。", k: ["伤官见官"], src: "《渊海子平·杂论口诀》" },
-  { t: "重犯财官者，贵；重犯亡神者，夭。", k: ["财旺生官"], src: "《渊海子平·杂论口诀》" }
+  { t: "年上伤官，富贵不久。", k: ["年伤官"], src: "《渊海子平·杂论口诀》",
+    blurb: "早年个性太强、不服管，容易错失打基础的黄金期；少年得志别张扬，根基比风光重要。" },
+  { t: "月上伤官，父母不完。", k: ["月伤官"], src: "《渊海子平·杂论口诀》",
+    blurb: "青年期个性星当值：与父母长辈的观念碰撞多。多体谅、多沟通，亲情也是要经营的。" },
+  { t: "日上伤官，难为妻妾。", k: ["日伤官"], src: "《渊海子平·杂论口诀》",
+    blurb: "婚姻宫坐个性星：亲密关系里输赢心太重。赢了道理、输了感情不划算——多讲感受，少争对错。" },
+  { t: "时上伤官，子孙无传。", k: ["时伤官"], src: "《渊海子平·杂论口诀》",
+    blurb: "晚年宫位带个性星：与晚辈相处要松弛，别用说教把他们推远。放下身段，反而亲近。" },
+  { t: "印绶见财，愈多愈灾。", k: ["财害印"], src: "《渊海子平·杂论口诀》",
+    blurb: "资历星与利益星相冲：名利难两全的阶段，想清楚当下更要哪个，别两头都抓两头空。" },
+  { t: "官杀混杂，有财者吉；无财印者凶。", k: ["官杀混杂"], src: "《渊海子平·杂论口诀》",
+    blurb: "同样是有管束又有压力，有财星疏导就有出路；缺财缺印的盘，更要主动找「变现的渠道」和「靠得住的人」。" },
+  { t: "柱有劫财比刃多者，刑父伤妻，不聚财也。", k: ["比劫多"], src: "《渊海子平·杂论口诀》",
+    blurb: "同辈竞争星多的人：钱难留、合伙易纠纷。记账、立合同、不轻易做担保，是这盘的理财必修课。" },
+  { t: "刑多者，为人不义；合多者，疏者亦亲。", k: ["刑多", "合多"], src: "《渊海子平·杂论口诀》",
+    blurb: "关系星见得多：合多的人缘好，走到哪都拉得近人情；刑多则口舌多——少传话、少站队、多当面说。" },
+  { t: "辰多好斗，戌多好讼。", k: ["辰多", "戌多"], src: "《渊海子平·杂论口诀》",
+    blurb: "辰戌之气偏刚：好胜心强、认死理。把较劲的劲头放在事上而不是人上，胜负心就是竞争力。" },
+  { t: "食神干旺，胜似财官。", k: ["食神"], src: "《渊海子平·杂论口诀》",
+    blurb: "福气星旺的盘：会享受、会生活、有才艺。这份从容本身就是财富，别拿它去硬换名利。" },
+  { t: "食衰枭旺，不死也灾。", k: ["枭神重"], src: "《渊海子平·杂论口诀》",
+    blurb: "原文吓人，实义是：福气星弱而思虑星过重，容易钻牛角尖伤身心。少想多做、找人说出来，比闷着强。" },
+  { t: "伤官见官，为祸百端；若非疾病伤躯，必当官讼囚系、子丧妻伤。", k: ["伤官见官"], src: "《渊海子平·杂论口诀》",
+    blurb: "个性星与规则星正面相撞，口舌是非多源于此。收敛锋芒、程序合规、文件留痕，祸事自然远；原文列举的种种后果是古人吓阻写法，不必对号入座。" },
+  { t: "重犯财官者，贵；重犯亡神者，夭。", k: ["财旺生官"], src: "《渊海子平·杂论口诀》",
+    blurb: "财官星双旺主贵气，是好事；原文后半句语气重，实义是心气容易耗散——给自己找个定锚的目标最重要。" }
 ];
 
 // ============ 三、疾病 / 性情（依五行取）============
@@ -3839,6 +4181,192 @@ function tkYongshen(pillars, monthZhi) {
   }
   out.st = st;
   return out;
+}
+
+// ============ 迭代51：喜忌判定 + 大运白话解读 ============
+// 喜忌判定：复用 tkYongshen 的旺衰取用（旺→喜克泄耗；弱→喜生扶；中和→依《穷通宝鉴》调候定喜忌）
+// 返回 { dayWx, level, kind, xi:[五行], ji:[五行], basis }（xi/ji 为五行字数组）
+function xishenOf(pillars, monthZhi) {
+  if (monthZhi == null) monthZhi = pillars[1] % 12;
+  var gs = pillars.map(function (p) { return p % 10; });
+  var dayWx = GAN_WUXING[gs[2]];
+  var ys = tkYongshen(pillars, monthZhi);
+  var st = ys.st;
+  var xi = [], ji = [], kind = "";
+  if (st.level === "极旺" || st.level === "偏旺") {
+    xi = [WX_KE[dayWx], WX_SHENG[dayWx], KE_ME(dayWx)];       // 财 · 食伤 · 官杀
+    ji = [SHENG_ME(dayWx), dayWx];                            // 印 · 比劫
+    kind = "旺";
+  } else if (st.level === "偏弱" || st.level === "极弱") {
+    xi = [SHENG_ME(dayWx), dayWx];                            // 印 · 比劫
+    ji = [WX_KE[dayWx], WX_SHENG[dayWx], KE_ME(dayWx)];       // 财 · 食伤 · 官杀
+    kind = "弱";
+  } else {
+    // 中和：调候为纲。喜 = 调候主用神之行 + 生它之行；忌 = 克调候用神之行
+    var tRow = TK_TIAOHO[TIANGAN[gs[2]]] && TK_TIAOHO[TIANGAN[gs[2]]][DIZHI[monthZhi]];
+    var tWx = tRow ? GAN_WUXING[TIANGAN.indexOf(tRow[0])] : dayWx;
+    xi = [tWx, SHENG_ME(tWx)];
+    ji = [KE_ME(tWx)];
+    kind = "中和";
+  }
+  var basis = kind === "旺"
+    ? "日主" + st.level + "（旺衰分 " + st.score + "），喜克泄耗之行（" + xi.join("、") + "），忌生扶之行（" + ji.join("、") + "）"
+    : kind === "弱"
+    ? "日主" + st.level + "（旺衰分 " + st.score + "），喜生扶之行（" + xi.join("、") + "），忌克泄耗之行（" + ji.join("、") + "）"
+    : "日主中和（旺衰分 " + st.score + "），以《穷通宝鉴》调候为纲：喜「" + xi[0] + "」行及其生扶（" + xi.join("、") + "），忌克调候之「" + ji[0] + "」行";
+  return { dayWx: dayWx, level: st.level, kind: kind, xi: xi, ji: ji, basis: basis, score: st.score };
+}
+
+// 大运白话解读（迭代51）：对 paipan 返回的 dayun 逐步出五档吉凶 + 十神主题 + 关系事件点 + 关键流年 + 四维度
+// pillars: [年,月,日,时] 六十甲子序号；dayun: paipan().dayun（{age,startYear,gz} 数组）；gender: "男"/"女"
+// 档位口径：运干、运支各按「喜+2 / 忌-2 / 中性0」打分，总和 → +4大吉 +2吉 0平 -2滞 -4凶
+// 返回 { xs, steps:[{gz,startYear,age,grade,gradeNote,mixed,theme,themeTxt,q5,h5,rels,keyYears,dims,judge}] }
+function dayunRead(pillars, dayun, gender) {
+  if (!dayun || !dayun.length) return null;
+  if (gender !== "女") gender = "男";
+  var monthZhi = pillars[1] % 12;
+  var gs = pillars.map(function (p) { return p % 10; });
+  var zs = pillars.map(function (p) { return p % 12; });
+  var dayGanIdx = gs[2];
+  var xs = xishenOf(pillars, monthZhi);
+  var POS = ["年", "月", "日", "时"];
+  var POS_HINT = ["（长辈·根基）", "（事业·住所）", "（自身·婚姻）", "（子女·下属）"];
+  var gzIdxOfName = function (name) {
+    var g2 = TIANGAN.indexOf(name[0]), z2 = DIZHI.indexOf(name[1]);
+    for (var k = 0; k < 60; k++) { if (k % 10 === g2 && k % 12 === z2) return k; }
+    return 0;
+  };
+  // 十神 → 白话主题（首次出现给白话，不在正文堆术语）
+  var SS_THEME = {
+    "比肩": ["同辈与协作", "同辈、同学、合伙人变得活跃，适合搭伙做事，但分利规则要先谈清楚"],
+    "劫财": ["竞争与破费", "花销与人情往来变大，合作里防被分走份额，钱上立好规矩为要"],
+    "食神": ["表达与生活", "心思偏生活情趣与表达创作，口福见长，适合养身养心、慢工出细活"],
+    "伤官": ["才华与变动", "想法多、不服管，才华容易被看见；但与规则、上司的关系要刻意维护"],
+    "偏财": ["机会与外快", "活钱、机会财变多，路子宽；但来得快去得也快，见好就收是上策"],
+    "正财": ["收入与积累", "正路财稳中有进，适合攒钱置业、把收入结构做扎实"],
+    "七杀": ["压力与磨砺", "任务重、竞争激烈，压力能转化为成长；硬仗一场接一场，注意休息"],
+    "正官": ["事业与名声", "名声与职位的机会窗口，考核、升迁、授权之事多；守规矩者得利"],
+    "偏印": ["技能与琢磨", "偏门技艺、学习研究之运，适合深耕一技；想太多易失眠，动起来更好"],
+    "正印": ["学习与贵人", "长辈贵人缘旺，学习考证顺利，是积累资历与证书的好阶段"]
+  };
+  // 忌神五行 → 健康提示（提示式，不作断语）
+  var HEALTH = {
+    "木": "注意肝胆与情绪：作息规律、少熬夜生气，多户外舒展",
+    "火": "注意心脑与睡眠：饮食清淡、控制熬夜与情绪激动",
+    "土": "注意脾胃：三餐定时、少生冷与暴饮暴食",
+    "金": "注意呼吸道与皮肤：换季保暖、少烟尘刺激",
+    "水": "注意肾气与腰部：少久坐熬夜，注意保暖与节制"
+  };
+  var steps = [];
+  for (var d = 0; d < dayun.length; d++) {
+    var du = dayun[d];
+    var idx = gzIdxOfName(du.gz);
+    var g = idx % 10, z = idx % 12;
+    var gWx = GAN_WUXING[g], zWx = ZHI_WUXING[z];
+    var gS = xs.xi.indexOf(gWx) >= 0 ? 2 : (xs.ji.indexOf(gWx) >= 0 ? -2 : 0);
+    var zS = xs.xi.indexOf(zWx) >= 0 ? 2 : (xs.ji.indexOf(zWx) >= 0 ? -2 : 0);
+    var total = gS + zS;
+    var grade = total >= 4 ? "大吉" : total === 2 ? "吉" : total === 0 ? "平" : total === -2 ? "滞" : "凶";
+    var mixed = (gS === 2 && zS === -2) || (gS === -2 && zS === 2);
+    var gradeNote = total >= 4 ? "干支皆为喜用，是十年里顺风顺水的一段，值得重点把握"
+      : total === 2 ? "以喜用为主，整体偏顺，抓住主线即有收获"
+      : mixed ? "干支喜忌各半：前五年与后五年走势分化明显，顺滞相间，节奏要对半看"
+      : total === 0 ? "干支均非喜非忌，十年整体平缓，适合稳扎稳打"
+      : total === -2 ? "以忌神为主，阻力偏大，宜守不宜攻，练内功等时机"
+      : "干支皆为忌神，十年压力集中，稳住基本盘、避免大投入为要";
+    var ssGan = shiShen(dayGanIdx, g);
+    var ssZhi = shiShen(dayGanIdx, TIANGAN.indexOf(DZ_BENQI[DIZHI[z]]));
+    var theme = (SS_THEME[ssGan] || ["", ""])[0] + " · " + (SS_THEME[ssZhi] || ["", ""])[0];
+    var themeTxt = "这步运天干走「" + ssGan + "」：" + (SS_THEME[ssGan] || ["", ""])[1] + "；地支本气走「" + ssZhi + "」：" + (SS_THEME[ssZhi] || ["", ""])[1];
+    // 前五年（天干主事）/ 后五年（地支主事）
+    var gWord = gS === 2 ? "顺遂" : gS === -2 ? "费力" : "平稳";
+    var zWord = zS === 2 ? "顺遂" : zS === -2 ? "费力" : "平稳";
+    var q5 = "前五年（" + du.startYear + "–" + (du.startYear + 4) + "）天干主事，走得" + gWord + "，" +
+      (gS === 2 ? "机会与助力集中在这段，想做的事往前排" : gS === -2 ? "这段花力气多、回报慢，别急，攒经验也是收获" : "维持常态节奏即可");
+    var h5 = "后五年（" + (du.startYear + 5) + "–" + (du.startYear + 9) + "）地支主事，走得" + zWord + "，" +
+      (zS === 2 ? "成果与落定集中在这段，前期铺垫这时见效" : zS === -2 ? "这段波动多，守成与规避为主，别接大摊子" : "延续节奏，查漏补缺");
+    // 关系事件点：运支 vs 原局四支（冲刑合害伏吟）
+    var rels = [];
+    for (var i = 0; i < 4; i++) {
+      var zz = zs[i];
+      if (zz === z) {
+        rels.push("大运支与" + POS[i] + "支同字（伏吟）" + POS_HINT[i] + "：旧事重提、情绪内耗，学会翻篇");
+        continue;
+      }
+      var rel = mpPairRel(z, zz);
+      if (rel === "六冲") rels.push("大运支冲" + POS[i] + "支" + POS_HINT[i] + "：这十年环境与人事变动大，搬迁、换岗、角色转换都可能发生");
+      else if (rel === "刑") rels.push("大运支刑" + POS[i] + "支" + POS_HINT[i] + "：合同、规则、手续等细节上多费心，别嫌琐碎");
+      else if (rel === "穿") rels.push("大运支穿" + POS[i] + "支" + POS_HINT[i] + "：易有口舌与沟通成本，话说明白、留好凭证");
+      else if (rel === "六合") rels.push("大运支合" + POS[i] + "支" + POS_HINT[i] + "：人缘与合作机会多，关系能帮上忙");
+      else if (rel === "暗合") rels.push("大运支暗合" + POS[i] + "支" + POS_HINT[i] + "：有不成文的机缘或私下协作，把握分寸即可");
+    }
+    // 关键流年：岁运并临 / 岁运天克地冲 / 冲日主 / 忌神临 / 喜用到位，按优先级取至多 4 条
+    var cand = [];
+    for (var yy = du.startYear; yy < du.startYear + 10; yy++) {
+      var ly = mod(yy - 4, 60);
+      var lg = ly % 10, lz = ly % 12;
+      var lyGz = ganzhiName(ly);
+      var tags = [];
+      var skYun = WX_KE[GAN_WUXING[lg]] === gWx && mpPairRel(lz, z) === "六冲";
+      var skDay = WX_KE[GAN_WUXING[lg]] === GAN_WUXING[dayGanIdx] && mpPairRel(lz, zs[2]) === "六冲";
+      if (ly === idx) tags.push("岁运并临");
+      if (skYun) tags.push("岁运天克地冲");
+      if (skDay) tags.push("冲日主");
+      var xiHit = xs.xi.indexOf(GAN_WUXING[lg]) >= 0 || xs.xi.indexOf(ZHI_WUXING[lz]) >= 0;
+      var jiHit = xs.ji.indexOf(GAN_WUXING[lg]) >= 0 || xs.ji.indexOf(ZHI_WUXING[lz]) >= 0;
+      if (!skYun && !skDay && ly !== idx) {
+        if (jiHit && !xiHit) tags.push("忌神临");
+        else if (xiHit) tags.push("喜用到位");
+      }
+      if (tags.length) {
+        var note = tags.indexOf("岁运天克地冲") >= 0 ? "与这步大运正面相冲，变动与决策集中，宜静不宜动"
+          : tags.indexOf("冲日主") >= 0 ? "冲击自身与婚姻宫，家事健康多留意，不逞强"
+          : tags.indexOf("岁运并临") >= 0 ? "与大运同字，运的主题被放大，顺则更顺、滞则更滞"
+          : tags.indexOf("忌神临") >= 0 ? "流年五行不帮身，节奏放缓，谨慎投入"
+          : "流年五行帮身，适合推进关键事项";
+        cand.push({ year: yy, gz: lyGz, tag: tags.join(" · "), note: note, pri: skYun ? 0 : skDay ? 1 : ly === idx ? 2 : jiHit ? 3 : 4 });
+      }
+    }
+    cand.sort(function (a, b) { return a.pri - b.pri || a.year - b.year; });
+    var keyYears = cand.slice(0, 4);
+    if (!keyYears.length) keyYears.push({ year: du.startYear + 4, gz: ganzhiName(mod(du.startYear, 60)), tag: "换段年", note: "前五年与后五年交接，检视节奏、调整布局" });
+    // 四维度白话（lv：1 顺 / 0 平 / -1 逆）
+    var lv = total >= 2 ? 1 : (total === 0 ? 0 : -1);
+    var career;
+    if (lv > 0) career = "事业窗口打开：" + (SS_THEME[ssGan] || ["", ""])[0] + "当值，" +
+      (ssGan === "正官" || ssGan === "七杀" ? "职位、考核、授权的机会多，主动承担能上位" : ssGan === "正印" || ssGan === "偏印" ? "进修、考证、拜师都能加分，资历攒到位路就更宽" : "把特长亮出来，平台与贵人都会给正反馈");
+    else if (lv < 0) career = "事业以守为主：这步运阻力偏大，少折腾、不站队，把手里的事做扎实，等下一步运再图进";
+    else career = "事业平稳：没有大开大合的机会，也没有硬风险，按部就班积累资历即可";
+    var caiWx = WX_KE[GAN_WUXING[dayGanIdx]];   // 我克之行 = 财之五行
+    var caiHit = ssGan === "正财" || ssGan === "偏财" || ssZhi === "正财" || ssZhi === "偏财";
+    var wealth;
+    if (lv > 0 && caiHit) wealth = "财运是这步运的重头戏，" + (xs.ji.indexOf(caiWx) >= 0 ? "但财为忌神，进财的同时开销也大，落袋为安" : "正路财与机会财都顺，可做中期布局");
+    else if (lv > 0) wealth = "财运随运向好，收入稳中有升；大额投入仍要量力而行";
+    else if (lv < 0 && caiHit) wealth = "财星虽当值但运势不托底，看得到的钱多、拿稳的少，忌借贷与重仓";
+    else if (lv < 0) wealth = "财运平淡偏紧，控支出、保现金流，别在低谷做大方的事";
+    else wealth = "财运不温不火，主业收入为主，理财求稳不求快";
+    // 感情：男看财星、女看官星为异性缘；运支与日支（婚姻宫）关系定基调
+    var spouseStar = gender === "女" ? ["正官", "七杀"] : ["正财", "偏财"];
+    var spouseHit = spouseStar.indexOf(ssGan) >= 0 || spouseStar.indexOf(ssZhi) >= 0;
+    var dayRel = "";
+    for (var i2 = 0; i2 < rels.length; i2++) { if (rels[i2].indexOf("（自身·婚姻）") >= 0) { dayRel = rels[i2]; break; } }
+    var love;
+    if (spouseHit && zS === 2) love = "感情运偏旺：" + (gender === "女" ? "官星" : "财星") + "到位，单身者脱单机会大，有伴者关系升温；婚姻宫得助，家事变顺";
+    else if (spouseHit) love = "异性缘不缺：" + (gender === "女" ? "官星" : "财星") + "当值，机会有但运不算全力托举，选人多看人品与担当";
+    else if (dayRel.indexOf("冲") >= 0) love = "婚姻宫被冲：" + (gender === "女" ? "官星" : "财星") + "未到位，聚少离多或口角增多，多沟通、少冷战，大事提前商量";
+    else if (dayRel.indexOf("合") >= 0) love = "婚姻宫被合：关系有拉近的机会，也防过界与第三方介入的苗头，边界感要立住";
+    else love = "感情平顺：无大波澜，把注意力放在共同目标上，感情自然稳固";
+    var health = "养生侧重：" + HEALTH[xs.ji[0]] + "；" + (lv < 0 ? "运不帮身，疲劳恢复慢，别透支" : "整体底子尚可，规律作息即可");
+    steps.push({
+      gz: du.gz, startYear: du.startYear, age: du.age,
+      grade: grade, gradeNote: gradeNote, mixed: mixed,
+      theme: theme, themeTxt: themeTxt, q5: q5, h5: h5,
+      rels: rels, keyYears: keyYears,
+      dims: { career: career, wealth: wealth, love: love, health: health },
+      judge: { gWx: gWx, zWx: zWx, gScore: gS, zScore: zS }
+    });
+  }
+  return { xs: xs, steps: steps };
 }
 // 辅助：返回「克我」的五行（WX_KE[a]=b 表示 a 克 b，故克 wx 者即 WX_KE[x]===wx 的 x）
 //       与「生我」的五行（WX_SHENG[x]===wx 的 x）
@@ -4242,7 +4770,7 @@ function tkGrade(pillars, monthZhi) {
         seen[x.t] = 1;
         var whys = [];
         hitK.forEach(function (k) { if (whyOf[k] && whys.indexOf(whyOf[k]) < 0) whys.push(whyOf[k]); });
-        zhongList.push({ t: x.t, src: x.src, k: hitK, why: whys.join("；") });
+        zhongList.push({ t: x.t, src: x.src, k: hitK, why: whys.join("；"), blurb: x.blurb || "" });
       }
     });
 
@@ -5847,6 +6375,226 @@ function tkGrade(pillars, monthZhi) {
   }
 
   // ------------------------------------------------------------
+  // 三·五、专旺五格（《滴天髓》纯从派 · 最严口径）（迭代49）
+  //
+  //   曲直仁寿格（木）/ 炎上格（火）/ 稼穑格（土）/ 从革格（金）/ 润下格（水）
+  //
+  //   五条判据（①②③ 为硬前置，任一不过即不成立；全过再议 ④⑤）：
+  //     ① 月令当令：月支「本气」五行 = 日主五行（日主当令得气）
+  //     ② 日主通根：四支藏干之本气，至少一处与日主同五行（专旺以日主为旺神，须自坐根基）
+  //     ③ 地支成方成局：三会（方）优先，其次三合（局）；三支须齐现，半合不算
+  //     ④ 无克神透干：除日干外三干，不得见克制日主之五行（木格忌金、火格忌水…）
+  //     ⑤ 支局无冲刑：构成方局之三支两两之间，不得为六冲 / 刑 / 自刑
+  //
+  //   ①②③ 全过 → ④⑤ 全过为「成格」，有碍为「近格」（假专旺）。
+  //
+  //   【典籍依据 · 迭代49 修正】
+  //   《渊海子平》「弃命从杀格」云：「…身主无气，只得舍身而从之，要行杀旺及财乡，
+  //     忌日主有根及比肩之地。」——「无根」是「从格」（日主极弱、弃命相从）的条件。
+  //   《三命通会》「弃命从财」：「弃命从财，须要会财，若逢根气，命损无猜。」同此。
+  //
+  //   专旺格（一行得气）与此相反：日主**极旺**，自身即旺神，须当令、通根、比劫印
+  //   帮身，忌官杀克破。古籍例证：
+  //     《渊海子平》李侍郎：乙酉 乙酉 乙酉 甲申（弃命从杀 —— 从格例，日主无根）
+  //     曲直格例：壬寅 癸卯 甲辰 甲子（甲木生卯月，卯即甲之根 —— 专旺例，日主有根）
+  //   「忌日主有根」与「日主通根」分属两格，判据不可互串。
+  // ------------------------------------------------------------
+
+  // 三会（方）：寅卯辰会东方木 …（土为辰戌丑未四库）
+  var ZW_SANHUI = { "木": [2, 3, 4], "火": [5, 6, 7], "金": [8, 9, 10],
+                    "水": [11, 0, 1], "土": [3, 6, 9, 0] };
+  // 三合（局）：亥卯未合木局 …（土无三合，仅四库会）
+  var ZW_SANHE = { "木": [11, 3, 7], "火": [2, 6, 10], "金": [5, 9, 1],
+                   "水": [8, 0, 4], "土": [] };
+  var ZW_NAME = { "木": "曲直仁寿格", "火": "炎上格", "土": "稼穑格",
+                  "金": "从革格", "水": "润下格" };
+  // 五行相克（用于判「克神」）：木克土、土克水、水克火、火克金、金克木
+  var ZW_KE = { "木": "土", "土": "水", "水": "火", "火": "金", "金": "木" };
+
+  function gjZhuanwang(pillars) {
+    var gans = [], zhis = [], k;
+    for (k = 0; k < 4; k++) { gans.push(pillars[k] % 10); zhis.push(pillars[k] % 12); }
+    var dayIdx = gans[2];
+    var dayGanName = TIANGAN[dayIdx];
+    var dayWx = GAN_WUXING[dayIdx];
+    var monthZhiName = DIZHI[zhis[1]];
+
+    // ① 月令当令 —— 日主当令得气。只认月支「本气」（charAt(0)），
+    //    不可用整串，否则巳月（藏丙戊庚）会火 / 土 / 金同时「当令」。
+    var mBenQi = CANGGAN[zhis[1]].charAt(0);
+    var mBenQiWx = GAN_WUXING[TIANGAN.indexOf(mBenQi)];
+    if (mBenQiWx !== dayWx) return null;
+
+    var w = dayWx;
+    var keWx = ZW_KE[w];   // 克制本格之五行（如木格之金）
+
+    // ② 日主通根 —— 四支藏干「本气」至少一处与日主同五行。
+    //    专旺以日主自身为旺神，须自坐根基（古籍曲直格例：甲木生卯月，卯即甲之根）。
+    //    注：此与「从格忌有根」相反，分属两格，不可混。
+    var hasRoot = false, rootAt = "";
+    for (k = 0; k < 4; k++) {
+      var bq = CANGGAN[zhis[k]].charAt(0);
+      if (GAN_WUXING[TIANGAN.indexOf(bq)] === w) {
+        hasRoot = true;
+        rootAt = ["年", "月", "日", "时"][k] + "支 " + DIZHI[zhis[k]] + "（本气 " + bq + "）";
+        break;
+      }
+    }
+
+    // ③ 地支成方成局（三条路径，满足其一即可）
+    //    ③a 三会（方）：寅卯辰之类，须三支齐现
+    //    ③b 三合（局）：亥卯未之类，须三支齐现（半合不算）
+    //    ③c 党众而强：无三合三会，但「干支同类」结党成势
+    //        古籍原文：「…或干支壬、癸、亥、子、申党众而强」（润下格例：癸亥×4）
+    //        判定：地支中「正五行 = 日主五行」或「本气 = 日主五行」者 ≥ 3 支
+    var form = null, formZhis = [];
+    var tables = [{ t: "三会", o: ZW_SANHUI }, { t: "三合", o: ZW_SANHE }];
+    for (var ti = 0; ti < tables.length; ti++) {
+      var need = tables[ti].o[w] || [];
+      if (need.length < 3) continue;
+      var hitZ = [];
+      for (var ni = 0; ni < need.length; ni++) {
+        if (zhis.indexOf(need[ni]) >= 0) hitZ.push(need[ni]);
+      }
+      if (hitZ.length === need.length) { form = tables[ti].t; formZhis = need; break; }
+    }
+
+    // ③c 党众：地支中与日主同类者（支之五行 = w，或支之本气 = w）计数
+    var dangZhis = [];
+    for (k = 0; k < 4; k++) {
+      var zwx = ZHI_WUXING[zhis[k]];
+      var zbq = CANGGAN[zhis[k]].charAt(0);
+      if (zwx === w || GAN_WUXING[TIANGAN.indexOf(zbq)] === w) dangZhis.push(zhis[k]);
+    }
+    if (!form) {
+      if (dangZhis.length >= 3) {
+        form = "党众"; formZhis = dangZhis;
+      } else {
+        return null;
+      }
+    }
+
+    var formTxt = formZhis.map(function (z) { return DIZHI[z]; }).join("");
+    // 去重且**按四柱顺序**排列的地支串（党众路径下原数组含重复支，需先排序再查重）
+    //   排序用支序号（0=子…11=亥），即从「子」到「亥」的传统顺序，
+    //   使输出稳定、可读，如「丑申」而非「申丑」。
+    function zwUniqZhis(arr) {
+      var sorted = arr.slice().sort(function (x, y) { return x - y; });
+      var u = [], i;
+      for (i = 0; i < sorted.length; i++) {
+        if (u.length === 0 || u[u.length - 1] !== sorted[i]) u.push(sorted[i]);
+      }
+      return u;
+    }
+    var participating = zwUniqZhis(formZhis);
+    var formTxtUniq = participating.map(function (z) { return DIZHI[z]; }).join("");
+
+    // ④ 克神须有力方为破格 —— 除日干外三干，见「克日主之五行」者，须**通根**方论破。
+    //    如木专旺忌庚辛（金）、火专旺忌壬癸（水）、土专旺忌甲乙（木）、
+    //    金专旺忌丙丁（火）、水专旺忌戊己（土）。
+    //    口径（据古籍例）：天干孤露而无根之克神「无力破局」，不作破格论。
+    //      《渊海子平》稼穑格例 戊戌 己未 戊辰 癸丑 —— 时干癸水财星，
+    //      癸虽于辰、丑中见余气（辰藏戊乙癸、丑藏己癸辛），然四库本属土，
+    //      其中癸仅为墓库余气，原文谓「虽有癸水财星，但无力破局」。
+    //    判定「有力」：该克神天干，须在地支中得「本气根」或坐「同五行之支」；
+    //      墓库中的中余气（如辰丑中之癸）不足以论有力。
+    var keGans = [], keWeakGans = [];
+    for (k = 0; k < 4; k++) {
+      if (k === 2) continue;
+      if (GAN_WUXING[gans[k]] !== keWx) continue;
+      var keRooted = false, keRootAt = "";
+      for (var rk = 0; rk < 4; rk++) {
+        // 该支自身五行为克神五行（如癸见子）→ 有力
+        if (ZHI_WUXING[zhis[rk]] === keWx) { keRooted = true; keRootAt = DIZHI[zhis[rk]]; break; }
+        // 该支「本气」为克神五行（如庚见申）→ 有力
+        var rbq = CANGGAN[zhis[rk]].charAt(0);
+        if (GAN_WUXING[TIANGAN.indexOf(rbq)] === keWx) { keRooted = true; keRootAt = DIZHI[zhis[rk]] + "（本气 " + rbq + "）"; break; }
+      }
+      var posName = ["年", "月", "时"][k === 0 ? 0 : k === 1 ? 1 : 2] + "干 " + TIANGAN[gans[k]];
+      if (keRooted) keGans.push(posName + "（得根于" + keRootAt + "，有力破局）");
+      else keWeakGans.push(posName + "（虚浮无根或仅墓库余气，无力破局）");
+    }
+    // 天干同类（比劫）与生我者（印）皆为帮身，不破格
+    var bangGans = [];
+    for (k = 0; k < 4; k++) {
+      if (k === 2) continue;
+      var gw = GAN_WUXING[gans[k]];
+      if (gw === w || ZW_KE[gw] === w) bangGans.push(TIANGAN[gans[k]]);
+    }
+
+    // ⑤ 支局无冲刑 —— 只在**成局之支（去重后）之间**两两相看。
+    //    注意：不可用 formZhis 全量两两相看 —— 党众路径下它含重复支，
+    //    会把「同一支自比」或「冲支本不参与成局」误计为破格。
+    //    participating 即上文由 formZhis 去重所得（三会/三合路径恒为 3 支，无重复）。
+    var chongXing = [];
+    for (var a = 0; a < participating.length; a++) {
+      for (var b = a + 1; b < participating.length; b++) {
+        var rel = mpPairRel(DIZHI[participating[a]], DIZHI[participating[b]]);
+        if (rel === "六冲" || rel === "刑" || rel === "自刑") {
+          chongXing.push(DIZHI[participating[a]] + DIZHI[participating[b]] + rel);
+        }
+      }
+    }
+
+    // 汇总判定
+    var poiList = [];
+    if (!hasRoot) poiList.push("日主不通根（四支本气皆非同气），孤旺无依");
+    if (keGans.length) poiList.push("天干见克神 " + keGans.join("、") + "，逆其旺势");
+    if (chongXing.length) poiList.push("支局受 " + chongXing.join("、") + " 冲破");
+    var hit = poiList.length === 0;
+
+    var chain = [];
+    chain.push("月令 " + monthZhiName + " 本气 " + mBenQi + " 属" + w +
+               "，与日主 " + dayGanName + " 同气，日主当令得气");
+    chain.push("日主 " + dayGanName + " 于四支" + (hasRoot ? "通根（" + rootAt + "）"
+                                                          : "不通根（四支本气皆非" + w + "）"));
+    chain.push("地支 " + formTxtUniq +
+               (form === "党众" ? ("（" + participating.length + " 支同类，党众而强）")
+                                : (" 成" + form + w + "局")));
+    chain.push(keGans.length
+      ? ("天干见克神 " + keGans.join("、") + "（" + keWx + "克" + w + "），有力破格")
+      : ("天干无有力之克神" +
+         (keWeakGans.length ? "（虽有 " + keWeakGans.join("、") + "，然虚浮无根，不破）" : "") +
+         (bangGans.length ? "，反见 " + bangGans.join("") + " 帮身" : "")));
+    chain.push(chongXing.length ? ("支局受 " + chongXing.join("、") + " 破") : "支局无冲刑");
+
+    var formDesc = (form === "党众")
+      ? ("地支 " + formTxtUniq + " 共 " + participating.length + " 支同类，党众而强")
+      : ("地支 " + formTxtUniq + " 成" + form + w + "局");
+
+    var txt;
+    if (hit) {
+      txt = "日主 " + dayGanName + " 生于 " + monthZhiName + " 月，当令得气，" + formDesc +
+            "，日主通根而天干不见" + keWx +
+            " 来克、支局亦无冲刑 —— 一行得气，" + w + "势纯一，" +
+            "依《渊海子平》《三命通会》之旨，当以「" + ZW_NAME[w] + "」专旺论。";
+    } else {
+      txt = "日主 " + dayGanName + " 生于 " + monthZhiName + " 月，" + formDesc +
+            "，" + w + "势已成气候；然" + poiList.join("、") +
+            "，未尽纯粹，为「假专旺」之象，须以岁运定其真伪。";
+    }
+
+    var note = "〔五判依据〕" + chain.join(" ｜ ") +
+               "。典籍依据：专旺格为「一行得气」，日主自身即旺神，须当令、通根、得比劫印帮身，" +
+               "所忌者在克神（" + w + "格忌" + keWx + "）。" +
+               "成局三途：地支三会（" + (ZW_SANHUI[w] || []).map(function (z) { return DIZHI[z]; }).join("") +
+               "）、三合（" + ((ZW_SANHE[w] || []).length ? ZW_SANHE[w].map(function (z) { return DIZHI[z]; }).join("") : "土无三合") +
+               "），或「干支同类党众而强」（古籍原文：「…或干支壬癸亥子申党众而强」）。" +
+               "注意与「从格」区别：《渊海子平》论弃命从杀云「忌日主有根及比肩之地」，" +
+               "《三命通会》论弃命从财云「若逢根气，命损无猜」——" +
+               "「无根」乃从格（日主极弱、弃命相从）之条件，非专旺格之条件，两者判据相反，不可混用。";
+
+    return {
+      hit: hit,
+      name: ZW_NAME[w],
+      level: hit ? "成格" : "近格",
+      txt: txt,
+      note: note,
+      chain: chain
+    };
+  }
+
+  // ------------------------------------------------------------
   // 四、兜底校验（《三命通会》）
   //   仅作参考，不参与主算法
   // ------------------------------------------------------------
@@ -5893,6 +6641,17 @@ function tkGrade(pillars, monthZhi) {
         });
       }
     });
+
+    // 1.5) 专旺五格 —— 严格判定（《滴天髓》纯从派 · 最严口径，迭代49）
+    //      宽松版（上）为「象」，此版为「断」；严格版置顶。
+    var zw = gjZhuanwang(pillars);
+    if (zw) {
+      if (zw.hit) {
+        // 严格成格 → 移除同名宽松条目，避免同名双列
+        out.items = out.items.filter(function (x) { return x.name !== zw.name; });
+      }
+      out.items.unshift({ name: zw.name, level: zw.level, txt: zw.txt, note: zw.note });
+    }
 
     // 2) 化气格：日干与月/时干五合，且生于化神当令之月
     var HE_TO = { "甲己": "土", "乙庚": "金", "丙辛": "水", "丁壬": "木", "戊癸": "火" };
@@ -6120,6 +6879,10 @@ function tkGrade(pillars, monthZhi) {
     tkWxState: tkWxState,
     duanyu: duanyu,
     geju: geju,
+    __zw: gjZhuanwang,   // 专旺五格严格判定（迭代49，供测试/调试）
+    sizhuReverse: sizhuReverse,  // 四柱反查（迭代50）：四柱干支 → 公历时刻列表
+    xishenOf: xishenOf,          // 喜忌判定（迭代51）：旺衰取用 + 中和调候
+    dayunRead: dayunRead,        // 大运白话解读（迭代51）：五档吉凶 + 四维度 + 关键流年
     jieOfYear: jieOfYear,
     liuyueList: liuyueList,
     jdn: jdn,
@@ -6750,7 +7513,101 @@ function tkGrade(pillars, monthZhi) {
     }
     syncPgridDy();      // 四柱表左两列（流年/大运）与横滑选中态保持一致
     renderDetailShensha();   // 细盘分析底部：四柱神煞 + 大运/流年神煞
+    dyReadRender();          // 迭代51：大运白话解读随选中步联动
   }
+  // ===== 迭代51：大运白话解读（随选中大运联动）=====
+  // 迭代51 补记：本模块为专业版（付费）内容 —— 未解锁时只出「标题 + 一句预览 + 引导卡」，
+  // 解锁后出完整解读（档位 / 十年主线 / 前后五年 / 四维度 / 关键年份 / 判定依据）。
+  var DY_GRADE_CLS = { "大吉": "dg0", "吉": "dg1", "平": "dg2", "滞": "dg3", "凶": "dg4" };
+  var dyReadData = null, dyReadKey = "";
+  function dyReadRender() {
+    var el = document.getElementById("dy-read");
+    if (!el) return;
+    if (!lastResult || !lastResult.dayun || !lastResult.dayun.length) { el.style.display = "none"; el.innerHTML = ""; return; }
+    var r = lastResult;
+    var pillars4 = [r.bazi.year.idx, r.bazi.month.idx, r.bazi.day.idx, r.bazi.hour.idx];
+    var pKey = pillars4.join(",") + "|" + r.gender;
+    if (!dyReadData || dyReadKey !== pKey) {
+      dyReadData = Bazi.dayunRead(pillars4, r.dayun, r.gender);
+      dyReadKey = pKey;
+    }
+    if (!dyReadData || !dyReadData.steps.length) { el.style.display = "none"; el.innerHTML = ""; return; }
+    var off = dyState.steps.length - r.dayun.length;   // 「起运前」占位步数（0 或 1）
+    var di = dyState.selStep - off;
+    el.style.display = "";
+    if (di < 0 || di >= dyReadData.steps.length) {
+      el.innerHTML = '<div class="DR-none dr-none">当前为「起运前」：尚未上大运。点选上方任一步大运，这里给出它的白话解读（吉凶档位 · 十年主线 · 事业财运感情健康 · 关键年份）。</div>';
+      return;
+    }
+    var st = dyReadData.steps[di];
+    var xs = dyReadData.xs;
+    var title = '<div class="dr-head"><span class="dr-title">大运 ' + st.gz + "（" + st.startYear + "–" + (st.startYear + 9) + "）</span>" +
+      '<span class="dr-grade ' + (DY_GRADE_CLS[st.grade] || "dg2") + '">' + st.grade + "</span>" +
+      '<span class="dr-theme">' + st.theme + "</span></div>";
+
+    // —— 未解锁：标题（档位/主题）+ 一句预览 + 引导卡 ——
+    if (!vipIsOn()) {
+      el.innerHTML = '<div class="dr-read-head"><span class="dr-read-h">大运白话解读</span>' +
+        '<span class="dr-read-badge">专业版</span></div>' +
+        title +
+        '<div class="dr-main vip-blur">' + st.themeTxt + "。</div>" +
+        '<div class="vip-gate"><div class="vip-lock-ico">🔒</div>' +
+        '<div class="vip-gate-h">解锁大运白话解读</div>' +
+        '<div class="vip-gate-d">您解锁的是本软件<b>专业版功能的查看权限</b>：大运解读由程序依<b>本命四柱 + 十步大运</b>自动生成，' +
+        "含十年趋势、前后五年分段、事业 / 财运 / 感情 / 健康 <b>四个参考维度</b>与关键年份提示，附可展开的判定依据；" +
+        "每步大运均已生成，点上方大运行即可切换。" +
+        "全部内容属<b>传统民俗文化娱乐参考</b>，由软件自动生成，<b>非人工命理咨询服务</b>，" +
+        "不构成任何现实决策依据，亦无「改运」「化解」类内容与服务。</div>" +
+        '<div class="vip-price"><b>¥' + VIP_PRICE + '</b><span> / 永久解锁</span></div>' +
+        '<button type="button" class="vip-btn" id="dy-vip-unlock">解 锁 专 业 版</button>' +
+        '<div class="vip-gate-n">已是会员？点上方按钮输入激活码</div></div>' +
+        '<div class="dr-note">解读为白话参考，非宿命断语；档位只描述十年运势的倾向，重大决定请结合现实判断。</div>';
+      var ub0 = el.querySelector("#dy-vip-unlock");
+      if (ub0) ub0.addEventListener("click", vipOpenDialog);
+      return;
+    }
+
+    // —— 已解锁：完整解读 + 顶部会员状态条 ——
+    var vv = vipGet();
+    var vd = vipIsPerm(vv.expire)
+      ? "永久有效 · 无需续费"
+      : "有效期至 " + vipFmt(vv.expire) + "（剩余 " + Math.ceil((vv.expire - Date.now()) / 86400000) + " 天）";
+    var H = '<div class="dr-read-head"><span class="dr-read-h">大运白话解读</span>' +
+      '<span class="dr-read-badge on">专业版 · 已解锁</span></div>' +
+      '<div class="vip-bar"><span class="vip-bar-t">专业版已解锁</span>' +
+      '<span class="vip-bar-d">' + vd + '</span>' +
+      '<button type="button" class="vip-bar-b" id="dy-vip-manage">管理</button></div>';
+    H += title;
+    H += '<div class="dr-main">' + st.themeTxt + "。</div>";
+    H += '<div class="dr-main">' + st.gradeNote + "。</div>";
+    H += '<div class="dr-half"><div>' + st.q5 + '</div><div>' + st.h5 + "</div></div>";
+    H += '<div class="dr-dims">' +
+      '<div class="dr-dim"><div class="dr-dim-h">事业</div><div class="dr-dim-t">' + st.dims.career + "</div></div>" +
+      '<div class="dr-dim"><div class="dr-dim-h">财运</div><div class="dr-dim-t">' + st.dims.wealth + "</div></div>" +
+      '<div class="dr-dim"><div class="dr-dim-h">感情</div><div class="dr-dim-t">' + st.dims.love + "</div></div>" +
+      '<div class="dr-dim"><div class="dr-dim-h">健康</div><div class="dr-dim-t">' + st.dims.health + "</div></div>" +
+      "</div>";
+    if (st.keyYears.length) {
+      H += '<div class="dr-ky-h">关键年份</div><div class="dr-kys">' + st.keyYears.map(function (ky) {
+        return '<div class="dr-ky"><span class="dr-ky-y">' + ky.year + " · " + ky.gz + '</span><span class="dr-ky-t">' + ky.tag + '</span><span class="dr-ky-n">' + ky.note + "</span></div>";
+      }).join("") + "</div>";
+    }
+    var gradeWord = { "2": "为喜", "-2": "为忌", "0": "中性" };
+    H += '<details class="dr-judge"><summary>判定依据（喜忌 · 干支五行 · 与原局关系）</summary><div class="dr-judge-b">' +
+      "<div>· " + xs.basis + "。</div>" +
+      '<div>· 本步大运「' + st.gz + "」：" + st.judge.gWx + "（天干）" + (gradeWord[String(st.judge.gScore)] || "中性") + "，" + st.judge.zWx + "（地支）" + (gradeWord[String(st.judge.zScore)] || "中性") + "，干支合看定档「" + st.grade + "」。</div>" +
+      (st.judge.rels && st.judge.rels.length
+        ? "<div>· " + st.judge.rels.join("</div><div>· ") + "</div>"
+        : "<div>· 大运支与原局四支无刑冲合害。</div>") +
+      "<div>· 口径：前五年看天干、后五年看地支；关键年份由流年与大运、日柱的刑冲合害及喜忌共同挑出。</div>" +
+      "</div></details>";
+    H += '<div class="dr-note">解读为白话参考，非宿命断语；档位只描述十年运势的倾向，重大决定请结合现实判断。</div>';
+    el.innerHTML = H;
+    var mb0 = el.querySelector("#dy-vip-manage");
+    if (mb0) mb0.addEventListener("click", vipOpenDialog);
+  }
+  // 会员状态变化后：重绘大运解读（解锁/撤销即时生效）
+  window.__baziRefreshDyRead = function () { dyReadRender(); };
   // 供路由层调用：切到「细盘分析」Tab 后重排，让选中列在可见宽度下居中
   window.__baziScrollDy = function () {
     renderDyRows(false);
@@ -7583,6 +8440,7 @@ function tkGrade(pillars, monthZhi) {
       vipCloseDialog();
       if (typeof duanyuRender === "function") duanyuRender();
       if (typeof tkRender === "function") tkRender();   // 总纲区（用神·调候·层次）已纳入门禁，解锁后同步刷新
+      if (typeof dyReadRender === "function") dyReadRender();   // 大运白话解读（专业版）解锁后同步刷新
     }, 900);
   }
 
@@ -7591,6 +8449,7 @@ function tkGrade(pillars, monthZhi) {
     vipCloseDialog();
     if (typeof duanyuRender === "function") duanyuRender();
     if (typeof tkRender === "function") tkRender();
+    if (typeof dyReadRender === "function") dyReadRender();
   }
 
   // 专业版接口（供测试 / 调试 / 未来接入管理页）。
@@ -7709,10 +8568,12 @@ function tkGrade(pillars, monthZhi) {
       H += '<div class="vip-gate">' +
         '<div class="vip-gate-in">' +
         '<div class="vip-lock-ico">🔒</div>' +
-        '<div class="vip-gate-h">解锁完整断语</div>' +
+        '<div class="vip-gate-h">解锁完整分析内容</div>' +
         '<div class="vip-gate-d">总评与事实表已免费可见。' +
-        "另有 <b>" + dimCount + " 个维度 · " + itemCount + " 条</b>分维度断语（含逐条依据与规则编号）已生成，" +
-        "解锁后可查看全部。</div>" +
+        "另有 <b>" + dimCount + " 个维度 · " + itemCount + " 条</b>分维度分析条目（含逐条依据与规则编号）已生成，" +
+        "解锁后可查看全部。<b>您解锁的是本软件专业版功能的查看权限</b>：全部内容由程序依传统典籍规则" +
+        "自动生成，属<b>传统民俗文化娱乐参考</b>，非人工命理咨询服务，不构成任何现实决策依据，" +
+        "亦无「改运」「化解」类内容与服务。</div>" +
         '<div class="vip-price"><b>¥' + VIP_PRICE + '</b><span> / 永久解锁</span></div>' +
         '<button type="button" class="vip-btn" id="vip-unlock">解 锁 专 业 版</button>' +
         '<div class="vip-gate-n">已是会员？点上方按钮输入激活码</div>' +
@@ -7845,7 +8706,9 @@ function tkGrade(pillars, monthZhi) {
           '<div class="vip-lock-ico">🔒</div>' +
           '<div class="vip-gate-h">解锁用神 · 调候 · 层次</div>' +
           '<div class="vip-gate-d">已依<b>《穷通宝鉴》</b>取<b>调候用神</b>、按旺衰取<b>扶抑用神</b>，' +
-          "并判<b>四时状态</b>与<b>富贵层次</b>（古法计分 6.5 分制），共 <b>4 条</b>已生成，解锁后可查看全部。</div>" +
+          "并判<b>四时状态</b>与<b>富贵层次</b>（古法计分 6.5 分制），共 <b>4 条</b>已生成，解锁后可查看全部。" +
+          "您解锁的是<b>本软件专业版功能的查看权限</b>：内容由程序依传统典籍规则自动生成，属<b>传统民俗文化娱乐参考</b>，" +
+          "非人工命理咨询服务，不构成任何现实决策依据，亦无「改运」「化解」类内容与服务。</div>" +
           '<div class="vip-price"><b>¥' + VIP_PRICE + '</b><span> / 永久解锁</span></div>' +
           '<button type="button" class="vip-btn" id="tk-vip-unlock">解 锁 专 业 版</button>' +
           '<div class="vip-gate-n">已是会员？点上方按钮输入激活码</div></div>';
@@ -7882,6 +8745,7 @@ function tkGrade(pillars, monthZhi) {
         m.zhongList.length + " 条</span></div>" +
         m.zhongList.map(function (t) {
           return '<div class="tk-item"><div class="tk-jue">' + t.t + "</div>" +
+            (t.blurb ? '<div class="tk-blurb">白话：' + t.blurb + "</div>" : "") +
             (t.why ? '<div class="tk-why">本盘依据：' + t.why + "</div>" : "") +
             '<div class="tk-src">' + t.src + "</div></div>";
         }).join("") + "</div>";
@@ -7906,10 +8770,9 @@ function tkGrade(pillars, monthZhi) {
     }
 
     H += '<div class="tk-miss" style="margin-top:12px">以上条目全部摘自传世命理典籍，' +
-      "逐条标注书名与篇名，可对照原文核对；<b>命中与否、落于何柱、前提是否成立，均依本命四柱逐条核验</b>，" +
-      "本页只做<b>原文摘录与检索</b>，不作改写、不作增补。" +
-      "古籍中同一篇目在不同版本间文字偶有出入，本页以通行整理本为准；" +
-      "典籍所论为古人经验总结，非现代科学结论，请勿据此作重大人生决定。</div>";
+      "逐条标注书名与篇名，可对照原文核对；<b>命中与否、落于何柱、前提是否成立，均依本命四柱逐条核验</b>。" +
+      "总诀下方的<b>白话小注</b>为本页为便于理解所作的整理，并把「必夭」「入泉台」一类重断语转为平和表达，<b>如有出入以原文为准</b>；" +
+      "古籍所论为古人经验总结，非现代科学结论，请勿据此作重大人生决定。</div>";
 
     box.innerHTML = H;
     // 专业版按钮接线（总纲区 gate / 状态条；id 与综合断语页的 vip-unlock/vip-manage 区分）
@@ -7929,6 +8792,11 @@ function tkGrade(pillars, monthZhi) {
   duanyuRender();  // 综合断语（依本盘组合推演；未排盘时显示占位）
   gejuRender();    // 格局判断（四书规则；未排盘时显示占位）
   window.__baziTk = { render: tkRender };   // 供测试/调试：手动触发日主笔记重渲染（如门禁态切换后）
+  window.__baziGeju = {                     // 供测试/调试：直接调用格局引擎与专旺格判定
+    geju: Bazi.geju,
+    doudi: function (pillars) { return Bazi.geju(pillars).doudi; },
+    zhuanwang: Bazi.__zw
+  };
   document.getElementById("note-save").addEventListener("click", archiveSaveNote);
 
   // ---- 专业版弹层接线 ----
@@ -8014,13 +8882,25 @@ function tkGrade(pillars, monthZhi) {
     box.style.display = "";
   }
 
-  // 农历模式切换显示闰月选项
+  // 历法模式切换：公历 / 农历 / 四柱反查（迭代 50）
+  function applyCalMode() {
+    var mode = document.querySelector('input[name=calmode]:checked').value;
+    document.getElementById("leap-field").style.display = mode === "lunar" ? "" : "none";
+    // 年月日时分字段：四柱模式下隐藏
+    var hideYmd = mode === "sizhu";
+    ["year", "month", "day", "hour", "minute"].forEach(function (id) {
+      var el = document.getElementById(id);
+      var fd = el.closest ? el.closest(".field") : null;
+      if (fd) fd.style.display = hideYmd ? "none" : "";
+    });
+    document.getElementById("sz-panel").style.display = hideYmd ? "" : "none";
+    if (hideYmd) szRenderCols();
+  }
   Array.prototype.forEach.call(
     document.querySelectorAll('input[name=calmode]'),
     function (el) {
       el.addEventListener("change", function () {
-        document.getElementById("leap-field").style.display =
-          document.querySelector('input[name=calmode]:checked').value === "lunar" ? "" : "none";
+        applyCalMode();
         update();
       });
     }
@@ -8032,6 +8912,164 @@ function tkGrade(pillars, monthZhi) {
     document.querySelectorAll('input[name=gender]'),
     function (el) { el.addEventListener("change", update); }
   );
+
+  /* ============ 四柱反查（迭代 50）============ */
+  var SZ_COLS = ["年柱", "月柱", "日柱", "时柱"];
+  var szSel = [null, null, null, null];   // 每柱 {g: 干序号0-9, z: 支序号0-11}
+  var szCur = null;                       // 当前编辑 {p: 柱0-3, t: "g"|"z"}
+
+  function szWxClassOfGan(g) { return gzClass(GAN_WUXING[g]); }
+  function szWxClassOfZhi(z) { return gzClass(ZHI_WUXING[z]); }
+
+  function szRenderCols() {
+    var html = "";
+    for (var p = 0; p < 4; p++) {
+      var s = szSel[p];
+      // 干/支分别判断是否已选（半选中间态：只选了干或只选了支，另一侧仍显示占位符）
+      var gOk = !!(s && s.g !== null && s.g !== undefined);
+      var zOk = !!(s && s.z !== null && s.z !== undefined);
+      // 未选：圆圈留空（不显示占位文字），与问真风格一致
+      var gHtml = gOk ? '<span class="' + szWxClassOfGan(s.g) + '">' + TIANGAN[s.g] + "</span>" : "";
+      var zHtml = zOk ? '<span class="' + szWxClassOfZhi(s.z) + '">' + DIZHI[s.z] + "</span>" : "";
+      var gCls = "sz-circle" + (gOk ? " filled" : "") + (szCur && szCur.p === p && szCur.t === "g" ? " active" : "");
+      var zCls = "sz-circle" + (zOk ? " filled" : "") + (szCur && szCur.p === p && szCur.t === "z" ? " active" : "");
+      html += '<div class="sz-col">' +
+        '<div class="sz-label">' + SZ_COLS[p] + "</div>" +
+        '<div class="' + gCls + '" data-p="' + p + '" data-t="g">' + gHtml + "</div>" +
+        '<div class="' + zCls + '" data-p="' + p + '" data-t="z">' + zHtml + "</div>" +
+        "</div>";
+    }
+    var cols = document.getElementById("sz-cols");
+    cols.innerHTML = html;
+    Array.prototype.forEach.call(cols.querySelectorAll(".sz-circle"), function (el) {
+      el.addEventListener("click", function () {
+        var p = parseInt(el.getAttribute("data-p"), 10);
+        var t = el.getAttribute("data-t");
+        if (szCur && szCur.p === p && szCur.t === t) {
+          szCur = null;
+          document.getElementById("sz-kb").style.display = "none";
+        } else {
+          szCur = { p: p, t: t };
+          szRenderKb();
+        }
+        szRenderCols();
+      });
+    });
+  }
+
+  function szRenderKb() {
+    var kb = document.getElementById("sz-kb");
+    var isGan = szCur.t === "g";
+    var chars = isGan ? TIANGAN : DIZHI;
+    var wxOf = isGan ? GAN_WUXING : ZHI_WUXING;
+    var html = '<div class="sz-kb-tip">请选择' + (isGan ? "天干" : "地支") +
+               "（" + SZ_COLS[szCur.p] + (isGan ? "·天干" : "·地支") + "）</div>";
+    for (var r = 0; r < chars.length; r += 5) {
+      html += '<div class="sz-kb-row">';
+      for (var i = r; i < Math.min(r + 5, chars.length); i++) {
+        html += '<div class="sz-key" data-k="' + i + '"><span class="' + gzClass(wxOf[i]) + '">' + chars[i] + "</span></div>";
+      }
+      html += "</div>";
+    }
+    kb.innerHTML = html;
+    kb.style.display = "";
+    Array.prototype.forEach.call(kb.querySelectorAll(".sz-key"), function (el) {
+      el.addEventListener("click", function () {
+        var k = parseInt(el.getAttribute("data-k"), 10);
+        if (!szSel[szCur.p]) szSel[szCur.p] = { g: null, z: null };
+        szSel[szCur.p][szCur.t] = k;
+        szCur = null;
+        document.getElementById("sz-kb").style.display = "none";
+        szRenderCols();
+        document.getElementById("sz-results").innerHTML = "";
+      });
+    });
+  }
+
+  function szResultLine(rr) {
+    var mm = rr.m < 10 ? "0" + rr.m : "" + rr.m;
+    var dd = rr.d < 10 ? "0" + rr.d : "" + rr.d;
+    var hh = rr.h < 10 ? "0" + rr.h : "" + rr.h;
+    var mi = rr.mi < 10 ? "0" + rr.mi : "" + rr.mi;
+    var zhi = DIZHI[Math.floor(((rr.h + 1) / 2) % 12)];
+    return rr.y + "-" + mm + "-" + dd + " " + hh + ":" + mi + "（" + zhi + "时）";
+  }
+
+  function szSearch() {
+    var box = document.getElementById("sz-results");
+    // 校验四柱选齐
+    var target = [];
+    for (var p = 0; p < 4; p++) {
+      var s = szSel[p];
+      if (!s || s.g == null || s.z == null) {
+        box.innerHTML = '<div class="sz-res-empty">请先选全四柱的天干与地支（点击圆圈选择）。</div>';
+        return;
+      }
+      var k = -1, i;
+      for (i = 0; i < 60; i++) { if (i % 10 === s.g && i % 12 === s.z) { k = i; break; } }
+      target.push(k);
+    }
+    var zi = document.getElementById("ziadvance").checked;
+    var R = Bazi.sizhuReverse(target, 1900, 2100, zi);
+    if (R.error) {
+      box.innerHTML = '<div class="sz-res-empty" style="color:#b03a2e">' + R.error + "</div>";
+      return;
+    }
+    if (!R.results.length) {
+      box.innerHTML = '<div class="sz-res-empty">1900—2100 年间未找到此四柱的出生时刻' +
+        '（该干支组合在此范围内未出现）。</div>';
+      return;
+    }
+    var html = '<div class="sz-res-empty">共找到 ' + R.count + " 个匹配时刻" +
+      "（同一时辰内任一时刻排盘结果相同）：";
+    for (var q = 0; q < R.results.length; q++) {
+      var rr = R.results[q];
+      html += '<div class="sz-res-item"><span><b>' + szResultLine(rr) + "</b>" +
+        (rr.ziNote ? '<span class="sz-tag">' + rr.ziNote + "</span>" : "") +
+        "</span>" +
+        '<button type="button" class="sz-res-use" data-i="' + q + '">用此盘</button></div>';
+    }
+    html += "</div>";
+    box.innerHTML = html;
+    Array.prototype.forEach.call(box.querySelectorAll(".sz-res-use"), function (el) {
+      el.addEventListener("click", function () {
+        var rr = R.results[parseInt(el.getAttribute("data-i"), 10)];
+        szUseResult(rr);
+      });
+    });
+  }
+
+  function szUseResult(rr) {
+    // 切回公历模式并回填；反查按北京时间口径，自动关闭时辰校正以免四柱偏移
+    var solarRadio = document.querySelector('input[name=calmode][value="solar"]');
+    if (solarRadio && !solarRadio.checked) {
+      solarRadio.checked = true;
+      applyCalMode();
+    }
+    document.getElementById("year").value = rr.y;
+    document.getElementById("month").value = rr.m;
+    document.getElementById("day").value = rr.d;
+    document.getElementById("hour").value = rr.h;
+    document.getElementById("minute").value = rr.mi;
+    var tst = document.getElementById("corr-tst"), dst = document.getElementById("corr-dst");
+    if (tst.checked || dst.checked) {
+      tst.checked = false; dst.checked = false;
+      var det = document.getElementById("corr-detail");
+      if (det) det.style.display = "none";
+    }
+    update();
+    // 与「确定」按钮一致：展开结果区并**直接进入「基本排盘」**
+    var errEl = document.getElementById("err");
+    if (errEl.style.display === "block") {
+      errEl.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    expandResult("paipan");
+    var tgt = document.getElementById("tabbar") || resultView;
+    tgt.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  document.getElementById("sz-search").addEventListener("click", szSearch);
 
   // 时辰校正：城市下拉 + 折叠 + 开关
   (function () {
@@ -8205,9 +9243,47 @@ function tkGrade(pillars, monthZhi) {
 })();
 </script>
 <script>
+/* ===== Service Worker 注册 / 更新 =====
+   注意：sw.js 的 URL 必须带版本查询串。iOS Safari 对 sw.js 自身的 HTTP 缓存较激进，
+   若 URL 字节始终不变，Safari 可能永远不向服务器比对，导致更新永远发现不了。
+   每次改动版本号时，这里连同 sw.js 里的 CACHE 一起改。 */
 if ("serviceWorker" in navigator) {
+  var SW_VER = "76";
+  // 必须在 register 之前读：若在 then 回调里读，首访的 clients.claim() 可能已完成，
+  // controller 已非空，会被误判为「旧版接管」而触发多余刷新。
+  var hadController = !!navigator.serviceWorker.controller;
+  var reloading = false;
   window.addEventListener("load", function () {
-    navigator.serviceWorker.register("sw.js").catch(function(){});
+    navigator.serviceWorker.register("sw.js?v=" + SW_VER).then(function (reg) {
+      // 主动向服务器要一次新版本，不依赖浏览器的默认节奏
+      try { reg.update(); } catch (e) {}
+
+      // 页面原先已被旧 SW 接管 → 新 SW 接管后自动刷新一次（首次安装不刷新）
+      navigator.serviceWorker.addEventListener("controllerchange", function () {
+        if (!hadController || reloading) return;
+        reloading = true;
+        location.reload();
+      });
+
+      // 发现新版本正在安装 → 装好后让它立刻激活（配合 sw.js 里的 skipWaiting）
+      reg.addEventListener("updatefound", function () {
+        var nw = reg.installing;
+        if (!nw) return;
+        nw.addEventListener("statechange", function () {
+          if (nw.state === "installed" && navigator.serviceWorker.controller) {
+            try { nw.postMessage({ type: "SKIP_WAITING" }); } catch (e) {}
+          }
+        });
+      });
+    }).catch(function () {});
+
+    // 回到前台时再查一次更新（iOS 切回 App 的常见场景）
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState !== "visible") return;
+      navigator.serviceWorker.getRegistration().then(function (reg) {
+        if (reg) { try { reg.update(); } catch (e) {} }
+      }).catch(function () {});
+    });
   });
 }
 </script>

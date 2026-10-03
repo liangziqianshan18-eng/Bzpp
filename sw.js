@@ -1,6 +1,6 @@
 /* 八字排盘 Service Worker：离线缓存
  * 版本号递增即可强制刷新全部缓存 */
-var CACHE = "bazi-v61";
+var CACHE = "bazi-v76";
 var ASSETS = [
   "./",
   "./index.html",
@@ -33,20 +33,48 @@ self.addEventListener("activate", function (e) {
   );
 });
 
+/* 页面发现新版本后，可发消息要求立即接管，无需等所有标签页关闭 */
+self.addEventListener("message", function (e) {
+  if (e.data && e.data.type === "SKIP_WAITING") self.skipWaiting();
+});
+
 self.addEventListener("fetch", function (e) {
   if (e.request.method !== "GET") return;
-  e.respondWith(
-    caches.match(e.request, { ignoreSearch: true }).then(function (hit) {
-      if (hit) return hit;
-      return fetch(e.request).then(function (resp) {
-        // 只缓存同源成功响应
+
+  var req = e.request;
+  var isHTML = req.mode === "navigate" ||
+               (req.headers.get("accept") || "").indexOf("text/html") >= 0;
+
+  // 导航请求（页面本身）：网络优先，确保拿到最新版；离线再回落缓存
+  if (isHTML) {
+    e.respondWith(
+      fetch(req).then(function (resp) {
         if (resp && resp.status === 200 && resp.type === "basic") {
           var copy = resp.clone();
-          caches.open(CACHE).then(function (c) { c.put(e.request, copy); });
+          caches.open(CACHE).then(function (c) { c.put("./index.html", copy); });
         }
         return resp;
       }).catch(function () {
-        // 离线且无缓存时的兜底
+        return caches.match("./index.html").then(function (hit) {
+          return hit || caches.match("./");
+        });
+      })
+    );
+    return;
+  }
+
+  // 静态资源：缓存优先
+  e.respondWith(
+    caches.match(req, { ignoreSearch: true }).then(function (hit) {
+      if (hit) return hit;
+      return fetch(req).then(function (resp) {
+        // 只缓存同源成功响应
+        if (resp && resp.status === 200 && resp.type === "basic") {
+          var copy = resp.clone();
+          caches.open(CACHE).then(function (c) { c.put(req, copy); });
+        }
+        return resp;
+      }).catch(function () {
         return caches.match("./index.html");
       });
     })
